@@ -10,5 +10,8 @@
         <module name="GenerateData" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="GenerateData" target="18" />
+    </bytecodeTargetLevel>
   </component>
 </project>
