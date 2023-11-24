@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class UserFavorite {
     //主键：user_id + commodity_id
-    String user_id;         //引用
-    String commodity_id;    //引用
+    String user_id;         //外键
+    String commodity_id;    //外键
     double price_limit;
     Timestamp create_time;
 }

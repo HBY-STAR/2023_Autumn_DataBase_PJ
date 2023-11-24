@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class PriceChange {
     //主键：commodity_id + change_time
-    String commodity_id;    //引用
+    String commodity_id;    //外键
     Timestamp change_time;
     double new_price;
 }

@@ -9,10 +9,10 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class CommodityRelation {
     //主键：commodity_id + seller_id + platform_id
-    String commodity_id;        //引用
+    String commodity_id;        //外键
     String commodity_name;      //2-20
-    String seller_id;           //引用
-    String platform_id;         //引用
+    String seller_id;           //外键
+    String platform_id;         //外键
     double price;
     Timestamp update_time;
     Timestamp production_date;
