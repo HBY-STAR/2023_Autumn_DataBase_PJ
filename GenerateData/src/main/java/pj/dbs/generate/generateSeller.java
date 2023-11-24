@@ -22,6 +22,7 @@ public class generateSeller {
             seller.setSeller_id(Integer.toString(i));
             seller.setSeller_name(GenerateChinese.generate_human_name());
             seller.setAddress(RandomStringUtils.random(GenerateNum.generate_num(5,20),32,127,true,true));
+            seller.setPassword(RandomStringUtils.random(GenerateNum.generate_num(5,20),32,127,true,true));
             sellerList.add(seller);
         }
         try {
