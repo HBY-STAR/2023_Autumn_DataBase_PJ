@@ -1,11 +1,9 @@
 package models
 
-type User struct {
+type Seller struct {
 	ID       int    `gorm:"primaryKey"`
 	Username string `gorm:"unique"`
-	Password string
-	IsAdmin  bool
+	Password string `gorm:"column:phone"`
 	Email    string
 	Age      int
-	Gender   bool
 }
