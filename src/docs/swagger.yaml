@@ -1,0 +1,93 @@
+basePath: /api
+definitions:
+  auth.LoginRequest:
+    properties:
+      password:
+        minLength: 4
+        type: string
+      type:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - type
+    - username
+    type: object
+  auth.TokenResponse:
+    properties:
+      access:
+        type: string
+      message:
+        type: string
+    type: object
+  common.ErrorDetailElement:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+      param:
+        type: string
+      struct_field:
+        type: string
+      tag:
+        type: string
+      value: {}
+    type: object
+  common.HttpError:
+    properties:
+      code:
+        type: integer
+      detail:
+        items:
+          $ref: '#/definitions/common.ErrorDetailElement'
+        type: array
+      message:
+        type: string
+    type: object
+info:
+  contact:
+    email: polaris@fduhole.com
+    name: Maintainer Polaris
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Database System Design Project
+  version: 1.0.0
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Login
+      tags:
+      - Auth
+swagger: "2.0"
