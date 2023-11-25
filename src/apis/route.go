@@ -4,6 +4,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	fiberSwagger "github.com/swaggo/fiber-swagger"
 	"src/apis/auth"
+	"src/apis/commodity"
+	"src/apis/favorite"
+	"src/apis/item"
+	"src/apis/message"
+	"src/apis/platform"
+	"src/apis/priceChange"
+	"src/apis/seller"
 	"src/apis/user"
 	"src/models"
 )
@@ -29,7 +36,13 @@ func RegisterRoutes(app *fiber.App) {
 	group := app.Group("/api")
 	group.Use(MiddlewareGetUser)
 	user.RegisterRoutes(group)
-
+	commodity.RegisterRoutes(group)
+	favorite.RegisterRoutes(group)
+	item.RegisterRoutes(group)
+	message.RegisterRoutes(group)
+	platform.RegisterRoutes(group)
+	priceChange.RegisterRoutes(group)
+	seller.RegisterRoutes(group)
 }
 
 func MiddlewareGetUser(c *fiber.Ctx) error {
