@@ -13,5 +13,4 @@ type CommodityItem struct {
 	ItemName    string    `json:"item_name"`
 	Price       float64   `json:"price"`
 	UpdateAt    time.Time `json:"update_at"`
-	Type        string    `json:"type"`
 }

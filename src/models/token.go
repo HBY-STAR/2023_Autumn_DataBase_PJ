@@ -51,14 +51,14 @@ type UserJwtSecret struct {
 
 type UserClaims struct {
 	jwt.RegisteredClaims
-	ID                   int       `json:"id"`
-	UserID               int       `json:"user_id"`
-	UID                  int       `json:"uid"`
-	Type                 string    `json:"type"`
-	Nickname             string    `json:"nickname"`
-	JoinedTime           time.Time `json:"joined_time"`
-	IsAdmin              bool      `json:"is_admin"`
-	HasAnsweredQuestions bool      `json:"has_answered_questions"`
+	ID       int    `json:"id"`
+	UserType string `json:"user_type"`
+	Type     string `json:"type"`
+	//UserID               int       `json:"user_id"`
+	//UID                  int       `json:"uid"`
+	//Nickname             string    `json:"nickname"`
+	//JoinedTime           time.Time `json:"joined_time"`
+	//HasAnsweredQuestions bool      `json:"has_answered_questions"`
 }
 
 const (
@@ -99,7 +99,7 @@ func (user *TmpUser) CreateJWTToken() (accessToken string, err error) {
 		},
 		ID: user.ID,
 		//UserID:     user.UserID,
-		Type: user.Type,
+		UserType: user.Type,
 	}
 
 	// access payload
