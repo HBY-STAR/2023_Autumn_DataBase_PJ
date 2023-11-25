@@ -33,7 +33,7 @@ func RegisterRoutes(app *fiber.App) {
 }
 
 func MiddlewareGetUser(c *fiber.Ctx) error {
-	userObject, err := models.GetUser(c)
+	userObject, err := models.GetGeneralUser(c)
 	if err != nil {
 		return err
 	}

@@ -3,7 +3,7 @@ definitions:
   auth.LoginRequest:
     properties:
       password:
-        minLength: 4
+        minLength: 3
         type: string
       type:
         type: string
@@ -19,6 +19,17 @@ definitions:
       access:
         type: string
       message:
+        type: string
+    type: object
+  commodity.CreateCommodityRequest:
+    properties:
+      category:
+        type: string
+      default_name:
+        type: string
+      produce_address:
+        type: string
+      produce_at:
         type: string
     type: object
   common.ErrorDetailElement:
@@ -46,6 +57,279 @@ definitions:
       message:
         type: string
     type: object
+  favorite.AddFavoriteModel:
+    properties:
+      item_id:
+        type: integer
+    required:
+    - item_id
+    type: object
+  favorite.PriceLimitModel:
+    properties:
+      item_id:
+        type: integer
+      price_limit:
+        type: integer
+    type: object
+  item.CreateItemModel:
+    properties:
+      commodity_id:
+        type: integer
+      item_name:
+        type: string
+      platform_id:
+        type: integer
+      price:
+        type: number
+    required:
+    - commodity_id
+    - item_name
+    - platform_id
+    - price
+    type: object
+  item.SearchQuery:
+    properties:
+      accurate:
+        type: boolean
+      range:
+        type: string
+      search:
+        type: string
+    type: object
+  item.UpdateItemModel:
+    properties:
+      commodity_item_id:
+        type: integer
+      item_name:
+        type: string
+      price:
+        type: number
+    required:
+    - commodity_item_id
+    - item_name
+    - price
+    type: object
+  models.Commodity:
+    properties:
+      category:
+        type: string
+      default_name:
+        type: string
+      id:
+        type: integer
+      produce_address:
+        type: string
+      produce_at:
+        type: string
+    type: object
+  models.CommodityItem:
+    properties:
+      commodity:
+        $ref: '#/definitions/models.Commodity'
+      commodity_id:
+        type: integer
+      id:
+        type: integer
+      item_name:
+        type: string
+      platform:
+        $ref: '#/definitions/models.Platform'
+      platform_id:
+        type: integer
+      price:
+        type: number
+      seller:
+        $ref: '#/definitions/models.Seller'
+      seller_id:
+        type: integer
+      update_at:
+        type: string
+    type: object
+  models.Favorite:
+    properties:
+      commodity_item_id:
+        type: integer
+      commodityItem:
+        $ref: '#/definitions/models.CommodityItem'
+      create_at:
+        type: string
+      price_limit:
+        type: number
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    type: object
+  models.Message:
+    properties:
+      commodity_item_id:
+        type: integer
+      commodityItem:
+        $ref: '#/definitions/models.CommodityItem'
+      create_at:
+        type: string
+      current_price:
+        type: number
+      id:
+        type: integer
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: integer
+    type: object
+  models.Platform:
+    properties:
+      country:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  models.PriceChange:
+    properties:
+      commodity_item_id:
+        type: integer
+      commodityItem:
+        $ref: '#/definitions/models.CommodityItem'
+      id:
+        type: integer
+      new_price:
+        type: number
+      update_at:
+        type: string
+    type: object
+  models.Seller:
+    properties:
+      address:
+        description: Age      int
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.User:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: boolean
+      id:
+        type: integer
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  platform.CreatePlatformRequest:
+    properties:
+      country:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  platform.UpdatePlatformRequest:
+    properties:
+      country:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  priceChange.GetPriceChangeModel:
+    properties:
+      commodity_item_id:
+        type: integer
+      time_end:
+        type: string
+      time_start:
+        type: string
+    required:
+    - commodity_item_id
+    - time_end
+    - time_start
+    type: object
+  priceChange.UpdatePriceChangeModel:
+    properties:
+      commodity_item_id:
+        type: integer
+      id:
+        type: integer
+      new_price:
+        type: number
+    type: object
+  seller.CreateSellerRequest:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      user_id:
+        type: string
+    type: object
+  seller.UpdateSellerRequest:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      user_id:
+        type: string
+    type: object
+  user.CreateUserRequest:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: boolean
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  user.UpdateUserRequest:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      gender:
+        type: boolean
+      id:
+        type: integer
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact:
     email: polaris@fduhole.com
@@ -56,6 +340,466 @@ info:
   title: Database System Design Project
   version: 1.0.0
 paths:
+  /api/commodity/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有商品
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommodityItem'
+      summary: 获取所有商品
+      tags:
+      - Item
+  /api/commodity/item:
+    delete:
+      consumes:
+      - application/json
+      description: 删除商品
+      parameters:
+      - description: commodity id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 删除商品
+      tags:
+      - Item
+    post:
+      consumes:
+      - application/json
+      description: 添加商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/item.CreateItemModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 添加商品
+      tags:
+      - Item
+    put:
+      consumes:
+      - application/json
+      description: 更新商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/item.UpdateItemModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 更新商品
+      tags:
+      - Item
+  /api/favorites:
+    post:
+      consumes:
+      - application/json
+      description: AddFavorite
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/favorite.AddFavoriteModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: AddFavorite
+      tags:
+      - Favorite
+  /api/favorites/all:
+    get:
+      consumes:
+      - application/json
+      description: GetAllFavorites
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Favorite'
+      summary: GetAllFavorites
+      tags:
+      - Favorite
+  /api/message/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all messages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+      summary: Get all messages
+      tags:
+      - Message
+  /api/platform:
+    delete:
+      consumes:
+      - application/json
+      description: Delete platform
+      parameters:
+      - description: platform id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete platform
+      tags:
+      - Platform
+    post:
+      consumes:
+      - application/json
+      description: Add platform
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/platform.CreatePlatformRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add platform
+      tags:
+      - Platform
+    put:
+      consumes:
+      - application/json
+      description: Update platform
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/platform.UpdatePlatformRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update platform
+      tags:
+      - Platform
+  /api/platform/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all platform
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Platform'
+      summary: Get all platform
+      tags:
+      - Platform
+  /api/price/limit:
+    post:
+      consumes:
+      - application/json
+      description: AddPriceLimit
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/favorite.PriceLimitModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: AddPriceLimit
+      tags:
+      - Favorite
+  /api/search:
+    post:
+      consumes:
+      - application/json
+      description: 搜索商品
+      parameters:
+      - description: 'Range: name, category; Search: content to search'
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/item.SearchQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommodityItem'
+      summary: 搜索商品
+      tags:
+      - Item
+  /api/sellers:
+    delete:
+      consumes:
+      - application/json
+      description: Delete seller
+      parameters:
+      - description: seller id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete seller
+      tags:
+      - Seller
+    post:
+      consumes:
+      - application/json
+      description: Add seller
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/seller.CreateSellerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add seller
+      tags:
+      - Seller
+    put:
+      consumes:
+      - application/json
+      description: Update seller
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/seller.UpdateSellerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update seller
+      tags:
+      - Seller
+  /api/sellers/data:
+    get:
+      consumes:
+      - application/json
+      description: Get seller info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Seller'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Get seller info
+      tags:
+      - Seller
+  /api/users:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete user
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Add user
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add user
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update user
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update user
+      tags:
+      - User
+  /api/users/data:
+    get:
+      consumes:
+      - application/json
+      description: Get user info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Get user info
+      tags:
+      - User
+  /commodities:
+    delete:
+      consumes:
+      - application/json
+      description: 删除商品
+      parameters:
+      - description: commodity id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 删除商品
+      tags:
+      - 商品
+    post:
+      consumes:
+      - application/json
+      description: 添加商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/commodity.CreateCommodityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 添加商品
+      tags:
+      - 商品
+    put:
+      consumes:
+      - application/json
+      description: 更新商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/models.Commodity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 更新商品
+      tags:
+      - 商品
+  /commodities/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有商品
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Commodity'
+      summary: 获取所有商品
+      tags:
+      - 商品
   /login:
     post:
       consumes:

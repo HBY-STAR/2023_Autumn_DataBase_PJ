@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
@@ -17,8 +16,8 @@ type TmpUser struct {
 // 传入type
 // user里有type id
 
-func GetUser(c *fiber.Ctx) (*TmpUser, error) {
-	fmt.Println(c.Get("type"))
+func GetGeneralUser(c *fiber.Ctx) (*TmpUser, error) {
+	//fmt.Println(c.Get("type"))
 	user := &TmpUser{}
 
 	if c.Locals("user") != nil {
