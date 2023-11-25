@@ -57,7 +57,7 @@ func Login(c *fiber.Ctx) error {
 				return common.Forbidden("无权限")
 			}
 		}
-		tmpUser.ID = user.ID
+		tmpUser.ID = int(user.ID)
 		tmpUser.Username = user.Username
 		tmpUser.Type = body.Type
 		tmpUser.Password = user.Password

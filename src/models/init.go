@@ -22,12 +22,13 @@ func InitDB() error {
 	}
 
 	// 迁移数据库，确保 Login 表存在
-	err = DB.AutoMigrate(&TmpUser{})
+	err = DB.AutoMigrate(&User{}, &Seller{}, &Commodity{}, &Platform{}, &UserJwtSecret{})
 	if err != nil {
 		return err
 	}
+	err = DB.AutoMigrate(&CommodityItem{}, &Favorite{}, &Message{})
 
-	return nil
+	return err
 }
 
 //func setupDatabase() (*gorm.DB, error) {

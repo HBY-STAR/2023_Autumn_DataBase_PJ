@@ -8,10 +8,10 @@ import (
 )
 
 type TmpUser struct {
-	ID       int    `gorm:"primaryKey"`
-	Username string `gorm:"unique"`
-	Password string `gorm:"column:phone"`
-	Type     string
+	ID       int    `json:"id"gorm:"primaryKey"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Type     string `json:"type"`
 }
 
 // 传入type

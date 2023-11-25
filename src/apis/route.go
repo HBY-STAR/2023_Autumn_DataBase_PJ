@@ -3,8 +3,8 @@ package apis
 import (
 	"github.com/gofiber/fiber/v2"
 	fiberSwagger "github.com/swaggo/fiber-swagger"
-	"src/apis/User"
 	"src/apis/auth"
+	"src/apis/user"
 	"src/models"
 )
 
@@ -28,7 +28,7 @@ func RegisterRoutes(app *fiber.App) {
 
 	group := app.Group("/api")
 	group.Use(MiddlewareGetUser)
-	User.RegisterRoutes(group)
+	user.RegisterRoutes(group)
 
 }
 
