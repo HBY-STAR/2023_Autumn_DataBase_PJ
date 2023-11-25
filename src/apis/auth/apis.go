@@ -43,6 +43,19 @@ func Login(c *fiber.Ctx) error {
 		tmpUser.Username = seller.Username
 		tmpUser.Type = "seller"
 		tmpUser.Password = seller.Password
+	} else if body.Type == "admin" {
+		var admin Admin
+		result = DB.Where("username = ?", body.Username).First(&admin)
+		if result.Error != nil {
+			if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+				return common.Forbidden("无权限")
+			}
+			return common.InternalServerError()
+		}
+		tmpUser.ID = admin.ID
+		tmpUser.Username = admin.Username
+		tmpUser.Type = "admin"
+		tmpUser.Password = admin.Password
 	} else {
 		var user User
 		result = DB.Where("username = ?", body.Username).First(&user)
@@ -52,12 +65,7 @@ func Login(c *fiber.Ctx) error {
 			}
 			return common.InternalServerError()
 		}
-		if tmpUser.Type == "admin" {
-			if !user.IsAdmin {
-				return common.Forbidden("无权限")
-			}
-		}
-		tmpUser.ID = int(user.ID)
+		tmpUser.ID = user.ID
 		tmpUser.Username = user.Username
 		tmpUser.Type = body.Type
 		tmpUser.Password = user.Password

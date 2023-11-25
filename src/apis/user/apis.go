@@ -5,6 +5,15 @@ import (
 	. "src/models"
 )
 
+// GetCurrentUser @GetCurrentUser
+// @Summary Get current user
+// @Description Get current user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} User
+// @Failure 400 {object} HttpError
+// @Failure 401 {object} HttpError
 func GetCurrentUser(c *fiber.Ctx) error {
 	user, err := GetUser(c)
 	if err != nil {

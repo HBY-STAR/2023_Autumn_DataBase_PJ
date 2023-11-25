@@ -8,7 +8,7 @@ import (
 )
 
 type TmpUser struct {
-	ID       int    `json:"id"gorm:"primaryKey"`
+	ID       int    `json:"id" gorm:"primaryKey"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Type     string `json:"type"`
@@ -67,24 +67,26 @@ func GetUser(c *fiber.Ctx) (*TmpUser, error) {
 func (user *TmpUser) CheckUserID() error {
 	return DB.Transaction(func(tx *gorm.DB) error {
 		if user.Type == "seller" {
-			var seller Seller = Seller{ID: user.ID}
+			var seller = Seller{ID: user.ID}
 			err := tx.Take(&seller).Error
 			if err != nil {
 				return err
 			}
 			user.Username = seller.Username
-		} else {
-			var newUser User = User{ID: user.ID}
+		} else if user.Type == "admin" {
+			var newUser = User{ID: user.ID}
 			err := tx.Take(&newUser).Error
 			if err != nil {
 				return err
 			}
-			if user.Type == "admin" {
-				if !newUser.IsAdmin {
-					return common.Forbidden("无权限")
-				}
-			}
 			user.Username = newUser.Username
+		} else {
+			var admin = Admin{ID: user.ID}
+			err := tx.Take(&admin).Error
+			if err != nil {
+				return err
+			}
+			user.Username = admin.Username
 		}
 		//err := tx.Take(&user, userID).Error
 		//if err != nil {
