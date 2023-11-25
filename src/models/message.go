@@ -2,7 +2,6 @@ package models
 
 import "time"
 
-// user_id		commodity_id	seller_id		platform_id		current_price
 type Message struct {
 	ID              int `json:"id" gorm:"primaryKey"`
 	User            *User
