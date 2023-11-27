@@ -22,9 +22,6 @@
                   <el-dropdown-item>
                     <RouterLink to="/login">登录</RouterLink>
                   </el-dropdown-item>
-                  <el-dropdown-item>
-                    <RouterLink to="/register">注册</RouterLink>
-                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -41,7 +38,7 @@
             height="50px"
           >
             <div style="margin-top: 10px;">
-              <span>商品种类</span>
+              <span>Navigation</span>
             </div>
           </el-header>
           <el-main>
@@ -49,45 +46,33 @@
               <el-menu-item index="1">
                 <template #title>
                   <el-icon>
-                    <message /> </el-icon
-                  >
-                  <div @click="router.push('/home_product_selling')">在售商品</div>
+                    <message />
+                  </el-icon>
+                  <div @click="router.push('/home_commodity_all')">所有商品</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="2">
                 <template #title>
                   <el-icon>
-                    <icon-menu /> </el-icon
-                  >
-                  <div @click="router.push('/home_shop_open')">在营商店</div>
+                    <icon-menu />
+                  </el-icon>
+                  <div @click="remind_to_login">个人信息</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="3">
                 <template #title>
                   <el-icon>
-                    <setting /> </el-icon
-                  >To do
+                    <setting />
+                  </el-icon>
+                  <div @click="remind_to_login">个人收藏</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="4">
                 <template #title>
                   <el-icon>
-                    <message /> </el-icon
-                  >To do
-                </template>
-              </el-menu-item>
-              <el-menu-item index="5">
-                <template #title>
-                  <el-icon>
-                    <message /> </el-icon
-                  >To do
-                </template>
-              </el-menu-item>
-              <el-menu-item index="6">
-                <template #title>
-                  <el-icon>
-                    <message /> </el-icon
-                  >To do
+                    <setting />
+                  </el-icon>
+                  <div @click="remind_to_login">系统消息</div>
                 </template>
               </el-menu-item>
             </el-menu>
@@ -102,38 +87,42 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
+
 export default {
-  name: 'home_view',
-  data(){
-    return{
-      shop_open_data: localStorage.getItem('shop_open_data')
-          ? JSON.parse(localStorage.getItem('shop_open_data'))
-          : {}
-    }
+  name: "home_view",
+  data() {
+    return {
+      home_commodity_all: localStorage.getItem("home_commodity_all")
+        ? JSON.parse(localStorage.getItem("home_commodity_all"))
+        : {}
+    };
   },
   created() {
-    // 从后台获取最新的User数据
-    this.findAll()
-    this.$router.push('/home_product_selling')
-
+    this.findAll();
+    //this.$router.push("home_commodity_all");
   },
-  methods:{
-    findAll(){
-      this.request.get('/shop-data/find_open_shop').then((res) => {
-        if (res.code === '200') {
-          localStorage.setItem('shop_open_data', JSON.stringify(res.data)) // 存储用户信息到浏览器
+  methods: {
+    findAll() {
+      this.request.get("/commodity/all").then((res) => {
+        if (res.code === "200") {
+          localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
         } else {
-          this.$message.error(res.msg)
+          this.$message.error(res.msg);
         }
-      })
+      });
     }
   }
+};
+
+const remind_to_login = () => {
+  ElMessage.error('请先登录！')
 }
 </script>
 
 <script setup>
-import { Menu as IconMenu, Message, Setting } from '@element-plus/icons-vue'
-import { RouterLink } from 'vue-router'
+import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+import { RouterLink } from "vue-router";
 import router from "@/router";
 
 </script>

@@ -2,21 +2,22 @@
   <div class="wrapper">
     <div
       style="
-        margin: 200px auto;
+        margin: 180px auto;
         background-color: #fff;
         width: 300px;
-        height: 250px;
+        height: 280px;
         padding: 20px;
         border-radius: 10px;
       "
     >
-      <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登录</b></div>
-      <el-form :model="user" :rules="rules" ref="userForm">
+      <div style="margin: 10px 0; text-align: center; font-size: 24px; color: cornflowerblue"><b>登录</b></div>
+      <div style="height: 20px"></div>
+      <el-form :model="user_login" :rules="rules" ref="userForm">
         <el-form-item prop="username">
           <el-input
             size="large"
             prefix-icon="User"
-            v-model="user.username"
+            v-model="user_login.username"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
@@ -25,23 +26,20 @@
             size="large"
             prefix-icon="Lock"
             show-password
-            v-model="user.password"
+            v-model="user_login.password"
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item style="margin: 40px 0; text-align: right">
-          <el-space direction="horizontal" alignment="center" :size="180">
-            <el-button type="primary" size="default" autocomplete="off" @click="login"
-              >登录</el-button
-            >
-            <el-button
-              type="warning"
-              size="default"
-              autocomplete="off"
-              @click="$router.push('/register')"
-              >注册</el-button
-            >
-          </el-space>
+        <el-form-item prop="type">
+          <el-radio-group v-model="user_login.type">
+            <el-radio :label= "'user'" >用户</el-radio>
+            <el-radio :label= "'seller'" >商家</el-radio>
+            <el-radio :label= "'admin'" >管理员</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="default" autocomplete="off" @click="login">登录</el-button>
+          <el-button autocomplete="off" style="position: absolute;right: 0" type="warning" @click="router().push('/')">返回</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -49,61 +47,66 @@
 </template>
 
 <script>
+import router from "../../router";
+
 export default {
-  name: 'user_login',
+  name: "user_login",
   data() {
     return {
-      user: {},
+      user_login: {
+        username: null,
+        password: null,
+        type: null,
+      },
       rules: {
         username: [
-                { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { required: true, message: "用户名不能为空", trigger: "blur" },
+          { min: 2, max: 20, message: "长度在 2 到 20 个字符", trigger: "blur" }
         ],
         password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' },
-          { min: 6, max: 32, message: '长度在 6 到 32 个字符', trigger: 'blur' }
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 5, max: 20, message: "长度在 5 到 20 个字符", trigger: "blur" }
+        ],
+        type: [
+          {required: true, trigger: "blur"}
         ]
       },
-      user_data: {
-        uid: 0,
-        username: '',
-        password: '',
-        email: '',
-        phone: '',
-        userType: '',
-        idNumber: '',
-        avatarUrl:'',
-      }
-    }
+    };
   },
   methods: {
+    router() {
+      return router
+    },
     login() {
-      this.$refs['userForm'].validate((valid) => {
+      this.$refs["userForm"].validate((valid) => {
         if (valid) {
           // 表单校验合法
-          //axios.post("/user-data/login", this.user).then()
-          this.request.post('/user-data/login', this.user).then((res) => {
-            if (res.code === '200') {
-              localStorage.setItem('user_data', JSON.stringify(res.data)) // 存储用户信息到浏览器
-              if (res.data.userType === 'sys_user') {
-                this.$router.push('/sys_user')
-              } else if (res.data.userType === 'user') {
-                this.$router.push('/user')
-              } else if (res.data.userType === 'seller') {
-                this.$router.push('/seller')
+          this.request.post("/login", this.user).then((res) => {
+            if (res.code === "200")
+            {
+              //存储token
+              localStorage.setItem("token", JSON.stringify(res.data.access));
+              if (this.user_login.type === "admin") {
+                this.$router.push("/admin");
+              } else if (this.user_login.type === "user") {
+                this.$router.push("/user");
+              } else if (this.user_login.type === "seller") {
+                this.$router.push("/seller");
               } else {
-                this.$router.push('/')
+                this.$router.push("/");
               }
-              this.$message.success('登录成功')
-            } else {
-              this.$message.error(res.msg)
+              this.$message.success(res.data.message);
             }
-          })
+            else
+            {
+              this.$message.error(res.data.message);
+            }
+          });
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -113,3 +116,4 @@ export default {
   overflow: hidden;
 }
 </style>
+

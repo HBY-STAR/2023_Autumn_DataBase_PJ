@@ -1,47 +1,41 @@
 import axios from 'axios'
-import router from "@/router";
 
 const request = axios.create({
     baseURL:'/api',
     timeout: 30000
 })
 
-request.interceptors.request.use(config => {
-    config.headers['Content-Type'] = 'application/json;charset=utf-8';
-    let user = localStorage.getItem("user_data") ? JSON.parse(localStorage.getItem("user_data")) : null
-    if (user) {
-        config.headers['token'] = user.token;  // 设置请求头
+// 请求拦截器
+request.interceptors.request.use(
+  (config) => {
+    // 在发送请求之前做些什么
+    // 例如添加请求头、修改请求参数等
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return config
-}, error => {
-    return Promise.reject(error)
-});
 
+    return config;
+  },
+  (error) => {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  }
+);
+
+// 响应拦截器
 request.interceptors.response.use(
-    response => {
-        let res = response.data;
-        // 如果是返回的文件
-        if (response.config.responseType === 'blob') {
-            return res
-        }
-        // 兼容服务端返回的字符串数据
-        if (typeof res === 'string') {
-            res = res ? JSON.parse(res) : res
-        }
-        // 当权限验证不通过的时候给出提示
-        if (res.code === '401') {
-            // ElementUI.Message({
-            //     message: res.msg,
-            //     type: 'error'
-            // });
-            router.push("/login")
-        }
-        return res;
-    },
-    error => {
-        return Promise.reject(error)
-    }
-)
+  (response) => {
+    // 对响应数据做点什么
+    // 例如处理特定状态码，统一处理错误等
+    return response;
+  },
+  (error) => {
+    // 对响应错误做点什么
+    // 例如处理特定状态码，统一处理错误等
+    return Promise.reject(error);
+  }
+);
 
 
 export default request
