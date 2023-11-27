@@ -7,12 +7,12 @@ import (
 
 type User struct {
 	ID       int    `json:"id" gorm:"primaryKey"`
-	Username string `json:"username" gorm:"unique"`
-	Password string `json:"password"`
+	Username string `json:"username" gorm:"unique;not null"`
+	Password string `json:"password;not null"`
 	Email    string `json:"email"`
-	Age      int8   `json:"age"`
-	Gender   bool   `json:"gender"`
-	Phone    string `json:"phone"`
+	Age      int8   `json:"age" gorm:"not null"`
+	Gender   bool   `json:"gender" gorm:"not null"`
+	Phone    string `json:"phone;not null"`
 }
 
 func (user *User) LoadUserByID(userID int) error {
