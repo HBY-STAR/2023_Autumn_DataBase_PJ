@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Platform {
-    //主键：id
+public class Admin {
+    //主键id
     //long id;     //auto
-    String name;   //2-20
-    String url;             //5-100
-    String country;         //2-20
+    String username;//2-20
+    String password;//5-50
 }

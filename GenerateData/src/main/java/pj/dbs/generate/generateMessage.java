@@ -1,6 +1,7 @@
 package pj.dbs.generate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import pj.dbs.entity.Message;
 import pj.dbs.entity.Seller;
 import pj.dbs.utils.GenerateNum;
@@ -20,16 +21,18 @@ public class generateMessage {
     public void generate(int num) throws ParseException {
         for(int i=1;i<=num;i++){
             Message message = new Message();
-            message.setUser_id(Integer.toString(GenerateNum.generate_num(1,generateUser.userList.size())));
-            message.setSeller_id(Integer.toString(GenerateNum.generate_num(1,generateSeller.sellerList.size())));
-            message.setCommodity_id(Integer.toString(GenerateNum.generate_num(1,generateCommodity.commodityList.size())));
-            message.setPlatform_id(Integer.toString(GenerateNum.generate_num(1,generatePlatform.platformList.size())));
+
+            //here
+            message.setUser_id(GenerateNum.generate_num(1,generateUser.userList.size()));
+            message.setCommodity_item_id(GenerateNum.generate_num(1,generateCommodityItem.commodityItemList.size()));
             message.setCurrent_price(GenerateNum.generate_num(1,10000));
-            message.setSend_time(GenerateTime.generate_time());
+            message.setCreate_at(GenerateTime.generate_time());
+
             messageList.add(message);
         }
         try {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
             mapper.writeValue(new File("Data/message.json"), messageList);
         } catch (IOException e) {
             e.printStackTrace();

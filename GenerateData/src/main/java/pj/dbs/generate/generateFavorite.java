@@ -2,8 +2,7 @@ package pj.dbs.generate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import pj.dbs.entity.PriceChange;
-import pj.dbs.entity.Seller;
+import pj.dbs.entity.Favorite;
 import pj.dbs.utils.GenerateNum;
 import pj.dbs.utils.GenerateTime;
 
@@ -13,24 +12,25 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class generatePriceChange {
-    public static List<PriceChange> priceChangeList = new ArrayList<>();
+public class generateFavorite {
+    public static List<Favorite> favoriteList = new ArrayList<>();
 
     public void generate(int num) throws ParseException {
         for(int i=1;i<=num;i++){
-            PriceChange priceChange = new PriceChange();
+            Favorite favorite = new Favorite();
 
             //here
-            priceChange.setCommodity_item_id(GenerateNum.generate_num(1,generateCommodity.commodityList.size()));
-            priceChange.setUpdate_at(GenerateTime.generate_time());
-            priceChange.setNew_price(GenerateNum.generate_num(1,10000));
+            favorite.setUser_id(GenerateNum.generate_num(1,generateUser.userList.size()));
+            favorite.setCreate_at(GenerateTime.generate_time());
+            favorite.setCommodity_item_id(GenerateNum.generate_num(1,generateCommodityItem.commodityItemList.size()));
+            favorite.setPrice_limit(GenerateNum.generate_num(1,10000));
 
-            priceChangeList.add(priceChange);
+            favoriteList.add(favorite);
         }
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            mapper.writeValue(new File("Data/price_change.json"), priceChangeList);
+            mapper.writeValue(new File("Data/favorite.json"), favoriteList);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    //主键：user_id
-    String user_id;     //auto
+    //主键：id
+    //String id;     //auto
     String user_name;   //2-20
     String password;    //5-20
+    String email;       //5-50
     int age;
     boolean gender;
-    String email;       //5-50
+    String phone;     //11
 }
