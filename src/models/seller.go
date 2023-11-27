@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Seller struct {
 	ID       int    `json:"id" gorm:"primaryKey"`
-	Username string `json:"user_id" gorm:"unique;not null;size:64"`
+	Username string `json:"username" gorm:"unique;not null;size:64"`
 	Password string `json:"password" gorm:"not null;size:64"`
 	Email    string `json:"email" gorm:"size:64"`
 	//Age      int
