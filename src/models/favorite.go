@@ -7,6 +7,6 @@ type Favorite struct {
 	UserID          int            `json:"user_id" gorm:"PrimaryKey; not null"`
 	CommodityItem   *CommodityItem `gorm:"ForeignKey:CommodityItemID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CommodityItemID int            `json:"commodity_item_id" gorm:"PrimaryKey; not null"`
-	PriceLimit      float64        `json:"price_limit" gorm:"not null;default:0"`
+	PriceLimit      float32        `json:"price_limit" gorm:"not null;default:0"`
 	CreateAt        time.Time      `json:"create_at"`
 }

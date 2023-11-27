@@ -10,7 +10,7 @@ type CommodityItem struct {
 	PlatformID  int        `json:"platform_id" gorm:"not null"`
 	Seller      *Seller    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	SellerID    int        `json:"seller_id" gorm:"not null"`
-	ItemName    string     `json:"item_name" gorm:"not null"`
-	Price       float64    `json:"price" gorm:"check:price > 0; not null"`
+	ItemName    string     `json:"item_name" gorm:"not null;size:64"`
+	Price       float32    `json:"price" gorm:"check:price > 0; not null"`
 	UpdateAt    time.Time  `json:"update_at"`
 }
