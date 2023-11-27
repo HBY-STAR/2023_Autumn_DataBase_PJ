@@ -154,7 +154,7 @@ export default {
     findAccount() {
       this.request.get('/user-account/find_' + this.user_data.uid).then((res) => {
         if (res.code === '200') {
-          localStorage.setItem('user_account', JSON.stringify(res.data)) // 存储用户信息到浏览器
+          localStorage.setItem('user_account', JSON.stringify(res.data))
         } else {
           this.$message.error(res.msg)
         }

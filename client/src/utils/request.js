@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const request = axios.create({
     baseURL:'/api',
-    timeout: 30000
+    timeout: 10000
 })
 
 // 请求拦截器
@@ -14,7 +14,6 @@ request.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => {
@@ -36,7 +35,6 @@ request.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default request
 

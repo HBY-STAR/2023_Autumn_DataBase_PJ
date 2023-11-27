@@ -8,7 +8,7 @@
           style="text-align: left; font-size: 20px; font-weight: 1000; color: darkslateblue"
         >
           <div class="toolbar">
-            <span>Lab2后台管理系统</span>
+            <span>PJ后台管理系统</span>
           </div>
         </el-aside>
         <el-main class="layout_header" style="text-align: right; font-size: 16px">

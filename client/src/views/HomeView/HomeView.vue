@@ -80,7 +80,7 @@
         </el-container>
       </el-aside>
       <el-main height="605px">
-        <RouterView></RouterView>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -99,8 +99,8 @@ export default {
     };
   },
   created() {
-    this.findAll();
-    //this.$router.push("home_commodity_all");
+    //this.findAll();
+    this.$router.push("/home_commodity_all");
   },
   methods: {
     findAll() {
@@ -108,7 +108,7 @@ export default {
         if (res.code === "200") {
           localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
         } else {
-          this.$message.error(res.msg);
+          this.$message.error(res.message);
         }
       });
     }

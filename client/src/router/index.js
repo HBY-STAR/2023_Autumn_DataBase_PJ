@@ -8,14 +8,15 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component:()=>import('../views/HomeView/HomeView.vue'),
-      children:[
+      children: [
         {
-          path:'home_commodity_all',
+          path:'/home_commodity_all',
           name:'home_commodity_all',
           component:()=>import('../views/HomeView/CommodityItemAll.vue')
         },
       ]
     },
+
     //登录界面
     {
       path: '/login',
