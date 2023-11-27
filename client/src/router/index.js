@@ -107,7 +107,7 @@ const router = createRouter({
         {
           path: 'message',
           name: 'message',
-          component:() =>import('../views/UserView/Message.vue')
+          component:() =>import('../views/UserView/MessageView.vue')
         }
       ]
     },
