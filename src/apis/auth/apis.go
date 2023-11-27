@@ -93,7 +93,7 @@ func Login(c *fiber.Ctx) error {
 
 	return c.JSON(TokenResponse{
 		Access:  access,
-		Message: "Login successful",
+		Message: "登录成功",
 	})
 }
 
