@@ -10,14 +10,9 @@ const router = createRouter({
       component:()=>import('../views/HomeView/HomeView.vue'),
       children: [
         {
-          path:'home_commodity_all',
+          path:'/home_commodity_all',
           name:'home_commodity_all',
           component:()=>import('../views/HomeView/CommodityItemAll.vue')
-        },
-        {
-          path:'search',
-          name:'search',
-          component:()=>import('../views/HomeView/SearchView.vue')
         },
       ]
     },

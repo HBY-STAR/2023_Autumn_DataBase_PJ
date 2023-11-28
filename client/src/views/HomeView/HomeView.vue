@@ -56,7 +56,7 @@
                   <el-icon>
                     <message />
                   </el-icon>
-                  <div @click="router.push('/search')">搜索商品</div>
+                  <div @click="remind_to_login">搜索商品</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="3">
