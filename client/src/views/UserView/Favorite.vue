@@ -1,153 +1,202 @@
 <template>
-  <el-container style="height: 500px">
-    <el-scrollbar height="500px">
-      <el-table :data="shop_cart_product"
-                stripe
-                @selection-change="handleSelectionChange"
-                border="true"
-                height="500px"
-      >
-
-        <el-table-column type="selection" width="50"/>
-        <el-table-column label="商品序列号" prop="productId" width="100"/>
-        <el-table-column label="商品名" prop="productName" width="120"/>
-        <el-table-column label="商品图片" prop="productImage" width="280">
-          <template v-slot="scope">
-            <div>
-              <el-image v-for="(item, index) in scope.row.productImage"
-                        :key="index" :src="item"
-                        :preview-src-list="[item]"
-                        alt="商品图片"
-                        style="width: 50px;height: 50px"
-                        append-to-body
-                        :preview-teleported="true"
-              >
-              </el-image>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="商品价格" prop="productPrice" width="180"/>
-        <el-table-column label="商品描述" prop="productInformation" width="120"/>
-        <el-table-column label="商品状态" prop="productState" width="90"/>
-        <el-table-column label="所属商店ID" prop="shopId" width="160"/>
-      </el-table>
-    </el-scrollbar>
-  </el-container>
-  <el-container>
-    <div>
-      <el-card style="margin-top: 20px;height: 80px;width: 1100px">
-        <div>
-          <div style="float: left">
-            <el-button
-                size="default"
-                @click="handleDelete()"
-                type="danger"
-                style="margin-left:10px;margin-top: 3px;"
-                icon="Delete"
-                :disabled="multiple"
-            >删除</el-button>
-          </div>
-          <div style="height: 50px; width: 800px;float: left">
+  <el-table :data="user_favorite" border height="580px" show-empty>
+    <el-table-column label="商品序号" prop="commodity_item_id" width="160"/>
+    <el-table-column label="商品名" prop="commodityItem.item_name" width="160"/>
+    <el-table-column label="商家" prop="commodityItem.seller.username" width="150"/>
+    <el-table-column label="平台" prop="commodityItem.platform.name" width="150"/>
+    <el-table-column label="当前价格" prop="commodityItem.price" width="150"/>
+    <el-table-column label="更多信息" width="100">
+      <template v-slot="scope">
+        <div style="text-align: center">
+          <el-icon>
+            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.commodity_item_id; drawer = true;">
+            </Search>
+          </el-icon>
+        </div>
+        <el-drawer v-model="drawer" title="商品更多信息" size="50%">
+          <div>
+            <el-form label-width="80px" size="small" style="margin-left: 10px">
+              <el-form-item label="生产日期:">
+                <span>{{ user_favorite.commodity.produce_at }}</span>
+              </el-form-item>
+              <el-form-item label="生产地址:">
+                <span>{{ user_favorite.commodity.produce_address }}</span>
+              </el-form-item>
+              <el-form-item label="售卖平台所属国家:">
+                <span>{{ user_favorite.platform.country }}</span>
+              </el-form-item>
+              <el-form-item label="上次信息更新时间:">
+                <span>{{ user_favorite.update }}</span>
+              </el-form-item>
+            </el-form>
           </div>
           <div>
-            <el-button
-                size="default"
-                @click="handlePay()"
-                type="success"
-                style="margin-left:10px;margin-top: 3px;"
-                icon="CircleCheck"
-                :disabled="multiple"
-            >结算</el-button>
+            <div style="height: 40px; margin-top: 20px">
+              <span style="margin-top: 20px; margin-bottom: 20px">查询价格历史:</span>
+            </div>
+            <div style="height: 50px">
+              <el-date-picker
+                v-model="find_price_history.time_start"
+                type="date"
+                placeholder="起始时间"
+              />
+              <el-date-picker
+                v-model="find_price_history.time_end"
+                type="date"
+                placeholder="结束时间"
+              />
+            </div>
+            <div>
+              <el-button @click="
+            innerDrawer = true;
+            this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
+            findPriceHistory();">查询
+              </el-button>
+              <el-drawer
+                v-model="innerDrawer"
+                title="价格历史"
+                :append-to-body="true"
+              >
+                <p>_(:зゝ∠)_</p>
+                <el-table :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
+                  <el-table-column label="更新时间" prop="update_at" width="200"/>
+                  <el-table-column label="价格" prop="new_price" width="200"/>
+                </el-table>
+              </el-drawer>
+            </div>
           </div>
-
+        </el-drawer>
+      </template>
+    </el-table-column>
+    <el-table-column label="收藏时间" prop="create_at" width="150"/>
+    <el-table-column label="提醒价格" prop="price_limit" width="120"/>
+    <el-table-column label="设置提醒价格" width="140">
+      <template v-slot="scope">
+        <div style="text-align: center">
+          <el-icon>
+            <Edit style="height: 25px; width: 25px;text-align: center;color: #409eff" @click="this.focus_commodity_item_id=scope.row.commodity_item_id; dialogFormVisible=true;">
+            </Edit>
+          </el-icon>
         </div>
-      </el-card>
-    </div>
-  </el-container>
-
+        <el-dialog v-model="dialogFormVisible" title="设置提醒价格">
+          <el-input-number v-model="input_limit" :min="0" :precision="2"/>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">返回</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false; setPriceLimit();">
+                确定
+              </el-button>
+            </span>
+          </template>
+        </el-dialog>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
-import QS from 'qs'
+
+import { Edit, Search } from "@element-plus/icons-vue";
 
 export default {
-  name: "shop_cart",
+  name: "user_favorite",
+  components: { Search, Edit },
   data() {
     return {
-      shop_cart_product: localStorage.getItem('shop_cart_product')
-          ? JSON.parse(localStorage.getItem('shop_cart_product'))
-          : {},
-      user_data: localStorage.getItem('user_data')
-          ? JSON.parse(localStorage.getItem('user_data'))
-          : {},
-      // 选中数组
-      productIds: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
+      user_favorite: localStorage.getItem('user_favorite')
+        ? JSON.parse(localStorage.getItem('user_favorite'))
+        : [],
+      commodity_price_history: localStorage.getItem('commodity_price_history')
+        ? JSON.parse(localStorage.getItem('commodity_price_history'))
+        : [],
+
+      focus_commodity_item_id: 0,
+      set_price_limit:{
+        item_id: -1,
+        price_limit: -1,
+      },
+      dialogFormVisible:false,
+      input_limit: -1,
+
+      drawer: false,
+      innerDrawer: false,
+      find_price_history:{
+        commodity_item_id: -1,
+        time_start: null,
+        time_end: null,
+      },
+    };
+  },
+  computed: {
+    lowestPriceRowIndex() {
+      let lowestPrice = Number.MAX_VALUE;
+      let lowestIndex = -1;
+
+      this.commodity_price_history.forEach((item, index) => {
+        if (item.new_price < lowestPrice) {
+          lowestPrice = item.new_price;
+          lowestIndex = index;
+        }
+      });
+      return lowestIndex;
     }
   },
   created() {
-    this.findByUid()
+    this.findAll()
   },
   methods: {
-    findByUid() {
-      this.request.get('/product-data/find_shop_cart_by_'+this.user_data.uid).then((res) => {
-        if (res.code === '200') {
-          localStorage.setItem('shop_cart_product', JSON.stringify(res.data))
+    findAll(){
+      this.request.get("/favorites/all").then((res) => {
+        if (res.code === "200") {
+          localStorage.setItem("user_favorite", JSON.stringify(res.data));
         } else {
-          this.$message.error(res.msg)
+          this.$message.error(res.message);
         }
-      })
+      });
     },
-    handleSelectionChange(selection) {
-      console.log("多选框选中数据");
-      this.productIds = selection.map(item => item.productId);
-      this.single = selection.length !== 1;
-      this.multiple = !selection.length;
+    setPriceLimit(){
+      if(this.input_limit<0){
+        this.$message.warning("提醒价格的值不应低于0")
+        return
+      }
+      this.set_price_limit.item_id=this.focus_commodity_item_id
+      this.set_price_limit.price_limit=this.input_limit
+      this.request.post("/price/limit",this.set_price_limit).then((res) => {
+        if (res.code === "200") {
+          localStorage.setItem("user_favorite", JSON.stringify(res.data));
+          this.$message.success("设置成功")
+        } else {
+          this.$message.error(res.message);
+        }
+      });
     },
-    handleDelete(){
-      this.$confirm("是否确认删除选中的商品?", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(()=>{
-          this.$axios({
-            method: "post",
-            url: '/user-account/delete_shop_cart_by_'+this.user_data.uid,
-            data: QS.stringify({productIds:this.productIds}, {arrayFormat: 'brackets'})
-          }).then(res=>{
-            if(res.data.code==='200'){
-              this.$message.success("删除成功");
-            }
-            else{
-              this.$message.error(res.data.msg);
-            }
-          })}
-      ).catch(()=>{})
-
-    },
-    handlePay(){
-      this.$confirm("是否结算选中的商品?", "通知", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(()=>{
-        this.$axios({
-          method: "post",
-          url: '/user-account/pay_shop_cart_by_'+this.user_data.uid,
-          data: QS.stringify({productIds:this.productIds}, {arrayFormat: 'brackets'})
-        }).then(res=>{
-          if(res.data.code==='200'){
-            this.$message.success("购买成功");
+    findPriceHistory(){
+      if(this.find_price_history.commodity_item_id===-1){
+        this.$message.error('未选中任何商品')
+      }else {
+        this.request.post('/price/history',this.find_price_history).then(res=>{
+          if(res.code==='200'){
+            this.$message.success("添加成功！")
           }
-          else{
-            this.$message.error(res.data.msg);
+          else {
+            this.$message.error(res.message)
           }
-        })}
-      ).catch(()=>{})
+        })
+      }
+    },
+    highlightLowestPriceRow(row, index) {
+      if (index === this.lowestPriceRowIndex) {
+        return 'highlight'; // Apply the 'highlight' class to the row with the lowest price
+      }
+      return ''; // Return empty string for other rows
     },
   }
-}
+};
+
 </script>
+
+<style>
+.highlight {
+  background-color: #ff0036; /* 设置您想要的高亮颜色 */
+}
+</style>

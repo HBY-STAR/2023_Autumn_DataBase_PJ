@@ -12,7 +12,7 @@
         </el-aside>
         <el-main style="text-align: right; font-size: 16px">
           <div>
-            <span style="position: relative">{{ user_data.username ? user_data.username : '用户名' }}</span>
+            <span style="position: relative">{{ user_data.username ? user_data.username : '未登录' }}</span>
             <el-dropdown>
               <el-icon style="margin-left: 8px; margin-top: 1px; font-size: large">
                 <setting />
@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     findAll() {
-      this.request.get("/commodities/all").then((res) => {
+      this.request.get("/commodity/all").then((res) => {
         if (res.code === "200") {
           localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
         } else {

@@ -1,6 +1,6 @@
 <template>
-  <el-table :data="currentTableData" border height="500px" show-empty>
-    <el-table-column label="商品序号" prop="commodity_id" width="180"/>
+  <el-table :data="currentTableData" border height="530px" show-empty>
+    <el-table-column label="商品序号" prop="id" width="180"/>
     <el-table-column label="商品名" prop="item_name" width="200"/>
     <el-table-column label="种类" prop="commodity.category" width="200"/>
     <el-table-column label="价格" prop="price" width="200"/>
@@ -10,7 +10,7 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.commodity_id; drawer = true;">
+            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true;">
             </Search>
           </el-icon>
         </div>
@@ -73,7 +73,7 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Star style="height: 25px; width: 25px;text-align: center;color: #409eff" @click="this.focus_commodity_item_id=scope.row.commodity_id; addToFavorite();">
+            <Star style="height: 25px; width: 25px;text-align: center;color: #409eff" @click="this.focus_commodity_item_id=scope.row.id; addToFavorite();">
             </Star>
           </el-icon>
         </div>
@@ -139,7 +139,6 @@ export default {
           lowestIndex = index;
         }
       });
-
       return lowestIndex;
     }
   },
@@ -153,7 +152,7 @@ export default {
       this.currentPage = val;
     },
     findAll() {
-      this.request.get("/commodities/all").then((res) => {
+      this.request.get("/commodity/all").then((res) => {
         if (res.code === "200") {
           localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
         } else {
