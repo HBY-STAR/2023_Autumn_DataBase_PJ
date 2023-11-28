@@ -1,5 +1,23 @@
 <template>
-  <el-table :data="currentTableData" border height="500px" show-empty>
+  <div>
+    <el-input
+      v-model="search_info.search"
+      placeholder="请输入..."
+    >
+      <template #prepend>
+        <el-select v-model="search_info.accurate" placeholder="搜索" style="width: 120px">
+          <el-option label="按相关商品" value = false />
+          <el-option label="按具体种类" value= true />
+        </el-select>
+      </template>
+      <template #append>
+        <el-button @click="search_commodity">
+          <el-icon><Search /></el-icon>
+        </el-button>
+      </template>
+    </el-input>
+  </div>
+  <el-table :data="currentTableData" border height="480px" show-empty style="margin-top: 20px">
     <el-table-column label="商品序号" prop="commodity_id" width="180"/>
     <el-table-column label="商品名" prop="item_name" width="200"/>
     <el-table-column label="种类" prop="commodity.category" width="200"/>
@@ -18,16 +36,16 @@
           <div>
             <el-form label-width="80px" size="small" style="margin-left: 10px">
               <el-form-item label="生产日期:">
-                <span>{{ home_commodity_all.commodity.produce_at }}</span>
+                <span>{{ search_commodity_item.commodity.produce_at }}</span>
               </el-form-item>
               <el-form-item label="生产地址:">
-                <span>{{ home_commodity_all.commodity.produce_address }}</span>
+                <span>{{ search_commodity_item.commodity.produce_address }}</span>
               </el-form-item>
               <el-form-item label="售卖平台所属国家:">
-                <span>{{ home_commodity_all.platform.country }}</span>
+                <span>{{ search_commodity_item.platform.country }}</span>
               </el-form-item>
               <el-form-item label="上次信息更新时间:">
-                <span>{{ home_commodity_all.update }}</span>
+                <span>{{ search_commodity_item.update }}</span>
               </el-form-item>
             </el-form>
           </div>
@@ -86,7 +104,7 @@
     :current-page="currentPage"
     :page-size="20"
     layout="total, prev, pager, next, jumper"
-    :total="home_commodity_all.length"
+    :total="search_commodity_item.length"
     position="bottom"
     background
   />
@@ -94,19 +112,16 @@
 
 <script>
 
-import {Star} from "@element-plus/icons-vue";
-import {Search} from "@element-plus/icons-vue";
-
-
+import { Search, Star } from "@element-plus/icons-vue";
 
 export default {
-  name: "home_commodity_all",
+  name: "search_commodity_item",
   components: {Star, Search},
   data() {
     return {
-      home_commodity_all: localStorage.getItem('home_commodity_all')
-          ? JSON.parse(localStorage.getItem('home_commodity_all'))
-          : [],
+      search_commodity_item: localStorage.getItem('search_commodity_item')
+        ? JSON.parse(localStorage.getItem('search_commodity_item'))
+        : [],
       commodity_price_history: localStorage.getItem('commodity_price_history')
         ? JSON.parse(localStorage.getItem('commodity_price_history'))
         : [],
@@ -114,6 +129,11 @@ export default {
       focus_commodity_item_id:0,
       currentPage: 1,
       pageSize: 10,
+      search_info: {
+        search: null,
+        accurate:  null,
+        range: null,
+      },
       drawer: false,
       innerDrawer: false,
       find_price_history:{
@@ -127,7 +147,7 @@ export default {
     currentTableData() {
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
-      return this.home_commodity_all.slice(start, end);
+      return this.search_commodity_item.slice(start, end);
     },
     lowestPriceRowIndex() {
       let lowestPrice = Number.MAX_VALUE;
@@ -144,22 +164,10 @@ export default {
     }
   },
   created() {
-    if(localStorage.getItem('home_commodity_all') === null){
-      this.findAll()
-    }
   },
   methods: {
     handleCurrentChange(val) {
       this.currentPage = val;
-    },
-    findAll() {
-      this.request.get("/commodities/all").then((res) => {
-        if (res.code === "200") {
-          localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
-        } else {
-          this.$message.error(res.message);
-        }
-      });
     },
     addToFavorite(){
       if(localStorage.getItem("token")===null){
@@ -177,6 +185,19 @@ export default {
             this.$message.error(res.message)
           }
         })
+      }
+    },
+    search_commodity(){
+      if(this.search_info.search==null || this.search_info.accurate==null){
+        this.$message.error('请确定搜索选项并输入要搜索的内容');
+      }else {
+        this.request.post("/search",).then((res) => {
+          if (res.code === "200") {
+            localStorage.setItem("search_commodity_item", JSON.stringify(res.data));
+          } else {
+            this.$message.error(res.message);
+          }
+        });
       }
     },
     findPriceHistory(){
@@ -198,7 +219,7 @@ export default {
         return 'highlight'; // Apply the 'highlight' class to the row with the lowest price
       }
       return ''; // Return empty string for other rows
-    },
+    }
   }
 }
 </script>

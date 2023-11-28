@@ -10,9 +10,14 @@ const router = createRouter({
       component:()=>import('../views/HomeView/HomeView.vue'),
       children: [
         {
-          path:'/home_commodity_all',
+          path:'home_commodity_all',
           name:'home_commodity_all',
           component:()=>import('../views/HomeView/CommodityItemAll.vue')
+        },
+        {
+          path:'search',
+          name:'search',
+          component:()=>import('../views/HomeView/SearchView.vue')
         },
       ]
     },
@@ -108,7 +113,12 @@ const router = createRouter({
           path: 'message',
           name: 'message',
           component:() =>import('../views/UserView/MessageView.vue')
-        }
+        },
+        {
+          path:'search',
+          name:'search',
+          component:()=>import('../views/HomeView/SearchView.vue')
+        },
       ]
     },
     //商家界面
@@ -133,6 +143,12 @@ const router = createRouter({
           component:()=>import('../views/SellerView/CommodityItemAdd.vue')
         },
       ]
+    },
+    //测试界面
+    {
+      path: '/test',
+      name: 'test',
+      component:()=>import('../views/TestView.vue')
     },
   ]
 })

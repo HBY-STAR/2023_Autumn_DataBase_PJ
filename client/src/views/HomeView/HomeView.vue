@@ -54,12 +54,20 @@
               <el-menu-item index="2">
                 <template #title>
                   <el-icon>
+                    <message />
+                  </el-icon>
+                  <div @click="router.push('/search')">搜索商品</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="3">
+                <template #title>
+                  <el-icon>
                     <icon-menu />
                   </el-icon>
                   <div @click="remind_to_login">个人信息</div>
                 </template>
               </el-menu-item>
-              <el-menu-item index="3">
+              <el-menu-item index="4">
                 <template #title>
                   <el-icon>
                     <setting />
@@ -67,7 +75,7 @@
                   <div @click="remind_to_login">个人收藏</div>
                 </template>
               </el-menu-item>
-              <el-menu-item index="4">
+              <el-menu-item index="5">
                 <template #title>
                   <el-icon>
                     <setting />
@@ -93,25 +101,11 @@ export default {
   name: "home_view",
   data() {
     return {
-      home_commodity_all: localStorage.getItem("home_commodity_all")
-        ? JSON.parse(localStorage.getItem("home_commodity_all"))
-        : {}
     };
   },
   created() {
-    //this.findAll();
-    this.$router.push("/home_commodity_all");
   },
   methods: {
-    findAll() {
-      this.request.get("/commodity/all").then((res) => {
-        if (res.code === "200") {
-          localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
-        } else {
-          this.$message.error(res.message);
-        }
-      });
-    }
   }
 };
 

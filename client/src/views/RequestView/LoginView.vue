@@ -39,7 +39,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" size="default" autocomplete="off" @click="login">登录</el-button>
-          <el-button autocomplete="off" style="position: absolute;right: 0" type="warning" @click="router().push('/')">返回</el-button>
+          <el-button autocomplete="off" style="position: absolute;right: 0" type="warning" @click="return_back">返回</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -81,11 +81,12 @@ export default {
       this.$refs["userForm"].validate((valid) => {
         if (valid) {
           // 表单校验合法
-          this.request.post("/login", this.user).then((res) => {
+          this.request.post("/login", this.user_login).then((res) => {
             if (res.code === "200")
             {
               //存储token
               localStorage.setItem("token", JSON.stringify(res.data.access));
+              localStorage.setItem("user_type", JSON.stringify(this.user_login.type));
               if (this.user_login.type === "admin") {
                 this.$router.push("/admin");
               } else if (this.user_login.type === "user") {
@@ -104,6 +105,17 @@ export default {
           });
         }
       });
+    },
+    return_back(){
+      if(localStorage.getItem("user_type") === 'admin'){
+        this.$router.push("/admin");
+      }else if(localStorage.getItem("user_type") === 'user'){
+        this.$router.push("/user");
+      }else if(localStorage.getItem("user_type") === 'seller'){
+        this.$router.push("/seller");
+      }else {
+        this.$router.push("/");
+      }
     }
   }
 };
