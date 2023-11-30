@@ -29,7 +29,6 @@ const router = createRouter({
       name:'admin',
       component: ()=>import('../views/AdminView/AdminView.vue'),
       children:[
-        //Get all
         {
           path:'all_user_data',
           name:'all_user_data',
@@ -55,31 +54,11 @@ const router = createRouter({
           name: 'all_platform_data',
           component:()=>import('../views/AdminView/Platform/PlatformData.vue')
         },
-        //Add one
-        {
-          path:'user_add',
-          name:'user_add_data',
-          component:()=>import('../views/AdminView/User/UserAdd.vue'),
-        },
-        {
-          path:'seller_add',
-          name:'seller_add_data',
-          component:()=>import('../views/AdminView/Seller/SellerAddData.vue'),
-        },
-        {
-          path: 'commodity_add',
-          name: 'commodity_add',
-          component:()=>import('../views/AdminView/Commodity/CommodityAdd.vue')
-        },
+        //add
         {
           path: 'commodity_item_add',
           name: 'commodity_item_add',
           component:()=>import('../views/AdminView/Commodity/CommodityItemAdd.vue')
-        },
-        {
-          path:'platform_add',
-          name:'platform_add',
-          component:()=>import('../views/AdminView/Platform/PlatformAdd.vue'),
         },
       ]
     },

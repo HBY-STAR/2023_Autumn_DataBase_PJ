@@ -39,7 +39,7 @@
       <el-card style="margin-left: 40px; width: 400px">
         <div style="margin: 10px 0; text-align: center; font-size: 24px; color: cornflowerblue"><b>发布商品</b></div>
         <div style="height: 20px"></div>
-        <el-form :model="addCommodity" :rules="addRules" ref="userForm">
+        <el-form :model="addCommodity" :rules="addRules" ref="addRules">
           <el-form-item prop="commodity_id">
             <el-input
               style="margin-top: 20px"

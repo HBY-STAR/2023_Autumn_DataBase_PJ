@@ -81,7 +81,7 @@
           title="修改商品"
           width="30%"
         >
-          <el-form :model="update_commodity_item" :rules="updateRules" label-width="120px">
+          <el-form :model="update_commodity_item" :rules="updateRules" ref="updateRules" label-width="120px">
             <el-form-item label="商品名" prop="item_name">
               <el-input v-model="update_commodity_item.item_name" placeholder="请输入修改后的商品名" />
             </el-form-item>
