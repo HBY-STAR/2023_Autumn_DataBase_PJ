@@ -1,330 +1,296 @@
 <template>
-  <div style="width: 900px;float: left">
-    <el-scrollbar height="605px">
-      <el-table
-          :data="my_shop_product_data"
-          ref="product_table"
-          height="605px"
-          :border="true"
-          highlight-current-row
-      >
-        <el-table-column label="商品序列号" prop="productId" width="100"/>
-        <el-table-column label="商品名" prop="productName" width="120"/>
-        <el-table-column label="商品图片" prop="productImage" width="210">
-          <template v-slot="scope">
-            <div>
-              <el-image v-for="(item, index) in scope.row.productImage"
-                        :key="index" :src="item"
-                        :preview-src-list="[item]"
-                        alt="商品图片"
-                        style="width: 50px;height: 50px"
-                        append-to-body
-                        :preview-teleported="true"
-              >
-              </el-image>
-              <UploadFilled
-                  style="height: 18px; width: 20px;position:absolute;right: 0; bottom:60%;text-align: center"
-                  @click="this.focus_product_id=scope.row.productId;upload_product_image=true">
-              </UploadFilled>
-              <Delete
-                  style="height: 18px; width: 20px;position:absolute;right: 0; bottom:10%;text-align: center"
-                  @click="this.focus_product_id=scope.row.productId;delete_product_image=true">
-              </Delete>
-                <el-dialog
-                    v-model="this.delete_product_image"
-                    title="通知"
-                    style="text-align: center"
-                    width="20%"
-                    :append-to-body="true"
-                    :modal="false"
-                >
-                  <span>是否确定要删除该商品的商品图片？</span>
-                  <template #footer>
-                  <span class="dialog-footer">
-                  <el-button @click="delete_product_image = false" style="position: absolute;left: 30px">取消</el-button>
-                  <el-button type="primary" @click="deleteProductImage">
-                    确定
-                  </el-button>
-                  </span>
-                  </template>
-                </el-dialog>
-              <div>
-            <el-dialog
-                v-model="this.upload_product_image"
-                title="上传商品图片"
-                width="20%"
-                style="text-align: center;"
-                fit="fit"
-                :append-to-body="true"
-                :modal="false"
-            >
-              <div>
-                <el-upload
-                    ref="upload"
-                    drag
-                    multiple
-                    list-type="picture"
-                    enctype="multipart/form-data"
-                    action="#"
-                    :limit="1"
-                    :show-file-list="true"
-                    :auto-upload="false"
-                    :http-request="picUpload"
-                    :before-upload="beforeAvatarUpload"
-                >
-
-                  <div class="el-upload__text">
-                    将文件拖至此处，或者 <em>点击上传</em>
-                  </div>
-                  <template #tip>
-                    <div class="el-upload__tip">
-                      文件格式为jpg或png，且不大于5MB。
-                    </div>
-                  </template>
-                </el-upload>
-              </div>
-              <template #footer>
-                    <span class="dialog-footer">
-                      <el-button @click="this.upload_product_image = false" style="position: absolute;left: 30px">返回</el-button>
-                      <el-button
-                          type="primary"
-                          @click="submitUpload();"
-                      >
-                        确认
-                      </el-button>
-                    </span>
-              </template>
-            </el-dialog>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="价格" prop="productPrice" width="70"/>
-        <el-table-column label="商品描述" prop="productInformation" width="280"/>
-        <el-table-column label="商品状态" prop="productState" width="120"/>
-      </el-table>
-    </el-scrollbar>
-  </div>
-  <div style="float: left;margin-left: 50px">
-    <el-card style="width: 300px;height: 300px">
-      <div style="text-align: center;">
-        <span style="color: #409eff">商品信息修改</span>
-        <el-form :model="product" :rules="rules" ref="productForm" style="margin-top: 20px">
-          <el-form-item prop="productId">
-            <el-input
-                placeholder="请输入商品序列号"
-                size="default"
-                prefix-icon="House"
-                v-model="product.productId"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="productName">
-            <el-input
-                placeholder="请输入商品名"
-                size="default"
-                prefix-icon="House"
-                v-model="product.productName"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="productPrice">
-            <el-input
-                placeholder="请输入商品价格"
-                size="default"
-                prefix-icon="Money"
-                v-model="product.productPrice"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="productInformation">
-            <el-input
-                placeholder="请输入商品描述"
-                size="default"
-                prefix-icon="EditPen"
-                v-model="product.productInformation"
-            ></el-input>
-          </el-form-item>
-          <el-form-item style="margin: 20px 0; text-align: right">
-              <el-button type="primary" size="default" autocomplete="off" @click="changeProduct" style="position: absolute;right: 0;margin-top: 20px"
-              >提交修改</el-button
-              >
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-card>
-    <el-card style="width: 300px;margin-top: 15px;height: 110px">
-      <div>
+  <el-table :data="currentTableData" border height="530px" show-empty>
+    <el-table-column label="商品序号" prop="id" width="180"/>
+    <el-table-column label="商品名" prop="item_name" width="200"/>
+    <el-table-column label="种类" prop="commodity.category" width="200"/>
+    <el-table-column label="价格" prop="price" width="200"/>
+    <el-table-column label="平台" prop="platform.name" width="150"/>
+    <el-table-column label="更多信息" width="100">
+      <template v-slot="scope">
         <div style="text-align: center">
-        <span style="color: #409eff">上架新商品</span>
+          <el-icon>
+            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer1 = true;">
+            </Search>
+          </el-icon>
         </div>
-        <el-button type="primary" size="default" autocomplete="off" @click="router().push('/seller/apply_for_product')" style="margin-top: 20px;position: absolute;right: 80px;"
-        >申请</el-button
-        >
-      </div>
-    </el-card>
-    <el-card style="width: 300px;margin-top: 15px;height: 160px">
-      <div>
-        <div>
-          <div style="text-align: center; height: 30px">
-            <span style="color: #409eff">下架商品</span>
+        <el-drawer v-model="drawer1" title="商品更多信息" size="50%">
+          <div>
+            <el-form label-width="80px" size="small" style="margin-left: 10px">
+              <el-form-item label="生产日期:">
+                <span>{{ seller_commodity_item.commodity.produce_at }}</span>
+              </el-form-item>
+              <el-form-item label="生产地址:">
+                <span>{{ seller_commodity_item.commodity.produce_address }}</span>
+              </el-form-item>
+              <el-form-item label="售卖平台所属国家:">
+                <span>{{ seller_commodity_item.platform.country }}</span>
+              </el-form-item>
+              <el-form-item label="上次信息更新时间:">
+                <span>{{ seller_commodity_item.update }}</span>
+              </el-form-item>
+            </el-form>
           </div>
           <div>
-            <span style="width: 80px;float: left;font-size: small;margin-top: 15px;color: #c45656">商品序列号:</span>
-            <el-input-number
-                style="margin-top: 10px;width: 180px;"
-                placeholder="请输入商品序列号"
-                v-model="delete_product_id"
-                controls-position="right"
-            >
-            </el-input-number>
+            <div style="height: 40px; margin-top: 20px">
+              <span style="margin-top: 20px; margin-bottom: 20px">查询价格历史:</span>
+            </div>
+            <div style="height: 50px">
+              <el-date-picker
+                v-model="find_price_history.time_start"
+                type="date"
+                placeholder="起始时间"
+              />
+              <el-date-picker
+                v-model="find_price_history.time_end"
+                type="date"
+                placeholder="结束时间"
+              />
+            </div>
+            <div>
+              <el-button @click="
+            innerDrawer1 = true;
+            this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
+            findPriceHistory();">查询
+              </el-button>
+              <el-drawer
+                v-model="innerDrawer1"
+                title="价格历史"
+                :append-to-body="true"
+              >
+                <p>_(:зゝ∠)_</p>
+                <el-table :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
+                  <el-table-column label="更新时间" prop="update_at" width="200"/>
+                  <el-table-column label="价格" prop="new_price" width="200"/>
+                </el-table>
+              </el-drawer>
+            </div>
           </div>
+        </el-drawer>
+      </template>
+    </el-table-column>
+    <el-table-column label="修改商品" width="110">
+      <template v-slot="scope">
+        <div style="text-align: center">
+          <el-icon>
+            <Star style="height: 25px; width: 25px;text-align: center;color: #409eff" @click="this.focus_commodity_item_id=scope.row.id; dialogVisible=true;">
+            </Star>
+          </el-icon>
         </div>
-        <el-button type="primary" size="default" autocomplete="off" @click="deleteProduct" style="margin-top: 20px; position: absolute;right: 80px;"
-        >删除</el-button
+        <el-dialog
+          v-model="dialogVisible"
+          title="修改商品"
+          width="30%"
         >
-      </div>
-    </el-card>
-  </div>
+          <el-form :model="update_commodity_item" :rules="updateRules" label-width="120px">
+            <el-form-item label="商品名" prop="item_name">
+              <el-input v-model="update_commodity_item.item_name" placeholder="请输入修改后的商品名" />
+            </el-form-item>
+            <el-form-item label="商品价格" prop="item_price">
+              <el-input-number
+                v-model="update_commodity_item.item_price"
+                :precision="2"
+                :min="0.00"
+                placeholder="请输入修改后的商品价格"
+              />
+            </el-form-item>
+          </el-form>
+          <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false;updateCommodityItem();">
+          确定
+        </el-button>
+      </span>
+          </template>
+        </el-dialog>
+      </template>
+    </el-table-column>
+    <el-table-column label="下架商品" width="110">
+      <template v-slot="scope">
+        <div style="text-align: center">
+          <el-icon>
+            <Star
+              style="height: 25px; width: 25px; text-align: center; color: #409eff"
+              @click="showConfirmationDialog(scope.row.id)"
+            >
+            </Star>
+          </el-icon>
+        </div>
+      </template>
+    </el-table-column>
+  </el-table>
+  <el-pagination
+    style="margin-top: 20px"
+    @current-change="handleCurrentChange"
+    :current-page="currentPage"
+    :page-size="20"
+    layout="total, prev, pager, next, jumper"
+    :total="seller_commodity_item.length"
+    position="bottom"
+    background
+  />
 </template>
 
 <script>
-import router from "@/router";
-import {Delete, UploadFilled} from "@element-plus/icons-vue";
+
+import {Star} from "@element-plus/icons-vue";
+import {Search} from "@element-plus/icons-vue";
 
 export default {
-  name:"my_shop_product_data",
-  components: {Delete, UploadFilled},
-  data(){
-    return{
-      product: {},
-      rules: {
-        productId:[
-          { required: true, message: '商品序列号不能为空', trigger: 'blur' },
-          { pattern:/^[0-9]*$/ , message: '商品序列号应为数字',trigger: 'blur'},
+  name: "seller_commodity_item",
+  components: {Star, Search},
+  data() {
+    return {
+      seller_commodity_item: localStorage.getItem('seller_commodity_item')
+        ? JSON.parse(localStorage.getItem('seller_commodity_item'))
+        : [],
+      seller_data: localStorage.getItem('seller_data')
+        ? JSON.parse(localStorage.getItem('seller_data'))
+        : {},
+      commodity_price_history: localStorage.getItem('commodity_price_history')
+        ? JSON.parse(localStorage.getItem('commodity_price_history'))
+        : [],
+      focus_commodity_item_id:0,
+      find_price_history:{
+        commodity_item_id: -1,
+        time_start: null,
+        time_end: null,
+      },
+      update_commodity_item:{
+        commodity_item_id:-1,
+        item_name:null,
+        price:0,
+      },
+      updateRules: {
+        item_name: [
+          { required: true, message: '请输入商品名', trigger: 'blur' },
+          { min: 2, max: 20, message: "长度在 2 到 20 个字符", trigger: "blur" }
         ],
-        productName: [
-          { required: true, message: '商品名不能为空', trigger: 'blur' },
-          { min: 1, max: 12, message: '长度应为 1 到 12 个字符', trigger: 'blur' }
-        ],
-        productPrice: [
-          { required: true, message: '商品价格不能为空', trigger: 'blur' },
-          { pattern:/^([1-9][0-9]*)+(.[0-9]{1,2})?$/, message: '商品价格应为最多带两位小数的正数',trigger: 'blur'},
-        ],
-        productInformation: [
-          { required: true, message: '商品描述不能为空', trigger: 'blur' },
-          { min: 1, max: 128, message: '长度在 1 到 128 个字符', trigger: 'blur' }
+        item_price: [
+          { required: true, message: '请输入商品价格', trigger: 'blur' },
+          { type: 'number', message: '请输入有效的数字', trigger: 'blur' },
+          { validator: this.validatePrice, trigger: 'blur' },
         ],
       },
-      my_shop_product_data: localStorage.getItem('my_shop_product_data')
-          ? JSON.parse(localStorage.getItem('my_shop_product_data'))
-          : {},
-      shop_data: localStorage.getItem('shop_data')
-          ? JSON.parse(localStorage.getItem('shop_data'))
-          :{},
-      user_data: localStorage.getItem('user_data')
-          ? JSON.parse(localStorage.getItem('user_data'))
-          : {},
-      delete_product_id:0,
-      upload_product_image:false,
-      delete_product_image:false,
-      focus_product_id:0,
+      //page
+      currentPage: 1,
+      pageSize: 10,
+      //drawer
+      drawer1: false,
+      innerDrawer1: false,
+      //dialog
+      dialogVisible:false,
+    }
+  },
+  computed: {
+    currentTableData() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.seller_commodity_item.slice(start, end);
+    },
+    lowestPriceRowIndex() {
+      let lowestPrice = Number.MAX_VALUE;
+      let lowestIndex = -1;
+
+      this.commodity_price_history.forEach((item, index) => {
+        if (item.new_price < lowestPrice) {
+          lowestPrice = item.new_price;
+          lowestIndex = index;
+        }
+      });
+      return lowestIndex;
     }
   },
   created() {
-    this.findShopId()
-    this.findAll()
+    if(localStorage.getItem('seller_commodity_item') === null){
+      this.findAll()
+    }
   },
-  methods:{
-    router() {
-      return router
+  methods: {
+    handleCurrentChange(val) {
+      this.currentPage = val;
     },
-    findAll(){
-      this.request.get('/product-data/find_by_'+ this.shop_data.shopId).then((res) => {
-        if (res.code === '200') {
-          localStorage.setItem('my_shop_product_data', JSON.stringify(res.data)) // 存储用户信息到浏览器
+    findAll() {
+      this.request.get("/commodity/all").then((res) => {
+        if (res.code === "200") {
+          localStorage.setItem("seller_commodity_item", JSON.stringify(res.data));
         } else {
-          this.$message.error(res.msg)
+          this.$message.error(res.message);
         }
-      })
+      });
     },
-    findShopId(){
-      this.request.get('/shop-data/find_by_uid_' + this.user_data.uid).then((res) => {
-        if (res.code === '200') {
-          localStorage.setItem('shop_data', JSON.stringify(res.data)) // 存储用户信息到浏览器
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
-    },
-    changeProduct(){
-      this.$refs['productForm'].validate((valid) => {
+    updateCommodityItem(){
+      this.$refs["updateRules"].validate((valid) => {
         if (valid) {
-          this.request.post('/product-data/change_product',this.product).then((res) => {
-            if (res.code === '200') {
-              localStorage.setItem('product_data', JSON.stringify(res.data))
-              this.$message.success('修改已提交，申请中')
+          this.update_commodity_item.commodity_item_id=this.focus_commodity_item_id;
+          this.request.put("/commodity/item",this.update_commodity_item).then((res) => {
+            if (res.code === "200") {
+              this.$message.success("设置成功")
             } else {
-              this.$message.error(res.msg)
+              this.$message.error(res.message);
             }
-          })
+          });
         }
-      })
+      });
     },
-    deleteProduct(){
-      this.request.delete('/product-data/delete_'+this.delete_product_id).then((res) => {
-        if (res === true) {
-          this.$message.success('删除成功')
+    validatePrice(rule, value, callback) {
+      // 自定义价格验证规则示例
+      if (value <= 0) {
+        callback(new Error('商品价格必须大于零'));
+      } else {
+        callback();
+      }
+    },
+    deleteCommodityItem(){
+      this.request.delete("/commodity/item/"+this.focus_commodity_item_id).then((res) => {
+        if (res.code === "200") {
+          this.$message.success("删除成功")
         } else {
-          this.$message.error("删除失败")
+          this.$message.error(res.message);
         }
-      })
+      });
     },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt5M = file.size / 1024 / 1024 < 5;
-
-      if ((!isPNG)&&(!isJPG)) {
-        this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
-      }
-      if (!isLt5M) {
-        this.$message.error('上传头像图片大小不能超过 5MB!');
-      }
-      return (isJPG || isPNG) && isLt5M;
-    },
-//这里是自定义发送请求
-    picUpload(f) {
-      let params = new FormData()
-      //注意在这里一个坑f.file
-      params.append("file", f.file);
-      this.$axios({
-        method:'post',
-        //这里的id是我要改变用户的ID值
-        url:'/product-data/upload_image_'+this.focus_product_id,
-        data:params,
-        headers:{
-          'content-type':'multipart/form-data'
-        }
-      }).then(res => {
-          if (res.data.code==='200') {
-            this.$message.success("上传成功");
-            this.my_shop_product_data.productImage=res.data.data;
-          }else {
-            this.$message.error(res.data.msg);
+    findPriceHistory(){
+      if(this.find_price_history.commodity_item_id===-1){
+        this.$message.error('未选中任何商品')
+      }else {
+        this.request.post('/price/history',this.find_price_history).then(res=>{
+          if(res.code==='200'){
+            localStorage.setItem("commodity_price_history", JSON.stringify(res.data));
           }
+          else {
+            this.$message.error(res.message)
+          }
+        })
+      }
+    },
+    highlightLowestPriceRow(row, index) {
+      if (index === this.lowestPriceRowIndex) {
+        return 'highlight'; // Apply the 'highlight' class to the row with the lowest price
+      }
+      return ''; // Return empty string for other rows
+    },
+    showConfirmationDialog(itemId) {
+      this.$confirm('您确定要删除这个商品吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
-    },
-    //触发请求
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
-    deleteProductImage(){
-      this.request.delete('/product-data/delete_image_'+this.focus_product_id).then(res=>{
-        if (res === true) {
-          this.$message.success('删除成功');
-        } else {
-          this.$message.error("删除失败");
-        }
-      })
-    },
-  }
+        .then(() => {
+          // 用户点击了确定按钮，可以在这里执行删除商品的操作
+          this.focus_commodity_item_id = itemId;
+          this.deleteCommodityItem();
+        })
+        .catch(() => {
+          // 用户点击了取消按钮，不执行任何操作
+        });
+    }
+  },
 }
 </script>
+
+<style>
+.highlight {
+  background-color: #ff0036; /* 设置您想要的高亮颜色 */
+}
+</style>

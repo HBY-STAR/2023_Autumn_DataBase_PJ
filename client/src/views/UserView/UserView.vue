@@ -100,7 +100,7 @@
 <script>
 
 export default {
-  name: "home_view",
+  name: "user_view",
   data() {
     return {
       home_commodity_all: localStorage.getItem("home_commodity_all")

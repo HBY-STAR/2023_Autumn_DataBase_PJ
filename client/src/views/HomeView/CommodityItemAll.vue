@@ -184,7 +184,7 @@ export default {
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
           if(res.code==='200'){
-            this.$message.success("添加成功！")
+            localStorage.setItem("commodity_price_history", JSON.stringify(res.data));
           }
           else {
             this.$message.error(res.message)

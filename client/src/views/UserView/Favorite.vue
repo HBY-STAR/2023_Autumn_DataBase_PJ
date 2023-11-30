@@ -163,7 +163,6 @@ export default {
       this.set_price_limit.price_limit=this.input_limit
       this.request.post("/price/limit",this.set_price_limit).then((res) => {
         if (res.code === "200") {
-          localStorage.setItem("user_favorite", JSON.stringify(res.data));
           this.$message.success("设置成功")
         } else {
           this.$message.error(res.message);
