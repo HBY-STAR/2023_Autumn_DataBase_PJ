@@ -49,7 +49,7 @@
               <el-menu-item index="1">
                 <template #title>
                   <el-icon>
-                    <message />
+                    <goods />
                   </el-icon>
                   <div @click="router.push('/seller/commodity_item_data')">在售商品管理</div>
                 </template>
@@ -57,7 +57,7 @@
               <el-menu-item index="2">
                 <template #title>
                   <el-icon>
-                    <message />
+                    <edit />
                   </el-icon>
                   <div @click="router.push('/seller/add_commodity_item')">发布商品</div>
                 </template>
@@ -65,7 +65,7 @@
               <el-menu-item index="3">
                 <template #title>
                   <el-icon>
-                    <icon-menu />
+                    <user />
                   </el-icon>
                   <div @click="router.push('/seller/seller_data')">商家信息</div>
                 </template>

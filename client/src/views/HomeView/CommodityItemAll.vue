@@ -10,8 +10,8 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true;">
-            </Search>
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true;">
+            </Plus>
           </el-icon>
         </div>
         <el-drawer v-model="drawer" title="商品更多信息" size="50%">
@@ -95,13 +95,13 @@
 <script>
 
 import {Star} from "@element-plus/icons-vue";
-import {Search} from "@element-plus/icons-vue";
+import {Plus} from "@element-plus/icons-vue";
 
 
 
 export default {
   name: "home_commodity_all",
-  components: {Star, Search},
+  components: {Star, Plus},
   data() {
     return {
       home_commodity_all: localStorage.getItem('home_commodity_all')

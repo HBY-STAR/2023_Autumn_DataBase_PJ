@@ -49,7 +49,7 @@
               <el-menu-item index="1">
                 <template #title>
                   <el-icon>
-                    <message />
+                    <goods />
                   </el-icon>
                   <div @click="router.push('/user/all_commodity_item_data')">所有商品</div>
                 </template>
@@ -57,7 +57,7 @@
               <el-menu-item index="2">
                 <template #title>
                   <el-icon>
-                    <message />
+                    <search />
                   </el-icon>
                   <div @click="router.push('/user/search')">搜索商品</div>
                 </template>
@@ -65,7 +65,7 @@
               <el-menu-item index="3">
                 <template #title>
                   <el-icon>
-                    <icon-menu />
+                    <user />
                   </el-icon>
                   <div @click="router.push('/user/user_data')">个人信息</div>
                 </template>
@@ -73,7 +73,7 @@
               <el-menu-item index="4">
                 <template #title>
                   <el-icon>
-                    <setting />
+                    <star />
                   </el-icon>
                   <div @click="router.push('/user/favorite')">个人收藏</div>
                 </template>
@@ -81,7 +81,7 @@
               <el-menu-item index="5">
                 <template #title>
                   <el-icon>
-                    <setting />
+                    <message />
                   </el-icon>
                   <div @click="router.push('/user/message')">系统消息</div>
                 </template>

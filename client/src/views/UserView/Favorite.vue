@@ -9,8 +9,8 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.commodity_item_id; drawer = true;">
-            </Search>
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.commodity_item_id; drawer = true;">
+            </Plus>
           </el-icon>
         </div>
         <el-drawer v-model="drawer" title="商品更多信息" size="50%">
@@ -96,11 +96,11 @@
 
 <script>
 
-import { Edit, Search } from "@element-plus/icons-vue";
+import { Edit, Plus } from "@element-plus/icons-vue";
 
 export default {
   name: "user_favorite",
-  components: { Search, Edit },
+  components: { Plus, Edit },
   data() {
     return {
       user_favorite: localStorage.getItem('user_favorite')

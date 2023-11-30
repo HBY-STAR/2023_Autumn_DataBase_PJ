@@ -9,8 +9,8 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Search style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer1 = true;">
-            </Search>
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer1 = true;">
+            </Plus>
           </el-icon>
         </div>
         <el-drawer v-model="drawer1" title="商品更多信息" size="50%">
@@ -72,8 +72,8 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Star style="height: 25px; width: 25px;text-align: center;color: #409eff" @click="this.focus_commodity_item_id=scope.row.id; dialogVisible=true;">
-            </Star>
+            <Edit style="height: 25px; width: 25px;text-align: center;color: #409eff" @click="this.focus_commodity_item_id=scope.row.id; dialogVisible=true;">
+            </Edit>
           </el-icon>
         </div>
         <el-dialog
@@ -109,11 +109,11 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Star
+            <Delete
               style="height: 25px; width: 25px; text-align: center; color: #409eff"
               @click="showConfirmationDialog(scope.row.id)"
             >
-            </Star>
+            </Delete>
           </el-icon>
         </div>
       </template>
@@ -133,12 +133,11 @@
 
 <script>
 
-import {Star} from "@element-plus/icons-vue";
-import {Search} from "@element-plus/icons-vue";
+import {Edit, Plus,Delete} from "@element-plus/icons-vue";
 
 export default {
   name: "seller_commodity_item",
-  components: {Star, Search},
+  components: {Edit, Plus,Delete},
   data() {
     return {
       seller_commodity_item: localStorage.getItem('seller_commodity_item')
