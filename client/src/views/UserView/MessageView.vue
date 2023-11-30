@@ -5,7 +5,7 @@
     <el-table-column label="商品名" prop="id" width="200"/>
     <el-table-column label="当前价格" prop="id" width="200"/>
     <el-table-column label="商家" prop="id" width="200"/>
-    <el-table-column label="平台" prop="id" width="200"/>
+    <el-table-column label="平台" prop="id" width="170"/>
   </el-table>
 </template>
 

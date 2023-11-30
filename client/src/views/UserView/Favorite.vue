@@ -70,7 +70,7 @@
     </el-table-column>
     <el-table-column label="收藏时间" prop="create_at" width="150"/>
     <el-table-column label="提醒价格" prop="price_limit" width="120"/>
-    <el-table-column label="设置提醒价格" width="140">
+    <el-table-column label="设置提醒价格" width="110">
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>

@@ -87,7 +87,7 @@
         </el-drawer>
       </template>
     </el-table-column>
-    <el-table-column label="收藏" width="100">
+    <el-table-column label="收藏" width="70">
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
