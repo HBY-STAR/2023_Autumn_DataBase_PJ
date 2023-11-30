@@ -3,6 +3,7 @@ package seller
 import "github.com/gofiber/fiber/v2"
 
 func RegisterRoutes(app fiber.Router) {
+	app.Get("/sellers/me", GetCurSeller)
 	app.Get("/sellers/data", GetSeller)
 	app.Post("/sellers", AddSeller)
 	app.Delete("/sellers/:id", DeleteSeller)

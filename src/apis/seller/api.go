@@ -6,6 +6,12 @@ import (
 	. "src/models"
 )
 
+// GetCurSeller @GetCurSeller
+// @Router /api/sellers/me [get]
+func GetCurSeller(ctx *fiber.Ctx) error {
+	return nil
+}
+
 // GetSeller @GetSeller
 // @Router /api/sellers/data [get]
 // @Summary Get seller info
