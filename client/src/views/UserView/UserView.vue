@@ -138,6 +138,7 @@ export default {
 </script>
 
 <script setup>
+// eslint-disable-next-line no-unused-vars
 import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 import { RouterLink } from "vue-router";
 import router from "@/router";

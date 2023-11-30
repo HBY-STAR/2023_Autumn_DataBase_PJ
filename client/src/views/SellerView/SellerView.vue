@@ -122,7 +122,8 @@ export default {
 </script>
 
 <script setup>
-import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+
+import { Setting } from "@element-plus/icons-vue";
 import { RouterLink } from "vue-router";
 import router from "@/router";
 
