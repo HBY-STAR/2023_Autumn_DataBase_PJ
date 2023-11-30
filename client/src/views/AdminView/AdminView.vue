@@ -70,15 +70,15 @@
                   <div @click="router.push('/admin/all_platform_data')">平台管理</div>
                 </template>
               </el-menu-item>
-              <el-menu-item index="3">
+              <el-menu-item index="4">
                 <template #title>
                   <el-icon>
                     <sell />
                   </el-icon>
-                  <div @click="router.push('/admin/all_commodity_item_data')">已发布商品管理</div>
+                  <div @click="router.push('/admin/all_admin_commodity_item_data')">已发布商品管理</div>
                 </template>
               </el-menu-item>
-              <el-menu-item index="3">
+              <el-menu-item index="5">
                 <template #title>
                   <el-icon>
                     <goods />

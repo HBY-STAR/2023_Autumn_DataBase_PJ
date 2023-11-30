@@ -32,14 +32,17 @@
                 <el-form-item  prop="age">
                   <el-input v-model="update_user.age" placeholder="请输入用户年龄" />
                 </el-form-item>
-                <el-form-item prop="gender">
-                  <el-input v-model="update_user.gender" placeholder="请输入用户性别" />
-                </el-form-item>
                 <el-form-item prop="email">
                   <el-input v-model="update_user.email" placeholder="请输入用户邮箱" />
                 </el-form-item>
                 <el-form-item prop="phone">
                   <el-input v-model="update_user.phone" placeholder="请输入用户电话" />
+                </el-form-item>
+                <el-form-item prop="gender">
+                  <el-radio-group v-model="update_user.gender">
+                    <el-radio label=true border>男</el-radio>
+                    <el-radio label=false border>女</el-radio>
+                  </el-radio-group>
                 </el-form-item>
               </el-form>
               <template #footer>
@@ -90,14 +93,17 @@
           <el-form-item  prop="age">
             <el-input v-model="add_user.age" placeholder="请输入用户年龄" />
           </el-form-item>
-          <el-form-item prop="gender">
-            <el-input v-model="add_user.gender" placeholder="请输入用户性别" />
-          </el-form-item>
           <el-form-item prop="email">
             <el-input v-model="add_user.email" placeholder="请输入用户邮箱" />
           </el-form-item>
           <el-form-item prop="phone">
             <el-input v-model="add_user.phone" placeholder="请输入用户电话" />
+          </el-form-item>
+          <el-form-item prop="gender">
+            <el-radio-group v-model="add_user.gender">
+              <el-radio label=true border>男</el-radio>
+              <el-radio label=false border>女</el-radio>
+            </el-radio-group>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -230,7 +236,7 @@ export default {
     },
     //delete
     deleteUser(){
-      this.request.delete("/users"+this.focus_id).then((res) => {
+      this.request.delete("/users/"+this.focus_id).then((res) => {
         if (res.code === "200") {
           this.$message.success("删除成功")
         } else {
@@ -244,11 +250,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        // 用户点击确定时的操作
         this.focus_id = row.id;
         this.deleteUser();
       }).catch(() => {
-        // 用户点击取消时的操作
       });
     },
   }

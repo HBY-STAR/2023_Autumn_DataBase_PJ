@@ -45,20 +45,14 @@ const router = createRouter({
           component:()=>import('../views/AdminView/Commodity/CommodityData.vue')
         },
         {
-          path: 'all_commodity_item_data',
-          name: 'all_commodity_item_data',
+          path: 'all_admin_commodity_item_data',
+          name: 'all_admin_commodity_item_data',
           component:()=>import('../views/AdminView/Commodity/CommodityItemData.vue')
         },
         {
           path: 'all_platform_data',
           name: 'all_platform_data',
           component:()=>import('../views/AdminView/Platform/PlatformData.vue')
-        },
-        //add
-        {
-          path: 'commodity_item_add',
-          name: 'commodity_item_add',
-          component:()=>import('../views/AdminView/Commodity/CommodityItemAdd.vue')
         },
       ]
     },

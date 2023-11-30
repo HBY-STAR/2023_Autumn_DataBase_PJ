@@ -206,7 +206,7 @@ export default {
     },
     //delete
     deleteSeller(){
-      this.request.delete("/sellers"+this.focus_id).then((res) => {
+      this.request.delete("/sellers/"+this.focus_id).then((res) => {
         if (res.code === "200") {
           this.$message.success("删除成功")
         } else {
@@ -220,11 +220,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        // 商家点击确定时的操作
         this.focus_id = row.id;
         this.deleteSeller();
       }).catch(() => {
-        // 商家点击取消时的操作
       });
     },
   }
