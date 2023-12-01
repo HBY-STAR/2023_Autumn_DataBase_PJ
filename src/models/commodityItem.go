@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type CommodityItem struct {
 	ID          int        `json:"id" gorm:"primaryKey"`
 	Commodity   *Commodity `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
@@ -12,5 +10,5 @@ type CommodityItem struct {
 	SellerID    int        `json:"seller_id" gorm:"not null"`
 	ItemName    string     `json:"item_name" gorm:"not null;size:64"`
 	Price       float32    `json:"price" gorm:"check:price > 0; not null"`
-	UpdateAt    time.Time  `json:"update_at"`
+	UpdateAt    MyTime     `json:"update_at"`
 }

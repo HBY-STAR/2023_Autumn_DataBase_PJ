@@ -21,7 +21,7 @@ public class generateUser {
             User user = new User();
 
             //here
-            user.setUser_name(GenerateChinese.generate_human_name());
+            user.setUsername(GenerateChinese.generate_human_name());
             user.setAge(GenerateNum.generate_num(10,80));
             user.setPassword(RandomStringUtils.random(GenerateNum.generate_num(5,20),32,127,true,true));
             user.setGender(i % 2 == 0);
