@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"src/models"
+	"src/utils"
 )
 
 func parseAdmin() error {
@@ -17,8 +18,11 @@ func parseAdmin() error {
 		return err
 	}
 	for _, v := range admins {
-		fmt.Println(v)
-		return nil
+		v.Password = utils.MakePassword(v.Password)
+		err = models.DB.Create(&v).Error
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 	return nil
 }

@@ -71,10 +71,7 @@ func Login(c *fiber.Ctx) error {
 		tmpUser.Password = user.Password
 	}
 
-	ok, err := utils.CheckPassword(body.Password, tmpUser.Password)
-	if err != nil {
-		return err
-	}
+	ok := utils.CheckPassword(body.Password, tmpUser.Password)
 	if !ok {
 		//return fiber.NewError(fiber.StatusUnauthorized, "密码错误")
 		return common.Unauthorized("密码错误")

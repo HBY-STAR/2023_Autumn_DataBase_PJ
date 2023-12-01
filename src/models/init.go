@@ -22,11 +22,11 @@ func InitDB() error {
 	}
 
 	// 迁移数据库，确保 Login 表存在
-	err = DB.AutoMigrate(&User{}, &Seller{}, &Commodity{}, &Platform{}, &UserJwtSecret{})
+	err = DB.AutoMigrate(&User{}, &Seller{}, &Admin{}, &Commodity{}, &Platform{}, &UserJwtSecret{})
 	if err != nil {
 		return err
 	}
-	err = DB.AutoMigrate(&CommodityItem{}, &Favorite{}, &Message{})
+	err = DB.AutoMigrate(&CommodityItem{}, &Favorite{}, &Message{}, &PriceChange{})
 
 	return err
 }

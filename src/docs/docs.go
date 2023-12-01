@@ -22,6 +22,116 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/commodities": {
+            "put": {
+                "description": "更新商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "更新商品",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Commodity"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "description": "添加商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "添加商品",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commodity.CreateCommodityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "删除商品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "commodity id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/commodities/all": {
+            "get": {
+                "description": "获取所有商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "获取所有商品",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Commodity"
+                        }
+                    }
+                }
+            }
+        },
         "/api/commodity/all": {
             "get": {
                 "description": "获取所有商品",
@@ -186,6 +296,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/login": {
+            "post": {
+                "description": "Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/message/all": {
             "get": {
                 "description": "Get all messages",
@@ -314,6 +476,69 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Platform"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/price/history": {
+            "put": {
+                "description": "Update priceChange",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PriceChange"
+                ],
+                "summary": "Update priceChange",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/priceChange.UpdatePriceChangeModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "description": "Get priceChange by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PriceChange"
+                ],
+                "summary": "Get priceChange by ID",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/priceChange.GetPriceChangeModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PriceChange"
                         }
                     }
                 }
@@ -500,6 +725,11 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/sellers/me": {
+            "get": {
+                "responses": {}
+            }
+        },
         "/api/users": {
             "put": {
                 "description": "Update user",
@@ -609,168 +839,6 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/common.HttpError"
-                        }
-                    }
-                }
-            }
-        },
-        "/commodities": {
-            "put": {
-                "description": "更新商品",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商品"
-                ],
-                "summary": "更新商品",
-                "parameters": [
-                    {
-                        "description": "json",
-                        "name": "json",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Commodity"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "post": {
-                "description": "添加商品",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商品"
-                ],
-                "summary": "添加商品",
-                "parameters": [
-                    {
-                        "description": "json",
-                        "name": "json",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/commodity.CreateCommodityRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "delete": {
-                "description": "删除商品",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商品"
-                ],
-                "summary": "删除商品",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "commodity id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/commodities/all": {
-            "get": {
-                "description": "获取所有商品",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "商品"
-                ],
-                "summary": "获取所有商品",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Commodity"
-                        }
-                    }
-                }
-            }
-        },
-        "/login": {
-            "post": {
-                "description": "Login",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Login",
-                "parameters": [
-                    {
-                        "description": "json",
-                        "name": "json",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.LoginRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/auth.TokenResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.HttpError"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/common.HttpError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/common.HttpError"
                         }
@@ -960,7 +1028,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "produce_at": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 }
             }
         },
@@ -995,7 +1063,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "update_at": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 }
             }
         },
@@ -1009,7 +1077,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "create_at": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 },
                 "price_limit": {
                     "type": "number"
@@ -1029,10 +1097,11 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.CommodityItem"
                 },
                 "commodity_item_id": {
+                    "description": "如果不constraint join时要注意",
                     "type": "integer"
                 },
                 "create_at": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 },
                 "current_price": {
                     "type": "number"
@@ -1045,6 +1114,14 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.MyTime": {
+            "type": "object",
+            "properties": {
+                "time.Time": {
+                    "type": "string"
                 }
             }
         },
@@ -1081,7 +1158,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "update_at": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 }
             }
         },
@@ -1101,7 +1178,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "user_id": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -1208,7 +1285,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "user_id": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -1228,7 +1305,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "user_id": {
+                "username": {
                     "type": "string"
                 }
             }

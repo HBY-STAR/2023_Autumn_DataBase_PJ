@@ -120,7 +120,7 @@ definitions:
       produce_address:
         type: string
       produce_at:
-        type: string
+        $ref: '#/definitions/models.MyTime'
     type: object
   models.CommodityItem:
     properties:
@@ -143,7 +143,7 @@ definitions:
       seller_id:
         type: integer
       update_at:
-        type: string
+        $ref: '#/definitions/models.MyTime'
     type: object
   models.Favorite:
     properties:
@@ -152,7 +152,7 @@ definitions:
       commodityItem:
         $ref: '#/definitions/models.CommodityItem'
       create_at:
-        type: string
+        $ref: '#/definitions/models.MyTime'
       price_limit:
         type: number
       user:
@@ -163,11 +163,12 @@ definitions:
   models.Message:
     properties:
       commodity_item_id:
+        description: 如果不constraint join时要注意
         type: integer
       commodityItem:
         $ref: '#/definitions/models.CommodityItem'
       create_at:
-        type: string
+        $ref: '#/definitions/models.MyTime'
       current_price:
         type: number
       id:
@@ -176,6 +177,11 @@ definitions:
         $ref: '#/definitions/models.User'
       user_id:
         type: integer
+    type: object
+  models.MyTime:
+    properties:
+      time.Time:
+        type: string
     type: object
   models.Platform:
     properties:
@@ -199,7 +205,7 @@ definitions:
       new_price:
         type: number
       update_at:
-        type: string
+        $ref: '#/definitions/models.MyTime'
     type: object
   models.Seller:
     properties:
@@ -212,7 +218,7 @@ definitions:
         type: integer
       password:
         type: string
-      user_id:
+      username:
         type: string
     type: object
   models.User:
@@ -282,7 +288,7 @@ definitions:
         type: string
       password:
         type: string
-      user_id:
+      username:
         type: string
     type: object
   seller.UpdateSellerRequest:
@@ -295,7 +301,7 @@ definitions:
         type: integer
       password:
         type: string
-      user_id:
+      username:
         type: string
     type: object
   user.CreateUserRequest:
@@ -340,6 +346,78 @@ info:
   title: Database System Design Project
   version: 1.0.0
 paths:
+  /api/commodities:
+    delete:
+      consumes:
+      - application/json
+      description: 删除商品
+      parameters:
+      - description: commodity id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 删除商品
+      tags:
+      - 商品
+    post:
+      consumes:
+      - application/json
+      description: 添加商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/commodity.CreateCommodityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 添加商品
+      tags:
+      - 商品
+    put:
+      consumes:
+      - application/json
+      description: 更新商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/models.Commodity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 更新商品
+      tags:
+      - 商品
+  /api/commodities/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有商品
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Commodity'
+      summary: 获取所有商品
+      tags:
+      - 商品
   /api/commodity/all:
     get:
       consumes:
@@ -447,6 +525,40 @@ paths:
       summary: GetAllFavorites
       tags:
       - Favorite
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Login
+      tags:
+      - Auth
   /api/message/all:
     get:
       consumes:
@@ -534,6 +646,47 @@ paths:
       summary: Get all platform
       tags:
       - Platform
+  /api/price/history:
+    post:
+      consumes:
+      - application/json
+      description: Get priceChange by ID
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/priceChange.GetPriceChangeModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PriceChange'
+      summary: Get priceChange by ID
+      tags:
+      - PriceChange
+    put:
+      consumes:
+      - application/json
+      description: Update priceChange
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/priceChange.UpdatePriceChangeModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update priceChange
+      tags:
+      - PriceChange
   /api/price/limit:
     post:
       consumes:
@@ -652,6 +805,9 @@ paths:
       summary: Get seller info
       tags:
       - Seller
+  /api/sellers/me:
+    get:
+      responses: {}
   /api/users:
     delete:
       consumes:
@@ -728,110 +884,4 @@ paths:
       summary: Get user info
       tags:
       - User
-  /commodities:
-    delete:
-      consumes:
-      - application/json
-      description: 删除商品
-      parameters:
-      - description: commodity id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: 删除商品
-      tags:
-      - 商品
-    post:
-      consumes:
-      - application/json
-      description: 添加商品
-      parameters:
-      - description: json
-        in: body
-        name: json
-        required: true
-        schema:
-          $ref: '#/definitions/commodity.CreateCommodityRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: 添加商品
-      tags:
-      - 商品
-    put:
-      consumes:
-      - application/json
-      description: 更新商品
-      parameters:
-      - description: json
-        in: body
-        name: json
-        required: true
-        schema:
-          $ref: '#/definitions/models.Commodity'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: 更新商品
-      tags:
-      - 商品
-  /commodities/all:
-    get:
-      consumes:
-      - application/json
-      description: 获取所有商品
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Commodity'
-      summary: 获取所有商品
-      tags:
-      - 商品
-  /login:
-    post:
-      consumes:
-      - application/json
-      description: Login
-      parameters:
-      - description: json
-        in: body
-        name: json
-        required: true
-        schema:
-          $ref: '#/definitions/auth.LoginRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/auth.TokenResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.HttpError'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/common.HttpError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/common.HttpError'
-      summary: Login
-      tags:
-      - Auth
 swagger: "2.0"
