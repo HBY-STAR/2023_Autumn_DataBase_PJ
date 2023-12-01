@@ -6,7 +6,7 @@ import (
 )
 
 // GetAllCommodity @GetAllCommodity
-// @Router /commodities/all [get]
+// @Router /api/commodities/all [get]
 // @Summary 获取所有商品
 // @Description 获取所有商品
 // @Tags 商品
@@ -19,7 +19,7 @@ func GetAllCommodity(c *fiber.Ctx) error {
 }
 
 // AddCommodity @AddCommodity
-// @Router /commodities [post]
+// @Router /api/commodities [post]
 // @Summary 添加商品
 // @Description 添加商品
 // @Tags 商品
@@ -33,7 +33,7 @@ func AddCommodity(c *fiber.Ctx) error {
 }
 
 // DeleteCommodity @DeleteCommodity
-// @Router /commodities [delete]
+// @Router /api/commodities [delete]
 // @Summary 删除商品
 // @Description 删除商品
 // @Tags 商品
@@ -47,7 +47,7 @@ func DeleteCommodity(c *fiber.Ctx) error {
 }
 
 // UpdateCommodity @UpdateCommodity
-// @Router /commodities [put]
+// @Router /api/commodities [put]
 // @Summary 更新商品
 // @Description 更新商品
 // @Tags 商品

@@ -10,7 +10,7 @@ import (
 )
 
 // Login godoc
-// @Router /login [post]
+// @Router /api/login [post]
 // @Summary Login
 // @Description Login
 // @Tags Auth
