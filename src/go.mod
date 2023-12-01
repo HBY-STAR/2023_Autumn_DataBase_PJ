@@ -3,6 +3,7 @@ module src
 go 1.21.0
 
 require (
+	github.com/go-playground/assert/v2 v2.2.0
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/golang-jwt/jwt/v5 v5.1.0
 	github.com/opentreehole/go-common v0.1.1

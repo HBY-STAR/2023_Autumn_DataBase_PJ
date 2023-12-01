@@ -9,7 +9,7 @@ import (
 // @Router /api/price/history [post]
 // @Summary Get priceChange by ID
 // @Description Get priceChange by ID
-// @Tags priceChange
+// @Tags PriceChange
 // @Accept json
 // @Produce json
 // @Param json body GetPriceChangeModel true "json"
@@ -24,7 +24,7 @@ func GetPriceChangeById(c *fiber.Ctx) error {
 // @Router /api/price/history [put]
 // @Summary Update priceChange
 // @Description Update priceChange
-// @Tags priceChange
+// @Tags PriceChange
 // @Accept json
 // @Produce json
 // @Param json body UpdatePriceChangeModel true "json"
