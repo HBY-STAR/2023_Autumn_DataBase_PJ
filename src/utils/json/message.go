@@ -3,6 +3,7 @@ package json
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"src/models"
 )
 
@@ -16,6 +17,7 @@ func parseMessage() error {
 	if err != nil {
 		return err
 	}
+	sort.Sort(ByCreatedAt(message))
 	for _, v := range message {
 		err = models.DB.Create(&v).Error
 		if err != nil {

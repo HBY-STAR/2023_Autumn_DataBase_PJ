@@ -16,5 +16,5 @@ public class Favorite {
     long user_id;         //外键
     long commodity_item_id;    //外键
     double price_limit;
-    String create_at;
+    String update_at;
 }

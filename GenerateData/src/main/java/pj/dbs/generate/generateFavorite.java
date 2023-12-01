@@ -35,7 +35,7 @@ public class generateFavorite {
                 user_favorite.put(favorite.getUser_id(), favorite.getCommodity_item_id());
                 break;
             }
-            favorite.setCreate_at(GenerateTime.generate_time());
+            favorite.setUpdate_at(GenerateTime.generate_time());
             favorite.setPrice_limit(GenerateNum.generate_num(1, 10000));
 
             favoriteList.add(favorite);

@@ -3,6 +3,7 @@ package json
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"src/models"
 )
 
@@ -16,6 +17,7 @@ func parsePriceChange() error {
 	if err != nil {
 		return err
 	}
+	sort.Sort(ByUpdateAt(changes))
 	for _, v := range changes {
 		err = models.DB.Create(&v).Error
 		if err != nil {
