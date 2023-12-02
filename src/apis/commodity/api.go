@@ -1,10 +1,8 @@
 package commodity
 
 import (
-	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
-	"gorm.io/gorm"
 	. "src/models"
 )
 
@@ -76,11 +74,7 @@ func DeleteCommodity(c *fiber.Ctx) error {
 		return common.BadRequest("Invalid request body")
 	}
 
-	err = DeleteCommodityByID(id)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return common.NotFound()
-	}
-	return err
+	return DeleteCommodityByID(id)
 }
 
 // UpdateCommodity @UpdateCommodity
@@ -107,9 +101,9 @@ func UpdateCommodity(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	err = commodity.Update()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return common.NotFound()
-	}
-	return err
+	//err =
+	//if errors.Is(err, gorm.ErrRecordNotFound) {
+	//	return common.NotFound()
+	//}
+	return commodity.Update()
 }

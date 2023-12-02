@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"github.com/opentreehole/go-common"
+	"gorm.io/gorm"
+)
 
 type Commodity struct {
 	ID             int    `json:"id" gorm:"primaryKey"`
@@ -37,14 +40,28 @@ func (commodity *Commodity) Create() (err error) {
 
 func DeleteCommodityByID(commodityID int) (err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Delete(&Commodity{}, commodityID).Error
+		result := tx.Delete(&Commodity{}, commodityID)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return common.NotFound("Commodity not found")
+		}
+		return nil
 	})
 	return
 }
 
 func (commodity *Commodity) Update() (err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Updates(&commodity).Error
+		result := tx.Updates(&commodity)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return common.NotFound("Commodity not found")
+		}
+		return nil
 	})
 	return
 }
