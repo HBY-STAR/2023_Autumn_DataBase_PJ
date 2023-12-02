@@ -2,6 +2,7 @@ package favorite
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/opentreehole/go-common"
 	. "src/models"
 )
 
@@ -43,6 +44,18 @@ func AddPriceLimit(c *fiber.Ctx) error {
 // @Success 200 {object} Favorite
 // @Authentication Bearer
 func GetAllFavorites(c *fiber.Ctx) error {
-	var favorites []Favorite
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+
+	if tmpUser.UserType != "user" {
+		return common.Forbidden("Only user can get favorites")
+	}
+
+	favorites, err := GetFavoritesByUserID(tmpUser.ID)
+	if err != nil {
+		return err
+	}
 	return c.JSON(&favorites)
 }

@@ -149,7 +149,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CommodityItem"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CommodityItem"
+                            }
                         }
                     }
                 }
@@ -348,7 +351,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/message/all": {
+        "/api/messages": {
             "get": {
                 "description": "Get all messages",
                 "consumes": [
@@ -365,7 +368,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Message"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Message"
+                            }
                         }
                     }
                 }
@@ -725,11 +731,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/sellers/me": {
-            "get": {
-                "responses": {}
-            }
-        },
         "/api/users": {
             "put": {
                 "description": "Update user",
@@ -1076,11 +1077,11 @@ const docTemplate = `{
                 "commodity_item_id": {
                     "type": "integer"
                 },
-                "create_at": {
-                    "$ref": "#/definitions/models.MyTime"
-                },
                 "price_limit": {
                     "type": "number"
+                },
+                "update_at": {
+                    "$ref": "#/definitions/models.MyTime"
                 },
                 "user": {
                     "$ref": "#/definitions/models.User"

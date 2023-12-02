@@ -12,15 +12,14 @@ import (
 // @Tags Item
 // @Accept json
 // @Produce json
-// @Success 200 {object} CommodityItem
+// @Success 200 {array} CommodityItem
 // @Authentication Bearer
 func GetAllCommodity(c *fiber.Ctx) error {
-	var CommodityItems []CommodityItem
-	err := DB.Find(&CommodityItems).Error
+	items, err := GetItems()
 	if err != nil {
 		return err
 	}
-	return c.JSON(&CommodityItems)
+	return c.JSON(&items)
 }
 
 // SearchCommodity @SearchCommodity

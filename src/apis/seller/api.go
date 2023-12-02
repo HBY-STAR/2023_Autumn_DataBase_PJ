@@ -6,11 +6,11 @@ import (
 	. "src/models"
 )
 
-// GetCurSeller @GetCurSeller
-// @Router /api/sellers/me [get]
-func GetCurSeller(ctx *fiber.Ctx) error {
-	return nil
-}
+//// GetCurSeller @GetCurSeller
+//// @Router /api/sellers/me [get]
+//func GetCurSeller(ctx *fiber.Ctx) error {
+//	return nil
+//}
 
 // GetSeller @GetSeller
 // @Router /api/sellers/data [get]
@@ -23,24 +23,21 @@ func GetCurSeller(ctx *fiber.Ctx) error {
 // @Authentication Bearer
 // @Failure 403 {object} common.HttpError
 func GetSeller(c *fiber.Ctx) error {
-	user, err := GetGeneralUser(c)
-	if err != nil {
-		return err
-	}
-	UserType := user.Type
-	userID := user.ID
-
-	if UserType != "seller" {
-		return common.Forbidden()
-	}
-
-	var getUser Seller
-	err = getUser.LoadSellerByID(userID)
+	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(&user)
+	if tmpUser.UserType != "seller" {
+		return common.Forbidden("You are not a seller.")
+	}
+
+	seller, err := GetSellerByID(tmpUser.ID)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(&seller)
 }
 
 // AddSeller @AddSeller

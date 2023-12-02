@@ -11,13 +11,9 @@ type Seller struct {
 	Address string `json:"address" gorm:"not null;size:64"`
 }
 
-func (user Seller) LoadSellerByID(userID int) error {
-	err := DB.Transaction(func(tx *gorm.DB) error {
-		err := tx.Take(&user, userID).Error
-		if err != nil {
-			return err
-		}
-		return nil
+func GetSellerByID(userID int) (seller *Seller, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Omit("Password").Take(&seller, userID).Error
 	})
-	return err
+	return
 }

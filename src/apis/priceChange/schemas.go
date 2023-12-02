@@ -1,11 +1,13 @@
 package priceChange
 
-import "time"
+import (
+	"src/models"
+)
 
 type GetPriceChangeModel struct {
 	CommodityItemID int       `json:"commodity_item_id" validate:"required"`
-	TimeStart       time.Time `json:"time_start" validate:"required"`
-	TimeEnd         time.Time `json:"time_end" validate:"required"`
+	TimeStart       models.MyTime `json:"time_start" validate:"required"`
+	TimeEnd         models.MyTime `json:"time_end" validate:"required"`
 }
 
 type UpdatePriceChangeModel struct {

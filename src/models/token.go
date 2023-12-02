@@ -99,7 +99,7 @@ func (user *TmpUser) CreateJWTToken() (accessToken string, err error) {
 		},
 		ID: user.ID,
 		//UserID:     user.UserID,
-		UserType: user.Type,
+		UserType: user.UserType,
 	}
 
 	// access payload

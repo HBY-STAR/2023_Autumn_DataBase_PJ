@@ -1,5 +1,7 @@
 package models
 
+import "gorm.io/gorm"
+
 type Message struct {
 	ID              int            `json:"id" gorm:"primaryKey"`
 	User            *User          `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
@@ -9,4 +11,18 @@ type Message struct {
 	CurrentPrice    float32        `json:"current_price" gorm:"not null"`
 	CreateAt        MyTime         `json:"create_at"`
 	//PriceLimit   float64
+}
+
+type ByCreatedAt []Message
+
+func (a ByCreatedAt) Len() int           { return len(a) }
+func (a ByCreatedAt) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByCreatedAt) Less(i, j int) bool { return a[i].CreateAt.Time.Before(a[j].CreateAt.Time) }
+
+func GetMessagesByUserID(userID int) ([]Message, error) {
+	var messages []Message
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload("CommodityItem").Where("user_id=?", userID).Find(&messages).Error
+	})
+	return messages, err
 }

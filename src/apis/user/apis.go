@@ -6,14 +6,14 @@ import (
 	. "src/models"
 )
 
-// GetCurrentUser @GetCurrentUser
-func GetCurrentUser(c *fiber.Ctx) error {
-	user, err := GetGeneralUser(c)
-	if err != nil {
-		return err
-	}
-	return c.JSON(&user)
-}
+//// GetCurrentUser @GetCurrentUser
+//func GetCurrentUser(c *fiber.Ctx) error {
+//	user, err := GetGeneralUser(c)
+//	if err != nil {
+//		return err
+//	}
+//	return c.JSON(&user)
+//}
 
 // GetUserInfo @GetUserInfo
 // @Router /api/users/data [get]
@@ -26,24 +26,21 @@ func GetCurrentUser(c *fiber.Ctx) error {
 // @Authentication Bearer
 // @Failure 403 {object} common.HttpError
 func GetUserInfo(c *fiber.Ctx) error {
-	user, err := GetGeneralUser(c)
+	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
 		return err
 	}
-	UserType := user.Type
-	userID := user.ID
 
-	if UserType != "user" {
+	if tmpUser.UserType != "user" {
 		return common.Forbidden()
 	}
 
-	var getUser User
-	err = getUser.LoadUserByID(userID)
+	getUser, err := GetUserByID(tmpUser.ID)
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(&user)
+	return c.JSON(&getUser)
 }
 
 // AddUser @AddUser

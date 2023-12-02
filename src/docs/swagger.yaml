@@ -151,10 +151,10 @@ definitions:
         type: integer
       commodityItem:
         $ref: '#/definitions/models.CommodityItem'
-      create_at:
-        $ref: '#/definitions/models.MyTime'
       price_limit:
         type: number
+      update_at:
+        $ref: '#/definitions/models.MyTime'
       user:
         $ref: '#/definitions/models.User'
       user_id:
@@ -429,7 +429,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CommodityItem'
+            items:
+              $ref: '#/definitions/models.CommodityItem'
+            type: array
       summary: 获取所有商品
       tags:
       - Item
@@ -559,7 +561,7 @@ paths:
       summary: Login
       tags:
       - Auth
-  /api/message/all:
+  /api/messages:
     get:
       consumes:
       - application/json
@@ -570,7 +572,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Message'
+            items:
+              $ref: '#/definitions/models.Message'
+            type: array
       summary: Get all messages
       tags:
       - Message
@@ -805,9 +809,6 @@ paths:
       summary: Get seller info
       tags:
       - Seller
-  /api/sellers/me:
-    get:
-      responses: {}
   /api/users:
     delete:
       consumes:

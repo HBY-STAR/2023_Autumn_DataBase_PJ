@@ -15,7 +15,10 @@ import (
 // @Success 200 {object} Platform
 // @Authentication Bearer
 func GetAllPlatform(c *fiber.Ctx) error {
-	var platforms []Platform
+	platforms, err := GetPlatforms()
+	if err != nil {
+		return err
+	}
 	return c.JSON(&platforms)
 }
 

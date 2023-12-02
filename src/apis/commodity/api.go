@@ -15,7 +15,11 @@ import (
 // @Success 200 {object} Commodity
 // @Authentication Bearer
 func GetAllCommodity(c *fiber.Ctx) error {
-	return nil
+	commodities, err := GetCommodities()
+	if err != nil {
+		return err
+	}
+	return c.JSON(&commodities)
 }
 
 // AddCommodity @AddCommodity

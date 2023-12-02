@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// "2023-01-22 02:03:51"
+// will be converted to
+// 2023-01-22 10:03:51.000
 type MyTime struct {
 	time.Time
 }

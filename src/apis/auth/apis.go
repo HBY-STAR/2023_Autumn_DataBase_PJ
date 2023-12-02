@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	. "src/models"
 	"src/utils"
+	"strings"
 )
 
 // Login godoc
@@ -30,7 +31,7 @@ func Login(c *fiber.Ctx) error {
 
 	var tmpUser TmpUser
 	var result *gorm.DB
-	if body.Type == "seller" {
+	if strings.ToLower(body.Type) == "seller" {
 		var seller Seller
 		result = DB.Where("username = ?", body.Username).First(&seller)
 		if result.Error != nil {
@@ -41,9 +42,9 @@ func Login(c *fiber.Ctx) error {
 		}
 		tmpUser.ID = seller.ID
 		tmpUser.Username = seller.Username
-		tmpUser.Type = "seller"
+		tmpUser.UserType = "seller"
 		tmpUser.Password = seller.Password
-	} else if body.Type == "admin" {
+	} else if strings.ToLower(body.Type) == "admin" {
 		var admin Admin
 		result = DB.Where("username = ?", body.Username).First(&admin)
 		if result.Error != nil {
@@ -54,7 +55,7 @@ func Login(c *fiber.Ctx) error {
 		}
 		tmpUser.ID = admin.ID
 		tmpUser.Username = admin.Username
-		tmpUser.Type = "admin"
+		tmpUser.UserType = "admin"
 		tmpUser.Password = admin.Password
 	} else {
 		var user User
@@ -67,7 +68,7 @@ func Login(c *fiber.Ctx) error {
 		}
 		tmpUser.ID = user.ID
 		tmpUser.Username = user.Username
-		tmpUser.Type = body.Type
+		tmpUser.UserType = "user"
 		tmpUser.Password = user.Password
 	}
 

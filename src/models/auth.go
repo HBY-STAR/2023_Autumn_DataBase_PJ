@@ -7,37 +7,31 @@ import (
 )
 
 type TmpUser struct {
-	ID       int    `json:"id" gorm:"primaryKey"`
+	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Type     string `json:"type"`
+	UserType string `json:"user_type"`
 }
 
-// 传入type
-// user里有type id
-
-func GetGeneralUser(c *fiber.Ctx) (*TmpUser, error) {
+// GetGeneralUser
+// return user from fiber.Ctx or jwt
+func GetGeneralUser(c *fiber.Ctx) (user *TmpUser, err error) {
 	//fmt.Println(c.Get("type"))
-	user := &TmpUser{}
 
 	if c.Locals("user") != nil {
-		return c.Locals("user").(*TmpUser), nil
+		user = c.Locals("user").(*TmpUser)
+		return
 	}
 
-	// get id
-	var err error
-	user.ID, err = common.GetUserID(c)
+	// get id and user_type from jwt
+	token := common.GetJWTToken(c)
+	if token == "" {
+		return nil, common.Unauthorized("Unauthorized")
+	}
+	err = common.ParseJWTToken(token, &user)
 	if err != nil {
-		return nil, err
+		return nil, common.Unauthorized("Unauthorized")
 	}
-
-	// parse JWT
-	err = common.ParseJWTToken(common.GetJWTToken(c), user)
-	if err != nil {
-		return nil, err
-	}
-
-	user.Type = c.Get("type")
 
 	// load user from database in transaction
 	err = user.CheckUserID()
@@ -55,24 +49,30 @@ func GetGeneralUser(c *fiber.Ctx) (*TmpUser, error) {
 	//}
 
 	if err != nil {
-		return nil, err
+		return
 	}
 	// save user in c.Locals
 	c.Locals("user", user)
-
-	return user, nil
+	return
 }
 
 func (user *TmpUser) CheckUserID() error {
 	return DB.Transaction(func(tx *gorm.DB) error {
-		if user.Type == "seller" {
+		if user.UserType == "seller" {
 			var seller = Seller{ID: user.ID}
 			err := tx.Take(&seller).Error
 			if err != nil {
 				return err
 			}
 			user.Username = seller.Username
-		} else if user.Type == "admin" {
+		} else if user.UserType == "admin" {
+			var admin = Admin{ID: user.ID}
+			err := tx.Take(&admin).Error
+			if err != nil {
+				return err
+			}
+			user.Username = admin.Username
+		} else if user.UserType == "user" {
 			var newUser = User{ID: user.ID}
 			err := tx.Take(&newUser).Error
 			if err != nil {
@@ -80,12 +80,7 @@ func (user *TmpUser) CheckUserID() error {
 			}
 			user.Username = newUser.Username
 		} else {
-			var admin = Admin{ID: user.ID}
-			err := tx.Take(&admin).Error
-			if err != nil {
-				return err
-			}
-			user.Username = admin.Username
+			return common.InternalServerError("未知用户类型")
 		}
 		//err := tx.Take(&user, userID).Error
 		//if err != nil {

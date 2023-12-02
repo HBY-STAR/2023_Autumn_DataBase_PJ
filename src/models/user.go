@@ -15,9 +15,9 @@ type User struct {
 	Phone    string `json:"phone" gorm:"not null;type:char(13)"`
 }
 
-func (user *User) LoadUserByID(userID int) error {
-	return DB.Transaction(func(tx *gorm.DB) error {
-		err := tx.Take(&user, userID).Error
+func GetUserByID(userID int) (user *User, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		err := tx.Omit("Password").Take(&user, userID).Error
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				// insert user if not found
@@ -32,4 +32,5 @@ func (user *User) LoadUserByID(userID int) error {
 		}
 		return nil
 	})
+	return
 }
