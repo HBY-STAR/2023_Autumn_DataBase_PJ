@@ -1,7 +1,10 @@
 package commodity
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/opentreehole/go-common"
+	"gorm.io/gorm"
 	. "src/models"
 )
 
@@ -22,7 +25,7 @@ func GetAllCommodity(c *fiber.Ctx) error {
 	return c.JSON(&commodities)
 }
 
-// AddCommodity @AddCommodity
+// CreateCommodity @AddCommodity
 // @Router /api/commodities [post]
 // @Summary 添加商品
 // @Description 添加商品
@@ -32,8 +35,22 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Param json body CreateCommodityRequest true "json"
 // @Success 200
 // @Authentication Bearer
-func AddCommodity(c *fiber.Ctx) error {
-	return nil
+func CreateCommodity(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden()
+	}
+
+	var commodity Commodity
+	err = c.BodyParser(&commodity)
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+
+	return commodity.Create()
 }
 
 // DeleteCommodity @DeleteCommodity
@@ -47,7 +64,23 @@ func AddCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Authentication Bearer
 func DeleteCommodity(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden()
+	}
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+
+	err = DeleteCommodityByID(id)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return common.NotFound()
+	}
+	return err
 }
 
 // UpdateCommodity @UpdateCommodity
@@ -61,10 +94,22 @@ func DeleteCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Authentication Bearer
 func UpdateCommodity(c *fiber.Ctx) error {
-	var commodity Commodity
-	err := c.BodyParser(&commodity)
+	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
 		return err
 	}
-	return nil
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden()
+	}
+
+	var commodity Commodity
+	err = c.BodyParser(&commodity)
+	if err != nil {
+		return err
+	}
+	err = commodity.Update()
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return common.NotFound()
+	}
+	return err
 }

@@ -21,9 +21,30 @@ func GetCommodities() ([]Commodity, error) {
 	return commodities, nil
 }
 
-func (commodity *Commodity) GetCommodityByID(commodityID int) error {
-	err := DB.Transaction(func(tx *gorm.DB) error {
+func GetCommodityByID(commodityID int) (commodity *Commodity, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Take(&commodity, commodityID).Error
 	})
-	return err
+	return
+}
+
+func (commodity *Commodity) Create() (err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Create(&commodity).Error
+	})
+	return
+}
+
+func DeleteCommodityByID(commodityID int) (err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Delete(&Commodity{}, commodityID).Error
+	})
+	return
+}
+
+func (commodity *Commodity) Update() (err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Updates(&commodity).Error
+	})
+	return
 }
