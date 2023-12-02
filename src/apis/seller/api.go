@@ -20,8 +20,8 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {object} Seller
-// @Authentication Bearer
 // @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
 func GetSeller(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -49,7 +49,7 @@ func GetSeller(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateSellerRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func AddSeller(c *fiber.Ctx) error {
 	//var seller Seller
 	//err := common.ValidateBody(c, &seller)
@@ -75,7 +75,7 @@ func AddSeller(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdateSellerRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func UpdateSeller(c *fiber.Ctx) error {
 	return nil
 }
@@ -89,7 +89,7 @@ func UpdateSeller(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path int true "seller id"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func DeleteSeller(c *fiber.Ctx) error {
 	return nil
 }

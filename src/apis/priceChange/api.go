@@ -3,7 +3,6 @@ package priceChange
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
-	. "src/models"
 )
 
 // GetPriceChange @GetPriceChangeById
@@ -14,8 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param json body GetPriceChangeModel true "json"
-// @Success 200 {object} PriceChange
-// @Authentication Bearer
+// @Success 200 {array} models.PriceChange
 func GetPriceChange(c *fiber.Ctx) error {
 	var getPriceChangeModel GetPriceChangeModel
 	if err := c.BodyParser(&getPriceChangeModel); err != nil {
@@ -38,7 +36,7 @@ func GetPriceChange(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdatePriceChangeModel true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func UpdatePriceChange(c *fiber.Ctx) error {
 	return nil
 }

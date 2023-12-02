@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Param json body AddFavoriteModel true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func AddFavorite(c *fiber.Ctx) error {
 	return nil
 }
@@ -29,7 +29,7 @@ func AddFavorite(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body PriceLimitModel true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func AddPriceLimit(c *fiber.Ctx) error {
 	return nil
 }
@@ -42,7 +42,7 @@ func AddPriceLimit(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Success 200 {object} Favorite
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func GetAllFavorites(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

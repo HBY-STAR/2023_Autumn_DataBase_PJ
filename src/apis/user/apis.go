@@ -23,8 +23,8 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {object} User
-// @Authentication Bearer
 // @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
 func GetUserInfo(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -52,7 +52,7 @@ func GetUserInfo(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateUserRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func AddUser(c *fiber.Ctx) error {
 	return nil
 }
@@ -66,7 +66,7 @@ func AddUser(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdateUserRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func UpdateUser(c *fiber.Ctx) error {
 	return nil
 }
@@ -80,7 +80,7 @@ func UpdateUser(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path int true "user id"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func DeleteUser(c *fiber.Ctx) error {
 	return nil
 }

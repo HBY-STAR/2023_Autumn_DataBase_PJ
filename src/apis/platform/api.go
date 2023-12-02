@@ -13,7 +13,6 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {object} Platform
-// @Authentication Bearer
 func GetAllPlatform(c *fiber.Ctx) error {
 	platforms, err := GetPlatforms()
 	if err != nil {
@@ -31,7 +30,7 @@ func GetAllPlatform(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreatePlatformRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func AddPlatform(c *fiber.Ctx) error {
 	//var platform Platform
 	//err := common.ValidateBody(c, &platform)
@@ -57,7 +56,7 @@ func AddPlatform(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdatePlatformRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func UpdatePlatform(c *fiber.Ctx) error {
 	return nil
 }
@@ -71,7 +70,7 @@ func UpdatePlatform(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path int true "platform id"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func DeletePlatform(c *fiber.Ctx) error {
 	return nil
 }

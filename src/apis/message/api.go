@@ -14,7 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {array} Message
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func GetAllMessages(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

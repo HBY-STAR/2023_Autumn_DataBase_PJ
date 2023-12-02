@@ -13,7 +13,6 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {array} CommodityItem
-// @Authentication Bearer
 func GetAllCommodity(c *fiber.Ctx) error {
 	items, err := GetItems()
 	if err != nil {
@@ -31,7 +30,6 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body SearchQuery true "Range: name, category; Search: content to search"
 // @Success 200 {object} CommodityItem
-// @Authentication Bearer
 func SearchCommodity(c *fiber.Ctx) error {
 	var CommodityItems []CommodityItem
 	//err := DB.Find(&CommodityItems).Error
@@ -50,7 +48,7 @@ func SearchCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateItemModel true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func AddCommodity(c *fiber.Ctx) error {
 	var commodityItem CommodityItem
 	err := c.BodyParser(&commodityItem)
@@ -73,7 +71,7 @@ func AddCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdateItemModel true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func UpdateCommodity(c *fiber.Ctx) error {
 	var commodityItem CommodityItem
 	err := c.BodyParser(&commodityItem)
@@ -96,7 +94,7 @@ func UpdateCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "commodity id"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func DeleteCommodity(c *fiber.Ctx) error {
 	return nil
 }

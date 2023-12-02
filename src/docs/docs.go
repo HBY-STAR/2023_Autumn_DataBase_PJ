@@ -49,6 +49,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
                     }
                 }
             },
@@ -105,6 +117,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
                     }
                 }
             }
@@ -544,7 +568,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.PriceChange"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PriceChange"
+                            }
                         }
                     }
                 }
@@ -1253,10 +1280,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "time_end": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 },
                 "time_start": {
-                    "type": "string"
+                    "$ref": "#/definitions/models.MyTime"
                 }
             }
         },

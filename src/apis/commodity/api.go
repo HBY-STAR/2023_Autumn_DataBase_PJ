@@ -14,7 +14,6 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 {object} Commodity
-// @Authentication Bearer
 func GetAllCommodity(c *fiber.Ctx) error {
 	commodities, err := GetCommodities()
 	if err != nil {
@@ -32,7 +31,7 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateCommodityRequest true "json"
 // @Success 200
-// @Authentication Bearer
+// @Authorization Bearer {token}
 func CreateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -60,7 +59,9 @@ func CreateCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "commodity id"
 // @Success 200
-// @Authentication Bearer
+// @Failure 400 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
+// @Authorization Bearer {token}
 func DeleteCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -86,7 +87,9 @@ func DeleteCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body Commodity true "json"
 // @Success 200
-// @Authentication Bearer
+// @Failure 400 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
+// @Authorization Bearer {token}
 func UpdateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

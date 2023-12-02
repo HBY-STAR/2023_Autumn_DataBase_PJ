@@ -263,9 +263,9 @@ definitions:
       commodity_item_id:
         type: integer
       time_end:
-        type: string
+        $ref: '#/definitions/models.MyTime'
       time_start:
-        type: string
+        $ref: '#/definitions/models.MyTime'
     required:
     - commodity_item_id
     - time_end
@@ -362,6 +362,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 删除商品
       tags:
       - 商品
@@ -400,6 +408,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 更新商品
       tags:
       - 商品
@@ -668,7 +684,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.PriceChange'
+            items:
+              $ref: '#/definitions/models.PriceChange'
+            type: array
       summary: Get priceChange by ID
       tags:
       - PriceChange
