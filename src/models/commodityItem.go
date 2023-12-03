@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -18,11 +19,11 @@ type CommodityItem struct {
 	UpdateAt    MyTime     `json:"update_at"`
 }
 
-func (item *CommodityItem) GetItemByID(ID int) error {
-	err := DB.Transaction(func(tx *gorm.DB) error {
+func GetItemByID(ID int) (item *CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Take(&item, ID).Error
 	})
-	return err
+	return
 }
 
 func GetItems() ([]CommodityItem, error) {
@@ -43,4 +44,43 @@ func GetItems() ([]CommodityItem, error) {
 	//	fmt.Println(it.CommodityID)
 	//}
 	return items, nil
+}
+
+func (item *CommodityItem) Create() error {
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		err := tx.First(&item.Commodity, item.CommodityID).Error
+		if err != nil {
+			return err
+		}
+		err = tx.First(&item.Platform, item.PlatformID).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return common.NotFound("Commodity or Platform not found")
+	}
+	return DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Create(&item).Error
+	})
+}
+
+func DeleteItemByID(itemID int) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Delete(&CommodityItem{}, itemID).Error
+	})
+}
+
+func (item *CommodityItem) Update() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Updates(&item)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return common.NotFound("CommodityItem not found")
+		}
+		return nil
+	})
 }

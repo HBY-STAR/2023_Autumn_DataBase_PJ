@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"github.com/opentreehole/go-common"
+	"gorm.io/gorm"
+)
 
 type Seller struct {
 	ID       int    `json:"id" gorm:"primaryKey"`
@@ -16,4 +19,36 @@ func GetSellerByID(userID int) (seller *Seller, err error) {
 		return tx.Omit("Password").Take(&seller, userID).Error
 	})
 	return
+}
+
+func (seller *Seller) Create() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Create(&seller).Error
+	})
+}
+
+func (seller *Seller) Update() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Updates(&seller)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return common.NotFound("Seller not found")
+		}
+		return nil
+	})
+}
+
+func DeleteSellerByID(id int) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Delete(&Seller{}, id)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return common.NotFound("Seller not found")
+		}
+		return nil
+	})
 }

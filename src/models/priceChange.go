@@ -34,3 +34,16 @@ func GetPriceChangeById(commodityItemID int, timeStart time.Time, timeEnd time.T
 	}
 	return
 }
+
+func (priceChange *PriceChange) Update() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Updates(&priceChange)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return gorm.ErrRecordNotFound
+		}
+		return nil
+	})
+}

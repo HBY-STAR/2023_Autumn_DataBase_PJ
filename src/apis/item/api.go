@@ -2,6 +2,7 @@ package item
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/opentreehole/go-common"
 	. "src/models"
 )
 
@@ -50,16 +51,28 @@ func SearchCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func AddCommodity(c *fiber.Ctx) error {
-	var commodityItem CommodityItem
-	err := c.BodyParser(&commodityItem)
+	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
 		return err
 	}
-	err = DB.Create(&commodityItem).Error
+	if tmpUser.UserType != "admin" && tmpUser.UserType != "seller" {
+		return common.Forbidden("Only admin and seller can add items")
+	}
+	var createItemModel CreateItemModel
+	err = c.BodyParser(&createItemModel)
 	if err != nil {
 		return err
 	}
-	return c.JSON(&commodityItem)
+	// check if valid
+	var commodityItem = CommodityItem{
+		ItemName:    createItemModel.ItemName,
+		Price:       createItemModel.Price,
+		SellerID:    tmpUser.ID,
+		PlatformID:  createItemModel.PlatformID,
+		CommodityID: createItemModel.CommodityID,
+	}
+
+	return commodityItem.Create()
 }
 
 // UpdateCommodity @UpdateCommodity
@@ -73,16 +86,24 @@ func AddCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func UpdateCommodity(c *fiber.Ctx) error {
-	var commodityItem CommodityItem
-	err := c.BodyParser(&commodityItem)
+	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
 		return err
 	}
-	err = DB.Save(&commodityItem).Error
+	if tmpUser.UserType != "admin" && tmpUser.UserType != "seller" {
+		return common.Forbidden("Only admin and seller can update items")
+	}
+	var updateItemModel UpdateItemModel
+	err = c.BodyParser(&updateItemModel)
 	if err != nil {
 		return err
 	}
-	return c.JSON(&commodityItem)
+	var commodityItem = CommodityItem{
+		ID:       updateItemModel.CommodityItemID,
+		ItemName: updateItemModel.ItemName,
+		Price:    updateItemModel.Price,
+	}
+	return commodityItem.Update()
 }
 
 // DeleteCommodity @DeleteCommodity
@@ -96,5 +117,17 @@ func UpdateCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func DeleteCommodity(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" && tmpUser.UserType != "seller" {
+		return common.Forbidden("Only admin and seller can delete items")
+	}
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return err
+	}
+
+	return DeleteItemByID(id)
 }

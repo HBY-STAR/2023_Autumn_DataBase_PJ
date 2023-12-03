@@ -34,3 +34,35 @@ func GetUserByID(userID int) (user *User, err error) {
 	})
 	return
 }
+
+func (user *User) Create() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Create(&user).Error
+	})
+}
+
+func (user *User) Update() error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Updates(&user)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return errors.New("user not found")
+		}
+		return nil
+	})
+}
+
+func DeleteUserByID(id int) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Delete(&User{}, id)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return errors.New("user not found")
+		}
+		return nil
+	})
+}

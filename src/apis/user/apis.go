@@ -54,7 +54,19 @@ func GetUserInfo(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func AddUser(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can add user")
+	}
+	var user User
+	err = common.ValidateBody(c, &user)
+	if err != nil {
+		return err
+	}
+	return user.Create()
 }
 
 // UpdateUser @UpdateUser
@@ -64,11 +76,26 @@ func AddUser(c *fiber.Ctx) error {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param json body UpdateUserRequest true "json"
+// @Param json body models.User true "json"
 // @Success 200
 // @Authorization Bearer {token}
 func UpdateUser(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" && tmpUser.UserType != "user" {
+		return common.Forbidden("Only admin or user can update user")
+	}
+	var user User
+	err = common.ValidateBody(c, &user)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType == "user" && tmpUser.ID != user.ID {
+		return common.Forbidden("You can only update your own info")
+	}
+	return user.Update()
 }
 
 // DeleteUser @DeleteUser
@@ -82,5 +109,16 @@ func UpdateUser(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func DeleteUser(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can delete user")
+	}
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return err
+	}
+	return DeleteUserByID(id)
 }

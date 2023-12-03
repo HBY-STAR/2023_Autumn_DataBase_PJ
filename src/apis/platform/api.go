@@ -2,6 +2,7 @@ package platform
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/opentreehole/go-common"
 	. "src/models"
 )
 
@@ -32,19 +33,20 @@ func GetAllPlatform(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func AddPlatform(c *fiber.Ctx) error {
-	//var platform Platform
-	//err := common.ValidateBody(c, &platform)
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//err = platform.Create()
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//return c.JSON(&platform)
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can add platform")
+	}
+
+	var platform Platform
+	err = common.ValidateBody(c, &platform)
+	if err != nil {
+		return err
+	}
+	return platform.Create()
 }
 
 // UpdatePlatform @UpdatePlatform
@@ -54,11 +56,24 @@ func AddPlatform(c *fiber.Ctx) error {
 // @Tags Platform
 // @Accept json
 // @Produce json
-// @Param json body UpdatePlatformRequest true "json"
+// @Param json body models.Platform true "json"
 // @Success 200
 // @Authorization Bearer {token}
 func UpdatePlatform(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can update platform")
+	}
+
+	var platform Platform
+	err = common.ValidateBody(c, &platform)
+	if err != nil {
+		return err
+	}
+	return platform.Update()
 }
 
 // DeletePlatform @DeletePlatform
@@ -72,5 +87,16 @@ func UpdatePlatform(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func DeletePlatform(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can delete platform")
+	}
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return common.BadRequest("Invalid platform id")
+	}
+	return DeletePlatformByID(id)
 }

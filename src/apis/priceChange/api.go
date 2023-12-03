@@ -3,6 +3,7 @@ package priceChange
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
+	. "src/models"
 )
 
 // GetPriceChange @GetPriceChangeById
@@ -38,5 +39,21 @@ func GetPriceChange(c *fiber.Ctx) error {
 // @Success 200
 // @Authorization Bearer {token}
 func UpdatePriceChange(c *fiber.Ctx) error {
-	return nil
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin and seller can update priceChange")
+	}
+
+	var updatePriceChangeModel UpdatePriceChangeModel
+	if err := c.BodyParser(&updatePriceChangeModel); err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+	var priceChange = PriceChange{
+		ID:       updatePriceChangeModel.ID,
+		NewPrice: updatePriceChangeModel.NewPrice,
+	}
+	return priceChange.Update()
 }
