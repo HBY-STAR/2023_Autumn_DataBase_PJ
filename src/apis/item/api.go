@@ -99,6 +99,33 @@ func AddCommodity(c *fiber.Ctx) error {
 	return commodityItem.Create()
 }
 
+func AddBatchCommodity(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" && tmpUser.UserType != "seller" {
+		return common.Forbidden("Only admin and seller can add items")
+	}
+	var createItemModel []CreateItemModel
+	err = c.BodyParser(&createItemModel)
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+	// check if valid
+	var commodityItems []CommodityItem
+	for _, item := range createItemModel {
+		commodityItems = append(commodityItems, CommodityItem{
+			ItemName:    item.ItemName,
+			Price:       item.Price,
+			SellerID:    tmpUser.ID,
+			PlatformID:  item.PlatformID,
+			CommodityID: item.CommodityID,
+		})
+	}
+	return CreateItems(commodityItems)
+}
+
 // UpdateCommodity @UpdateCommodity
 // @Router /api/commodity/item [put]
 // @Summary 更新商品
@@ -128,6 +155,15 @@ func UpdateCommodity(c *fiber.Ctx) error {
 		ID:       updateItemModel.CommodityItemID,
 		ItemName: updateItemModel.ItemName,
 		Price:    updateItemModel.Price,
+	}
+	if commodityItem.Price > 0 {
+		is, err := IsPriceChangeToday(commodityItem.ID)
+		if err != nil {
+			return err
+		}
+		if is {
+			return common.Forbidden("Price has been changed today")
+		}
 	}
 	return commodityItem.Update()
 }

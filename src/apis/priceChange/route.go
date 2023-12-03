@@ -8,5 +8,6 @@ func RegisterRoutesWithoutAuthorization(app fiber.Router) {
 
 func RegisterRoutes(app fiber.Router) {
 	app.Put("/price/history", UpdatePriceChange)
+	app.Post("/price/history/batch", AddBatchPriceChange)
 	//app.Post("/priceChange/search", SearchPriceChange)
 }

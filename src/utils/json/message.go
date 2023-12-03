@@ -18,11 +18,10 @@ func parseMessage() error {
 		return err
 	}
 	sort.Sort(models.ByCreatedAt(message))
-	for _, v := range message {
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
+
+	err = models.DB.Create(&message).Error
+	if err != nil {
+		fmt.Println(err)
 	}
 	return nil
 }

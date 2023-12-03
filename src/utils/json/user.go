@@ -36,11 +36,10 @@ func parseUsers() error {
 		v.Password = utils.MakePassword(v.Password)
 		//fmt.Println(v)
 		//return nil
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
 	}
-
+	err = models.DB.Create(&users).Error
+	if err != nil {
+		fmt.Println(err)
+	}
 	return nil
 }

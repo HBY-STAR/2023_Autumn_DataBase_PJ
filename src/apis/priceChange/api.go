@@ -59,3 +59,20 @@ func UpdatePriceChange(c *fiber.Ctx) error {
 	}
 	return priceChange.Update()
 }
+
+func AddBatchPriceChange(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can add priceChange")
+	}
+
+	var priceChanges []PriceChange
+	if err := c.BodyParser(&priceChanges); err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+
+	return CreatePriceChanges(priceChanges)
+}

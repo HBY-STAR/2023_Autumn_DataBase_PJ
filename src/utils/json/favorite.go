@@ -16,11 +16,11 @@ func parseFavorite() error {
 	if err != nil {
 		return err
 	}
-	for _, v := range favorite {
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
+
+	err = models.DB.Create(&favorite).Error
+	if err != nil {
+		fmt.Println(err)
 	}
+
 	return nil
 }

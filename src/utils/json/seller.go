@@ -19,10 +19,10 @@ func parseSeller() error {
 	}
 	for _, v := range sellers {
 		v.Password = utils.MakePassword(v.Password)
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
+	}
+	err = models.DB.Create(&sellers).Error
+	if err != nil {
+		fmt.Println(err)
 	}
 	return nil
 }

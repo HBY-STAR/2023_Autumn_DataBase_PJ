@@ -18,11 +18,9 @@ func parsePriceChange() error {
 		return err
 	}
 	sort.Sort(models.ByUpdateAt(changes))
-	for _, v := range changes {
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
+	err = models.CreatePriceChanges(changes)
+	if err != nil {
+		fmt.Println(err)
 	}
 	return nil
 }

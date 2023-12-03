@@ -11,4 +11,5 @@ func RegisterRoutes(app fiber.Router) {
 	app.Post("/commodity/item", AddCommodity)
 	app.Put("/commodity/item", UpdateCommodity)
 	app.Delete("/commodity/item/:id", DeleteCommodity)
+	app.Post("/commodity/item/batch", AddBatchCommodity)
 }

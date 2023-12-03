@@ -16,11 +16,11 @@ func parsePlatform() error {
 	if err != nil {
 		return err
 	}
-	for _, v := range platforms {
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
+
+	err = models.DB.Create(&platforms).Error
+	if err != nil {
+		fmt.Println(err)
 	}
+
 	return nil
 }

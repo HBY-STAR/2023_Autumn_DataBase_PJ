@@ -108,9 +108,6 @@ func UpdateCommodity(c *fiber.Ctx) error {
 	if err != nil {
 		return common.BadRequest("Invalid request body")
 	}
-	//err =
-	//if errors.Is(err, gorm.ErrRecordNotFound) {
-	//	return common.NotFound()
-	//}
+
 	return commodity.Update()
 }

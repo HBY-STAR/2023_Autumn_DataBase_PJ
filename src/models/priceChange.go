@@ -47,3 +47,23 @@ func (priceChange *PriceChange) Update() error {
 		return nil
 	})
 }
+
+func IsPriceChangeToday(commodityItemID int) (bool, error) {
+	var priceChange PriceChange
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Where("commodity_item_id = ? AND DATE(update_at) = DATE(NOW())", commodityItemID).First(&priceChange).Error
+	})
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func CreatePriceChanges(priceChanges []PriceChange) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Create(&priceChanges).Error
+	})
+}

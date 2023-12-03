@@ -16,11 +16,9 @@ func parseItem() error {
 	if err != nil {
 		return err
 	}
-	for _, v := range items {
-		err = models.DB.Create(&v).Error
-		if err != nil {
-			fmt.Println(err)
-		}
+	err = models.CreateItems(items)
+	if err != nil {
+		fmt.Println(err)
 	}
 	return nil
 }
