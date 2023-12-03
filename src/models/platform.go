@@ -16,9 +16,6 @@ func GetPlatforms() (platforms []Platform, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Find(&platforms).Error
 	})
-	if err != nil {
-		return nil, err
-	}
 	return
 }
 

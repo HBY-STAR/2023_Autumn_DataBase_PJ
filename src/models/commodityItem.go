@@ -26,14 +26,11 @@ func GetItemByID(ID int) (item *CommodityItem, err error) {
 	return
 }
 
-func GetItems() ([]CommodityItem, error) {
-	var items []CommodityItem
-	err := DB.Transaction(func(tx *gorm.DB) error {
+func GetItems() (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Preload(clause.Associations).Find(&items).Error
 	})
-	if err != nil {
-		return nil, err
-	}
+
 	//for _, it := range items {
 	//	//it.Commodity = new(Commodity)
 	//	//it.Platform = new(Platform)
@@ -43,7 +40,7 @@ func GetItems() ([]CommodityItem, error) {
 	//	//_ = it.Seller.GetSellerByID(it.SellerID)
 	//	fmt.Println(it.CommodityID)
 	//}
-	return items, nil
+	return
 }
 
 func (item *CommodityItem) Create() error {
@@ -83,4 +80,32 @@ func (item *CommodityItem) Update() error {
 		}
 		return nil
 	})
+}
+
+func GetItemsByName(name string) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("item_name = ?", name).Find(&items).Error
+	})
+	return
+}
+
+func GetItemsByNameFuzzy(name string) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("item_name LIKE ?", "%"+name+"%").Find(&items).Error
+	})
+	return
+}
+
+func GetItemsByCategory(category string) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("category = ?", category).Find(&items).Error
+	})
+	return
+}
+
+func GetItemsByCategoryFuzzy(category string) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("category LIKE ?", "%"+category+"%").Find(&items).Error
+	})
+	return
 }

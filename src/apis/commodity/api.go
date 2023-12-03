@@ -31,6 +31,8 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateCommodityRequest true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func CreateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -60,6 +62,7 @@ func CreateCommodity(c *fiber.Ctx) error {
 // @Param id path string true "commodity id"
 // @Success 200
 // @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
 // @Authorization Bearer {token}
 func DeleteCommodity(c *fiber.Ctx) error {
@@ -88,6 +91,7 @@ func DeleteCommodity(c *fiber.Ctx) error {
 // @Param json body Commodity true "json"
 // @Success 200
 // @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
 // @Authorization Bearer {token}
 func UpdateCommodity(c *fiber.Ctx) error {

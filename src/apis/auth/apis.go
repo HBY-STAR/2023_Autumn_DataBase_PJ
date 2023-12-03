@@ -21,6 +21,7 @@ import (
 // @Success 200 {object} TokenResponse
 // @Failure 400 {object} common.HttpError
 // @Failure 401 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Failure 500 {object} common.HttpError
 func Login(c *fiber.Ctx) error {
 	var body LoginRequest

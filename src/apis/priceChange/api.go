@@ -37,6 +37,8 @@ func GetPriceChange(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdatePriceChangeModel true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func UpdatePriceChange(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)

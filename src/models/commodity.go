@@ -13,15 +13,11 @@ type Commodity struct {
 	Category       string `json:"category" gorm:"not null;size:64"`
 }
 
-func GetCommodities() ([]Commodity, error) {
-	var commodities []Commodity
-	err := DB.Transaction(func(tx *gorm.DB) error {
+func GetCommodities() (commodities []Commodity, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Find(&commodities).Error
 	})
-	if err != nil {
-		return nil, err
-	}
-	return commodities, nil
+	return
 }
 
 func GetCommodityByID(commodityID int) (commodity *Commodity, err error) {

@@ -69,7 +69,7 @@ definitions:
       item_id:
         type: integer
       price_limit:
-        type: integer
+        type: number
     type: object
   item.CreateItemModel:
     properties:
@@ -247,17 +247,6 @@ definitions:
       url:
         type: string
     type: object
-  platform.UpdatePlatformRequest:
-    properties:
-      country:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      url:
-        type: string
-    type: object
   priceChange.GetPriceChangeModel:
     properties:
       commodity_item_id:
@@ -273,11 +262,10 @@ definitions:
     type: object
   priceChange.UpdatePriceChangeModel:
     properties:
-      commodity_item_id:
-        type: integer
       id:
         type: integer
       new_price:
+        description: CommodityItemID int     `json:"commodity_item_id"`
         type: number
     type: object
   seller.CreateSellerRequest:
@@ -291,19 +279,6 @@ definitions:
       username:
         type: string
     type: object
-  seller.UpdateSellerRequest:
-    properties:
-      address:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      password:
-        type: string
-      username:
-        type: string
-    type: object
   user.CreateUserRequest:
     properties:
       age:
@@ -312,23 +287,6 @@ definitions:
         type: string
       gender:
         type: boolean
-      password:
-        type: string
-      phone:
-        type: string
-      username:
-        type: string
-    type: object
-  user.UpdateUserRequest:
-    properties:
-      age:
-        type: integer
-      email:
-        type: string
-      gender:
-        type: boolean
-      id:
-        type: integer
       password:
         type: string
       phone:
@@ -366,6 +324,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
         "404":
           description: Not Found
           schema:
@@ -389,6 +351,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 添加商品
       tags:
       - 商品
@@ -410,6 +380,10 @@ paths:
           description: OK
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
           schema:
             $ref: '#/definitions/common.HttpError'
         "404":
@@ -448,6 +422,10 @@ paths:
             items:
               $ref: '#/definitions/models.CommodityItem'
             type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 获取所有商品
       tags:
       - Item
@@ -467,6 +445,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 删除商品
       tags:
       - Item
@@ -486,6 +472,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 添加商品
       tags:
       - Item
@@ -505,6 +499,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: 更新商品
       tags:
       - Item
@@ -525,7 +527,46 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: AddFavorite
+      tags:
+      - Favorite
+  /api/favorites/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteFavorite
+      parameters:
+      - description: item id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: DeleteFavorite
       tags:
       - Favorite
   /api/favorites/all:
@@ -539,7 +580,17 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Favorite'
+            items:
+              $ref: '#/definitions/models.Favorite'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: GetAllFavorites
       tags:
       - Favorite
@@ -570,6 +621,10 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
         "500":
           description: Internal Server Error
           schema:
@@ -591,6 +646,10 @@ paths:
             items:
               $ref: '#/definitions/models.Message'
             type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Get all messages
       tags:
       - Message
@@ -610,6 +669,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Delete platform
       tags:
       - Platform
@@ -629,6 +696,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Add platform
       tags:
       - Platform
@@ -642,12 +717,20 @@ paths:
         name: json
         required: true
         schema:
-          $ref: '#/definitions/platform.UpdatePlatformRequest'
+          $ref: '#/definitions/models.Platform'
       produces:
       - application/json
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Update platform
       tags:
       - Platform
@@ -662,7 +745,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Platform'
+            items:
+              $ref: '#/definitions/models.Platform'
+            type: array
       summary: Get all platform
       tags:
       - Platform
@@ -706,6 +791,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Update priceChange
       tags:
       - PriceChange
@@ -726,6 +819,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: AddPriceLimit
       tags:
       - Favorite
@@ -747,7 +852,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CommodityItem'
+            items:
+              $ref: '#/definitions/models.CommodityItem'
+            type: array
       summary: 搜索商品
       tags:
       - Item
@@ -767,6 +874,14 @@ paths:
       responses:
         "200":
           description: OK
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Delete seller
       tags:
       - Seller
@@ -786,6 +901,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Add seller
       tags:
       - Seller
@@ -799,12 +922,24 @@ paths:
         name: json
         required: true
         schema:
-          $ref: '#/definitions/seller.UpdateSellerRequest'
+          $ref: '#/definitions/models.Seller'
       produces:
       - application/json
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Update seller
       tags:
       - Seller
@@ -843,6 +978,18 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Delete user
       tags:
       - User
@@ -862,6 +1009,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Add user
       tags:
       - User
@@ -875,12 +1030,24 @@ paths:
         name: json
         required: true
         schema:
-          $ref: '#/definitions/user.UpdateUserRequest'
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
       summary: Update user
       tags:
       - User

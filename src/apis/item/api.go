@@ -13,7 +13,8 @@ import (
 // @Tags Item
 // @Accept json
 // @Produce json
-// @Success 200 {array} CommodityItem
+// @Success 200 {array} models.CommodityItem
+// @Failure 403 {object} common.HttpError
 func GetAllCommodity(c *fiber.Ctx) error {
 	items, err := GetItems()
 	if err != nil {
@@ -30,14 +31,32 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param json body SearchQuery true "Range: name, category; Search: content to search"
-// @Success 200 {object} CommodityItem
+// @Success 200 {array} models.CommodityItem
 func SearchCommodity(c *fiber.Ctx) error {
-	var CommodityItems []CommodityItem
-	//err := DB.Find(&CommodityItems).Error
-	//if err != nil {
-	//	return err
-	//}
-	return c.JSON(&CommodityItems)
+	var searchQuery SearchQuery
+	err := c.BodyParser(&searchQuery)
+	if err != nil {
+		return err
+	}
+	var items []CommodityItem
+	switch searchQuery.Range {
+	case "name":
+		if searchQuery.Accurate {
+			items, err = GetItemsByName(searchQuery.Search)
+		} else {
+			items, err = GetItemsByNameFuzzy(searchQuery.Search)
+		}
+	case "category":
+		if searchQuery.Accurate {
+			items, err = GetItemsByCategory(searchQuery.Search)
+		} else {
+			items, err = GetItemsByCategoryFuzzy(searchQuery.Search)
+		}
+	}
+	if err != nil {
+		return err
+	}
+	return c.JSON(&items)
 }
 
 // AddCommodity @AddCommodity
@@ -49,6 +68,8 @@ func SearchCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateItemModel true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func AddCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -84,6 +105,8 @@ func AddCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body UpdateItemModel true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func UpdateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -115,6 +138,8 @@ func UpdateCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "commodity id"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func DeleteCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)

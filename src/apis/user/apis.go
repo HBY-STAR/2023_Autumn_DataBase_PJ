@@ -22,7 +22,7 @@ import (
 // @Tags User
 // @Accept json
 // @Produce json
-// @Success 200 {object} User
+// @Success 200 {object} models.User
 // @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func GetUserInfo(c *fiber.Ctx) error {
@@ -52,6 +52,8 @@ func GetUserInfo(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreateUserRequest true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func AddUser(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -78,6 +80,9 @@ func AddUser(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body models.User true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
 // @Authorization Bearer {token}
 func UpdateUser(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -107,6 +112,9 @@ func UpdateUser(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path int true "user id"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
 // @Authorization Bearer {token}
 func DeleteUser(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)

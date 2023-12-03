@@ -13,7 +13,7 @@ import (
 // @Tags Platform
 // @Accept json
 // @Produce json
-// @Success 200 {object} Platform
+// @Success 200 {array} models.Platform
 func GetAllPlatform(c *fiber.Ctx) error {
 	platforms, err := GetPlatforms()
 	if err != nil {
@@ -31,6 +31,8 @@ func GetAllPlatform(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body CreatePlatformRequest true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func AddPlatform(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -58,6 +60,8 @@ func AddPlatform(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body models.Platform true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func UpdatePlatform(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -85,6 +89,8 @@ func UpdatePlatform(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path int true "platform id"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func DeletePlatform(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)

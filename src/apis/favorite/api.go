@@ -15,6 +15,9 @@ import (
 // @Produce json
 // @Param json body AddFavoriteModel true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
 // @Authorization Bearer {token}
 func AddFavorite(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -46,6 +49,9 @@ func AddFavorite(c *fiber.Ctx) error {
 // @Produce json
 // @Param json body PriceLimitModel true "json"
 // @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
 // @Authorization Bearer {token}
 func AddPriceLimit(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -75,7 +81,9 @@ func AddPriceLimit(c *fiber.Ctx) error {
 // @Tags Favorite
 // @Accept json
 // @Produce json
-// @Success 200 {object} Favorite
+// @Success 200 {array} models.Favorite
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func GetAllFavorites(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
@@ -94,6 +102,18 @@ func GetAllFavorites(c *fiber.Ctx) error {
 	return c.JSON(&favorites)
 }
 
+// DeleteFavorite @DeleteFavorite
+// @Router /api/favorites/{id} [delete]
+// @Summary DeleteFavorite
+// @Description DeleteFavorite
+// @Tags Favorite
+// @Accept json
+// @Produce json
+// @Param id path string true "item id"
+// @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
+// @Authorization Bearer {token}
 func DeleteFavorite(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

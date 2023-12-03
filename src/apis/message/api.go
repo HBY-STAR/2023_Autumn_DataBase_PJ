@@ -13,7 +13,8 @@ import (
 // @Tags Message
 // @Accept json
 // @Produce json
-// @Success 200 {array} Message
+// @Success 200 {array} models.Message
+// @Failure 403 {object} common.HttpError
 // @Authorization Bearer {token}
 func GetAllMessages(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
