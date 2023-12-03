@@ -46,7 +46,7 @@ func UpdatePriceChange(c *fiber.Ctx) error {
 		return err
 	}
 	if tmpUser.UserType != "admin" {
-		return common.Forbidden("Only admin and seller can update priceChange")
+		return common.Forbidden("Only admin can update priceChange")
 	}
 
 	var updatePriceChangeModel UpdatePriceChangeModel

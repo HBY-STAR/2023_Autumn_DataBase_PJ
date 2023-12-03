@@ -30,8 +30,12 @@ func registerRoutes(app *fiber.App) {
 func RegisterRoutes(app *fiber.App) {
 	registerRoutes(app)
 
-	authGroup := app.Group("/api")
-	auth.RegisterRoutes(authGroup)
+	groupWithoutAuthorization := app.Group("/api")
+	auth.RegisterRoutes(groupWithoutAuthorization)
+	commodity.RegisterRoutesWithoutAuthorization(groupWithoutAuthorization)
+	item.RegisterRoutesWithoutAuthorization(groupWithoutAuthorization)
+	platform.RegisterRoutesWithoutAuthorization(groupWithoutAuthorization)
+	priceChange.RegisterRoutesWithoutAuthorization(groupWithoutAuthorization)
 
 	group := app.Group("/api")
 	group.Use(MiddlewareGetUser)
