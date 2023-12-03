@@ -98,14 +98,24 @@ func GetItemsByNameFuzzy(name string) (items []CommodityItem, err error) {
 
 func GetItemsByCategory(category string) (items []CommodityItem, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Preload(clause.Associations).Where("category = ?", category).Find(&items).Error
+		return tx.
+			Joins("JOIN commodity ON commodity.id = commodity_item.commodity_id").
+			Where("commodity.category = ?", category).
+			Preload(clause.Associations).
+			Find(&items).
+			Error
 	})
 	return
 }
 
 func GetItemsByCategoryFuzzy(category string) (items []CommodityItem, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Preload(clause.Associations).Where("category LIKE ?", "%"+category+"%").Find(&items).Error
+		return tx.
+			Joins("JOIN commodity ON commodity.id = commodity_item.commodity_id").
+			Where("commodity.category LIKE ?", "%"+category+"%").
+			Preload(clause.Associations).
+			Find(&items).
+			Error
 	})
 	return
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
 	. "src/models"
+	"strings"
 )
 
 // GetAllCommodity @GetAllCommodity
@@ -36,10 +37,10 @@ func SearchCommodity(c *fiber.Ctx) error {
 	var searchQuery SearchQuery
 	err := c.BodyParser(&searchQuery)
 	if err != nil {
-		return err
+		return common.BadRequest("Invalid request body")
 	}
 	var items []CommodityItem
-	switch searchQuery.Range {
+	switch strings.ToLower(searchQuery.Range) {
 	case "name":
 		if searchQuery.Accurate {
 			items, err = GetItemsByName(searchQuery.Search)
@@ -52,6 +53,8 @@ func SearchCommodity(c *fiber.Ctx) error {
 		} else {
 			items, err = GetItemsByCategoryFuzzy(searchQuery.Search)
 		}
+	default:
+		return common.BadRequest("Invalid search range")
 	}
 	if err != nil {
 		return err
@@ -82,7 +85,7 @@ func AddCommodity(c *fiber.Ctx) error {
 	var createItemModel CreateItemModel
 	err = c.BodyParser(&createItemModel)
 	if err != nil {
-		return err
+		return common.BadRequest("Invalid request body")
 	}
 	// check if valid
 	var commodityItem = CommodityItem{
@@ -119,7 +122,7 @@ func UpdateCommodity(c *fiber.Ctx) error {
 	var updateItemModel UpdateItemModel
 	err = c.BodyParser(&updateItemModel)
 	if err != nil {
-		return err
+		return common.BadRequest("Invalid request body")
 	}
 	var commodityItem = CommodityItem{
 		ID:       updateItemModel.CommodityItemID,
