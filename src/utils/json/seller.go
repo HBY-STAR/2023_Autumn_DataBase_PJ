@@ -17,8 +17,8 @@ func parseSeller() error {
 	if err != nil {
 		return err
 	}
-	for _, v := range sellers {
-		v.Password = utils.MakePassword(v.Password)
+	for i := range sellers {
+		sellers[i].Password = utils.MakePassword(sellers[i].Password)
 	}
 	err = models.DB.Create(&sellers).Error
 	if err != nil {

@@ -57,6 +57,13 @@ definitions:
       message:
         type: string
     type: object
+  favorite.AddCommodityFavoriteModel:
+    properties:
+      commodity_id:
+        type: integer
+    required:
+    - commodity_id
+    type: object
   favorite.AddFavoriteModel:
     properties:
       item_id:
@@ -510,6 +517,36 @@ paths:
       summary: 更新商品
       tags:
       - Item
+  /api/commodity/item/batch:
+    post:
+      consumes:
+      - application/json
+      description: 批量添加商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/item.CreateItemModel'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: 批量添加商品
+      tags:
+      - Item
   /api/favorites:
     post:
       consumes:
@@ -592,6 +629,38 @@ paths:
           schema:
             $ref: '#/definitions/common.HttpError'
       summary: GetAllFavorites
+      tags:
+      - Favorite
+  /api/favorites/commodity:
+    post:
+      consumes:
+      - application/json
+      description: AddCommodityFavorite
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/favorite.AddCommodityFavoriteModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: AddCommodityFavorite
       tags:
       - Favorite
   /api/login:
@@ -800,6 +869,36 @@ paths:
           schema:
             $ref: '#/definitions/common.HttpError'
       summary: Update priceChange
+      tags:
+      - PriceChange
+  /api/price/history/batch:
+    post:
+      consumes:
+      - application/json
+      description: Add batch priceChange
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.PriceChange'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Add batch priceChange
       tags:
       - PriceChange
   /api/price/limit:

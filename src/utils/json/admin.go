@@ -17,8 +17,8 @@ func parseAdmin() error {
 	if err != nil {
 		return err
 	}
-	for _, v := range admins {
-		v.Password = utils.MakePassword(v.Password)
+	for i := range admins {
+		admins[i].Password = utils.MakePassword(admins[i].Password)
 	}
 	err = models.DB.Create(&admins).Error
 	if err != nil {

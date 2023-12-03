@@ -43,6 +43,13 @@ func GetItems() (items []CommodityItem, err error) {
 	return
 }
 
+func GetItemsByCommodityID(commodityID int) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("commodity_id = ?", commodityID).Find(&items).Error
+	})
+	return
+}
+
 func (item *CommodityItem) Create() error {
 	err := DB.Transaction(func(tx *gorm.DB) error {
 		err := tx.First(&item.Commodity, item.CommodityID).Error

@@ -99,6 +99,18 @@ func AddCommodity(c *fiber.Ctx) error {
 	return commodityItem.Create()
 }
 
+// AddBatchCommodity @AddBatchCommodity
+// @Router /api/commodity/item/batch [post]
+// @Summary 批量添加商品
+// @Description 批量添加商品
+// @Tags Item
+// @Accept json
+// @Produce json
+// @Param json body []CreateItemModel true "json"
+// @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
 func AddBatchCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

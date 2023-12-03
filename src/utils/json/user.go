@@ -32,8 +32,8 @@ func parseUsers() error {
 	if err != nil {
 		return err
 	}
-	for _, v := range users {
-		v.Password = utils.MakePassword(v.Password)
+	for i := range users {
+		users[i].Password = utils.MakePassword(users[i].Password)
 		//fmt.Println(v)
 		//return nil
 	}

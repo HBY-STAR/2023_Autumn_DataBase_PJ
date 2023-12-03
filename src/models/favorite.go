@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Favorite struct {
@@ -57,5 +58,32 @@ func (favorite *Favorite) Delete() error {
 			return common.NotFound("Favorite not found")
 		}
 		return nil
+	})
+}
+
+func CreateCommodityFavorite(commodityId int, userID int) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		var commodityItems []CommodityItem
+		result := tx.
+			Model(&CommodityItem{}).
+			Where("commodity_id = ?", commodityId).
+			Find(&commodityItems)
+		if result.Error != nil {
+			return result.Error
+		}
+		if len(commodityItems) == 0 {
+			return common.NotFound("Commodity not found")
+		}
+		var favorites []Favorite
+		t := MyTime{time.Now()}
+		for _, commodityItem := range commodityItems {
+			favorites = append(favorites, Favorite{
+				UserID:          userID,
+				CommodityItemID: commodityItem.ID,
+				PriceLimit:      0,
+				UpdateAt:        t,
+			})
+		}
+		return tx.Create(&favorites).Error
 	})
 }

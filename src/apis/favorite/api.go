@@ -40,6 +40,36 @@ func AddFavorite(c *fiber.Ctx) error {
 	return favorite.Create()
 }
 
+// AddCommodityFavorite @AddCommodityFavorite
+// @Router /api/favorites/commodity [post]
+// @Summary AddCommodityFavorite
+// @Description AddCommodityFavorite
+// @Tags Favorite
+// @Accept json
+// @Produce json
+// @Param json body AddCommodityFavoriteModel true "json"
+// @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Failure 404 {object} common.HttpError
+// @Authorization Bearer {token}
+func AddCommodityFavorite(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "user" {
+		return common.Forbidden("Only user can add favorites")
+	}
+	var AddCommodityFavoriteModel AddCommodityFavoriteModel
+	err = c.BodyParser(&AddCommodityFavoriteModel)
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+
+	return CreateCommodityFavorite(AddCommodityFavoriteModel.CommodityId, tmpUser.ID)
+}
+
 // AddPriceLimit @AddPriceLimit
 // @Router /api/price/limit [post]
 // @Summary AddPriceLimit

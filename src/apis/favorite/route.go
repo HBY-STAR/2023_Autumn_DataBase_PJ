@@ -7,4 +7,5 @@ func RegisterRoutes(app fiber.Router) {
 	app.Post("/favorites", AddFavorite)
 	app.Post("/price/limit", AddPriceLimit)
 	app.Delete("/favorites/:id", DeleteFavorite)
+	app.Post("/favorites/commodity", AddCommodityFavorite)
 }

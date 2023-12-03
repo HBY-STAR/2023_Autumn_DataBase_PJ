@@ -60,6 +60,18 @@ func UpdatePriceChange(c *fiber.Ctx) error {
 	return priceChange.Update()
 }
 
+// AddBatchPriceChange @AddBatchPriceChange
+// @Router /api/price/history/batch [post]
+// @Summary Add batch priceChange
+// @Description Add batch priceChange
+// @Tags PriceChange
+// @Accept json
+// @Produce json
+// @Param json body []models.PriceChange true "json"
+// @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
 func AddBatchPriceChange(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
