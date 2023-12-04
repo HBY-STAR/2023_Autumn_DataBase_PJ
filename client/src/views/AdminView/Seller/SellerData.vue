@@ -168,7 +168,7 @@ export default {
     },
     //data
     findAll() {
-      this.request.get("/sellers/data/all").then((res) => {
+      this.request.get("/sellers/all").then((res) => {
         if (res.status === 200) {
           localStorage.setItem("all_seller_data", JSON.stringify(res.data));
         } else {

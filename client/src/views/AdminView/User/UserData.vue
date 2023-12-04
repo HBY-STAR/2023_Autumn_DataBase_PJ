@@ -198,7 +198,7 @@ export default {
     },
     //data
     findAll() {
-      this.request.get("/users/data/all").then((res) => {
+      this.request.get("/users/all").then((res) => {
         if (res.status === 200) {
           localStorage.setItem("all_user_data", JSON.stringify(res.data));
         } else {
