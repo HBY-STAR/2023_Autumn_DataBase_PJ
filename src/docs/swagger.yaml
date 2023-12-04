@@ -1042,6 +1042,27 @@ paths:
       summary: Update seller
       tags:
       - Seller
+  /api/sellers/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all sellers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Seller'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Get all sellers
+      tags:
+      - Seller
   /api/sellers/data:
     get:
       consumes:
@@ -1148,6 +1169,27 @@ paths:
           schema:
             $ref: '#/definitions/common.HttpError'
       summary: Update user
+      tags:
+      - User
+  /api/users/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Get all users
       tags:
       - User
   /api/users/data:

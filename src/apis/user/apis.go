@@ -43,6 +43,31 @@ func GetUserInfo(c *fiber.Ctx) error {
 	return c.JSON(&getUser)
 }
 
+// GetAllUsers @GetAllUsers
+// @Router /api/users/all [get]
+// @Summary Get all users
+// @Description Get all users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.User
+// @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
+func GetAllUsers(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can get all users")
+	}
+	users, err := GetUsers()
+	if err != nil {
+		return err
+	}
+	return c.JSON(&users)
+}
+
 // AddUser @AddUser
 // @Router /api/users [post]
 // @Summary Add user

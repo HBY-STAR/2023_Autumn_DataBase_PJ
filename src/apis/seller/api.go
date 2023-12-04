@@ -40,6 +40,34 @@ func GetSeller(c *fiber.Ctx) error {
 	return c.JSON(&seller)
 }
 
+// GetAllSeller @GetAllSeller
+// @Router /api/sellers/all [get]
+// @Summary Get all sellers
+// @Description Get all sellers
+// @Tags Seller
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Seller
+// @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
+func GetAllSeller(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can get all sellers.")
+	}
+
+	sellers, err := GetSellers()
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(&sellers)
+}
+
 // AddSeller @AddSeller
 // @Router /api/sellers [post]
 // @Summary Add seller

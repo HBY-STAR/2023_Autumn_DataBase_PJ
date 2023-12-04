@@ -15,6 +15,13 @@ type User struct {
 	Phone    string `json:"phone" gorm:"not null;type:char(13)"`
 }
 
+func GetUsers() (users []User, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Find(&users).Error
+	})
+	return
+}
+
 func GetUserByID(userID int) (user *User, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		err := tx.Omit("Password").Take(&user, userID).Error
