@@ -52,8 +52,8 @@ export default {
   },
   methods: {
     findCurUser() {
-      this.request.get("/users/me").then((res) => {
-        if (res.code === "200") {
+      this.request.get("/users/data").then((res) => {
+        if (res.status === 200) {
           localStorage.setItem("user_data", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);

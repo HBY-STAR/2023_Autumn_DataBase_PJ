@@ -118,14 +118,14 @@ export default {
   methods: {
     findAll() {
       this.request.get("/commodity/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
         }
       });
-      this.request.get("/users/me").then((res) => {
-        if (res.code === "200") {
+      this.request.get("/users/data").then((res) => {
+        if (res.status === 200) {
           localStorage.setItem("user_data", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);

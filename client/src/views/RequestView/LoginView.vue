@@ -65,7 +65,7 @@ export default {
         ],
         password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
-          { min: 5, max: 20, message: "长度在 5 到 20 个字符", trigger: "blur" }
+          { min: 5, max: 50, message: "长度在 5 到 50 个字符", trigger: "blur" }
         ],
         type: [
           {required: true, trigger: "blur"}
@@ -82,7 +82,7 @@ export default {
         if (valid) {
           // 表单校验合法
           this.request.post("/login", this.user_login).then((res) => {
-            if (res.code === "200")
+            if (res.status === 200)
             {
               //存储token
               localStorage.setItem("token", JSON.stringify(res.data.access));

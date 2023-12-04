@@ -101,15 +101,15 @@ export default {
   },
   methods: {
     findAll() {
-      this.request.get("/sellers/me").then((res) => {
-        if (res.code === "200") {
+      this.request.get("/sellers/data").then((res) => {
+        if (res.status === 200) {
           localStorage.setItem("seller_data", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
         }
       });
       this.request.get("/commodity/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("seller_commodity_item", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);

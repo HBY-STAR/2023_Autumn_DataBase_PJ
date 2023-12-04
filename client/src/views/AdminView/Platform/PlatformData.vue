@@ -157,7 +157,7 @@ export default {
     //data
     findAll() {
       this.request.get("/platform/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("all_platform_data", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
@@ -169,7 +169,7 @@ export default {
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
           this.request.post("/platform",this.add_platform).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("新建成功")
             } else {
               this.$message.error(res.message);
@@ -183,7 +183,7 @@ export default {
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
           this.request.put("/platform",this.update_platform).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("修改成功")
             } else {
               this.$message.error(res.message);
@@ -195,7 +195,7 @@ export default {
     //delete
     deletePlatform(){
       this.request.delete("/platform/"+this.focus_id).then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           this.$message.success("删除成功")
         } else {
           this.$message.error(res.message);

@@ -177,7 +177,7 @@ export default {
     //data
     findAll() {
       this.request.get("/commodities/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("all_commodity_data", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
@@ -189,7 +189,7 @@ export default {
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
           this.request.post("/commodities",this.add_commodity).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("新建成功")
             } else {
               this.$message.error(res.message);
@@ -203,7 +203,7 @@ export default {
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
           this.request.put("/commodities",this.update_commodity).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("修改成功")
             } else {
               this.$message.error(res.message);
@@ -215,7 +215,7 @@ export default {
     //delete
     deleteCommodity(){
       this.request.delete("/commodities/"+this.focus_id).then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           this.$message.success("删除成功")
         } else {
           this.$message.error(res.message);

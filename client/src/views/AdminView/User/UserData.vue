@@ -198,8 +198,8 @@ export default {
     },
     //data
     findAll() {
-      this.request.get("/users/data").then((res) => {
-        if (res.code === "200") {
+      this.request.get("/users/data/all").then((res) => {
+        if (res.status === 200) {
           localStorage.setItem("all_user_data", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
@@ -211,7 +211,7 @@ export default {
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
           this.request.post("/users",this.add_user).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("新建成功")
             } else {
               this.$message.error(res.message);
@@ -225,7 +225,7 @@ export default {
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
           this.request.put("/users",this.update_user).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("修改成功")
             } else {
               this.$message.error(res.message);
@@ -237,7 +237,7 @@ export default {
     //delete
     deleteUser(){
       this.request.delete("/users/"+this.focus_id).then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           this.$message.success("删除成功")
         } else {
           this.$message.error(res.message);

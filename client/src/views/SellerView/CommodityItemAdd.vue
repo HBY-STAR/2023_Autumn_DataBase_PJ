@@ -168,14 +168,14 @@ export default {
     },
     findAll() {
       this.request.get("/commodities/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("commodities_all", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
         }
       });
       this.request.get("/platform/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("platform_all", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
@@ -186,7 +186,7 @@ export default {
       this.$refs["addRules"].validate((valid) => {
         if (valid) {
           this.request.post("/commodity/item",this.addCommodity).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("发布成功")
             } else {
               this.$message.error(res.message);

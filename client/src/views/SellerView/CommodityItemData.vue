@@ -1,71 +1,74 @@
 <template>
-  <el-table :data="currentTableData" border height="530px" show-empty>
+  <el-table :data="currentTableData" border show-empty>
     <el-table-column label="商品序号" prop="id" width="180"/>
     <el-table-column label="商品名" prop="item_name" width="200"/>
-    <el-table-column label="种类" prop="commodity.category" width="200"/>
+    <el-table-column label="种类" prop="Commodity.category" width="200"/>
     <el-table-column label="价格" prop="price" width="200"/>
-    <el-table-column label="平台" prop="platform.name" width="150"/>
+    <el-table-column label="平台" prop="Platform.name" width="150"/>
     <el-table-column label="更多信息" width="100">
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer1 = true;">
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true">
             </Plus>
           </el-icon>
-        </div>
-        <el-drawer v-model="drawer1" title="商品更多信息" size="50%">
-          <div>
-            <el-form label-width="80px" size="small" style="margin-left: 10px">
-              <el-form-item label="生产日期:">
-                <span>{{ seller_commodity_item.commodity.produce_at }}</span>
-              </el-form-item>
-              <el-form-item label="生产地址:">
-                <span>{{ seller_commodity_item.commodity.produce_address }}</span>
-              </el-form-item>
-              <el-form-item label="售卖平台所属国家:">
-                <span>{{ seller_commodity_item.platform.country }}</span>
-              </el-form-item>
-              <el-form-item label="上次信息更新时间:">
-                <span>{{ seller_commodity_item.update }}</span>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div>
-            <div style="height: 40px; margin-top: 20px">
-              <span style="margin-top: 20px; margin-bottom: 20px">查询价格历史:</span>
-            </div>
-            <div style="height: 50px">
-              <el-date-picker
-                v-model="find_price_history.time_start"
-                type="date"
-                placeholder="起始时间"
-              />
-              <el-date-picker
-                v-model="find_price_history.time_end"
-                type="date"
-                placeholder="结束时间"
-              />
+          <el-drawer v-model="drawer" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
+            <div>
+              <el-form label-width="120px" style="margin-left: 10px">
+                <el-form-item label="生产日期:">
+                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].Commodity.produce_at }}</span>
+                </el-form-item>
+                <el-form-item label="生产地址:">
+                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].Commodity.produce_address }}</span>
+                </el-form-item>
+                <el-form-item label="平台所在国家:">
+                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].Platform.country }}</span>
+                </el-form-item>
+                <el-form-item label="上次更新时间:">
+                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].update }}</span>
+                </el-form-item>
+              </el-form>
             </div>
             <div>
-              <el-button @click="
-            innerDrawer1 = true;
-            this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
-            findPriceHistory();">查询
-              </el-button>
-              <el-drawer
-                v-model="innerDrawer1"
-                title="价格历史"
-                :append-to-body="true"
-              >
-                <p>_(:зゝ∠)_</p>
-                <el-table :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
-                  <el-table-column label="更新时间" prop="update_at" width="200"/>
-                  <el-table-column label="价格" prop="new_price" width="200"/>
-                </el-table>
-              </el-drawer>
+              <div style="height: 40px; margin-top: 100px">
+                <span style="margin-top: 20px; margin-bottom: 20px">查询价格历史:</span>
+              </div>
+              <div style="height: 50px">
+                <el-date-picker
+                  v-model="find_price_history.time_start"
+                  type="date"
+                  placeholder="起始时间"
+                />
+              </div>
+              <div style="height: 50px">
+                <el-date-picker
+                  v-model="find_price_history.time_end"
+                  type="date"
+                  placeholder="结束时间"
+                />
+              </div>
+              <div>
+                <el-button @click="
+                  innerDrawer = true;
+                  this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
+                  findPriceHistory();">查询
+                </el-button>
+                <el-drawer
+                  v-model="innerDrawer"
+                  title="价格历史"
+                  :append-to-body="true"
+                  destroy-on-close
+                  :before-close="handleClose2"
+                >
+                  <el-table :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
+                    <el-table-column label="更新时间" prop="update_at" width="200"/>
+                    <el-table-column label="价格" prop="new_price" width="200"/>
+                  </el-table>
+                </el-drawer>
+              </div>
             </div>
-          </div>
-        </el-drawer>
+          </el-drawer>
+        </div>
       </template>
     </el-table-column>
     <el-table-column label="修改商品" width="110">
@@ -175,8 +178,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       //drawer
-      drawer1: false,
-      innerDrawer1: false,
+      drawer: false,
+      innerDrawer: false,
       //dialog
       dialogVisible:false,
     }
@@ -211,7 +214,7 @@ export default {
     },
     findAll() {
       this.request.get("/commodity/all").then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           localStorage.setItem("seller_commodity_item", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
@@ -223,7 +226,7 @@ export default {
         if (valid) {
           this.update_commodity_item.commodity_item_id=this.focus_commodity_item_id;
           this.request.put("/commodity/item",this.update_commodity_item).then((res) => {
-            if (res.code === "200") {
+            if (res.status === 200) {
               this.$message.success("设置成功")
             } else {
               this.$message.error(res.message);
@@ -242,7 +245,7 @@ export default {
     },
     deleteCommodityItem(){
       this.request.delete("/commodity/item/"+this.focus_commodity_item_id).then((res) => {
-        if (res.code === "200") {
+        if (res.status === 200) {
           this.$message.success("删除成功")
         } else {
           this.$message.error(res.message);
@@ -254,7 +257,7 @@ export default {
         this.$message.error('未选中任何商品')
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
-          if(res.code==='200'){
+          if(res.status===200){
             localStorage.setItem("commodity_price_history", JSON.stringify(res.data));
           }
           else {
@@ -283,7 +286,13 @@ export default {
         .catch(() => {
           // 用户点击了取消按钮，不执行任何操作
         });
-    }
+    },
+    handleClose1(){
+      this.drawer=false
+    },
+    handleClose2(){
+      this.innerDrawer=false
+    },
   },
 }
 </script>
