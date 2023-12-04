@@ -4,6 +4,7 @@ import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"time"
 )
 
 type CommodityItem struct {
@@ -78,11 +79,13 @@ func DeleteItemByID(itemID int) error {
 
 func (item *CommodityItem) Update() error {
 	return DB.Transaction(func(tx *gorm.DB) error {
+		item.UpdateAt = MyTime{time.Now()}
 		result := tx.Updates(&item)
 		if result.Error != nil {
 			return result.Error
 		}
 		if result.RowsAffected == 0 {
+			// when the value is not changed, it will return 0
 			return common.NotFound("CommodityItem not found")
 		}
 		return nil
@@ -131,4 +134,41 @@ func CreateItems(items []CommodityItem) error {
 	return DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Create(&items).Error
 	})
+}
+
+func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error) {
+	if item.Price == 0 {
+		return
+	}
+	var favorites []Favorite
+	var messages []Message
+	var t = time.Now()
+	var priceChange = PriceChange{
+		CommodityItemID: item.ID,
+		NewPrice:        item.Price,
+		UpdateAt:        MyTime{t},
+	}
+	//err = tx.Transaction(func(tx *gorm.DB) (err error) {
+	// insert priceChange
+	err = tx.Create(&priceChange).Error
+	if err != nil {
+		return
+	}
+	// find favorites
+	err = tx.Where("commodity_item_id = ? AND price_limit >= ?", item.ID, item.Price).Find(&favorites).Error
+	if err != nil || len(favorites) == 0 {
+		return
+	}
+
+	for _, favorite := range favorites {
+		messages = append(messages, Message{
+			UserID:          favorite.UserID,
+			CommodityItemID: item.ID,
+			CurrentPrice:    item.Price,
+			CreateAt:        MyTime{t},
+		})
+	}
+	// insert messages
+	return tx.Create(&messages).Error
+	//})
 }
