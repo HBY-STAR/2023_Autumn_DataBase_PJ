@@ -4,7 +4,7 @@
       <el-table :data="currentTableData1" border height="550px" show-empty style="width: 950px">
         <el-table-column label="商品ID" prop="id" width="100"/>
         <el-table-column label="默认名称" prop="default_name" width="150"/>
-        <el-table-column label="种类" prop="type" width="150"/>
+        <el-table-column label="种类" prop="category" width="150"/>
         <el-table-column label="生产日期" prop="produce_at" width="150"/>
         <el-table-column label="生产地址" prop="produce_address" width="220"/>
         <el-table-column label="修改信息" width="90">
@@ -17,20 +17,23 @@
             </div>
             <el-dialog
               v-model="dialogVisible"
-              title="修改商品信息"
-              width="30%"
+              width="25%"
+              :append-to-body="true"
+              :before-close="handleDialogClose"
             >
-              <el-form :model="update_commodity" :rules="update_rules" ref="update_rules" label-width="120px">
+              <div style="margin-bottom: 30px; text-align: center; font-size: 24px; color: cornflowerblue"><b>修改商品信息</b></div>
+              <el-form :model="update_commodity" :rules="update_rules" ref="update_rules">
                 <el-form-item  prop="default_name">
                   <el-input v-model="update_commodity.default_name" placeholder="请输入商品默认名称" />
                 </el-form-item>
-                <el-form-item  prop="type">
-                  <el-input v-model="update_commodity.type" placeholder="请输入商品种类" />
+                <el-form-item  prop="category">
+                  <el-input v-model="update_commodity.category" placeholder="请输入商品种类" />
                 </el-form-item>
                 <el-form-item   prop="produce_at">
                   <el-date-picker
                     v-model="update_commodity.produce_at"
                     type="datetime"
+                    value-format="YYYY-MM-DD hh:mm:ss"
                     placeholder="请选择生产时间"
                   />
                 </el-form-item>
@@ -80,13 +83,14 @@
           <el-form-item  prop="default_name">
             <el-input v-model="add_commodity.default_name" placeholder="请输入商品默认名称" />
           </el-form-item>
-          <el-form-item  prop="type">
-            <el-input v-model="add_commodity.type" placeholder="请输入商品种类" />
+          <el-form-item  prop="category">
+            <el-input v-model="add_commodity.category" placeholder="请输入商品种类" />
           </el-form-item>
           <el-form-item   prop="produce_at">
             <el-date-picker
               v-model="add_commodity.produce_at"
               type="datetime"
+              value-format="YYYY-MM-DD hh:mm:ss"
               placeholder="请选择生产时间"
             />
           </el-form-item>
@@ -110,7 +114,7 @@
 
 <script>
 
-import { Edit, Delete, MessageBox } from "@element-plus/icons-vue";
+import { Edit, Delete} from "@element-plus/icons-vue";
 
 export default {
   name: "admin_commodity_data",
@@ -129,7 +133,7 @@ export default {
       //add
       add_commodity:{
         default_name:null,
-        type:null,
+        category:null,
         produce_at:null,
         produce_address:null,
       },
@@ -137,7 +141,7 @@ export default {
       update_commodity:{
         id:null,
         default_name:null,
-        type:null,
+        category:null,
         produce_at:null,
         produce_address:null,
       },
@@ -146,7 +150,7 @@ export default {
         default_name:[
           { required: true, message: '不能为空', trigger: 'blur' },
         ],
-        type:[
+        category:[
           { required: true, message: '不能为空', trigger: 'blur' },
         ],
         produce_at:[
@@ -202,6 +206,7 @@ export default {
     updateCommodity(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
+          this.update_commodity.id=this.focus_id
           this.request.put("/commodities",this.update_commodity).then((res) => {
             if (res.status === 200) {
               this.$message.success("修改成功")
@@ -223,7 +228,7 @@ export default {
       });
     },
     showDeleteConfirm(row) {
-      MessageBox.confirm('确定要删除吗?', '提示', {
+      this.$confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -232,6 +237,9 @@ export default {
         this.deleteCommodity();
       }).catch(() => {
       });
+    },
+    handleDialogClose(){
+      this.dialogVisible=false
     },
   }
 }

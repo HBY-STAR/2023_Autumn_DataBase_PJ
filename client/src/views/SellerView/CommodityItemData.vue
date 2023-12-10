@@ -16,16 +16,16 @@
             <div>
               <el-form label-width="120px" style="margin-left: 10px">
                 <el-form-item label="生产日期:">
-                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].Commodity.produce_at }}</span>
+                  <span>{{ this.seller_commodity_item.find(item => item.id === this.focus_commodity_item_id).Commodity.produce_at }}</span>
                 </el-form-item>
                 <el-form-item label="生产地址:">
-                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].Commodity.produce_address }}</span>
+                  <span>{{ this.seller_commodity_item.find(item => item.id === this.focus_commodity_item_id).Commodity.produce_address }}</span>
                 </el-form-item>
                 <el-form-item label="平台所在国家:">
-                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].Platform.country }}</span>
+                  <span>{{ this.seller_commodity_item.find(item => item.id === this.focus_commodity_item_id).Platform.country }}</span>
                 </el-form-item>
                 <el-form-item label="上次更新时间:">
-                  <span>{{ seller_commodity_item[this.focus_commodity_item_id].update }}</span>
+                  <span>{{ this.seller_commodity_item.find(item => item.id === this.focus_commodity_item_id).update }}</span>
                 </el-form-item>
               </el-form>
             </div>
@@ -37,6 +37,7 @@
                 <el-date-picker
                   v-model="find_price_history.time_start"
                   type="date"
+                  value-format="YYYY-MM-DD hh:mm:ss"
                   placeholder="起始时间"
                 />
               </div>
@@ -44,6 +45,7 @@
                 <el-date-picker
                   v-model="find_price_history.time_end"
                   type="date"
+                  value-format="YYYY-MM-DD hh:mm:ss"
                   placeholder="结束时间"
                 />
               </div>
@@ -153,6 +155,7 @@ export default {
         ? JSON.parse(localStorage.getItem('commodity_price_history'))
         : [],
       focus_commodity_item_id:0,
+      showPrice:false,
       find_price_history:{
         commodity_item_id: -1,
         time_start: null,
@@ -228,6 +231,7 @@ export default {
           this.request.put("/commodity/item",this.update_commodity_item).then((res) => {
             if (res.status === 200) {
               this.$message.success("设置成功")
+              location.reload();
             } else {
               this.$message.error(res.message);
             }
@@ -247,6 +251,7 @@ export default {
       this.request.delete("/commodity/item/"+this.focus_commodity_item_id).then((res) => {
         if (res.status === 200) {
           this.$message.success("删除成功")
+          location.reload();
         } else {
           this.$message.error(res.message);
         }
@@ -258,7 +263,9 @@ export default {
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
           if(res.status===200){
-            localStorage.setItem("commodity_price_history", JSON.stringify(res.data));
+            localStorage.setItem("commodity_price_history", JSON.stringify(res.data))
+            this.commodity_price_history = JSON.stringify(res.data)
+            this.showPrice=true
           }
           else {
             this.$message.error(res.message)
@@ -282,6 +289,7 @@ export default {
           // 用户点击了确定按钮，可以在这里执行删除商品的操作
           this.focus_commodity_item_id = itemId;
           this.deleteCommodityItem();
+          location.reload();
         })
         .catch(() => {
           // 用户点击了取消按钮，不执行任何操作
@@ -292,6 +300,7 @@ export default {
     },
     handleClose2(){
       this.innerDrawer=false
+      this.showPrice=false
     },
   },
 }

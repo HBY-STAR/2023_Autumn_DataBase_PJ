@@ -18,10 +18,12 @@
             </div>
             <el-dialog
               v-model="dialogVisible"
-              title="修改商品信息"
-              width="30%"
+              width="25%"
+              :append-to-body="true"
+              :before-close="handleDialogClose"
             >
-              <el-form :model="update_commodity_item" :rules="update_rules" ref="update_rules" label-width="120px">
+              <div style="margin-bottom: 30px; text-align: center; font-size: 24px; color: cornflowerblue"><b>修改商品信息</b></div>
+              <el-form :model="update_commodity_item" :rules="update_rules" ref="update_rules">
                 <el-form-item prop="commodity_id">
                   <el-input
                     v-model="update_commodity_item.commodity_id"
@@ -139,7 +141,7 @@
 
 <script>
 
-import { Edit, Delete, MessageBox } from "@element-plus/icons-vue";
+import { Edit, Delete} from "@element-plus/icons-vue";
 
 export default {
   name: "admin_commodity_item_data",
@@ -189,7 +191,6 @@ export default {
         ],
         price: [
           { required: true, message: '商品价格不能为空', trigger: 'blur' },
-          { type: 'number', message: '请输入有效的数字', trigger: 'blur' },
           { validator: this.validatePrice, trigger: 'blur' },
         ],
       }
@@ -225,7 +226,7 @@ export default {
     addCommodityItem(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
-          this.request.post("/commodity",this.add_commodity_item).then((res) => {
+          this.request.post("/commodity/item",this.add_commodity_item).then((res) => {
             if (res.status === 200) {
               this.$message.success("新建成功")
             } else {
@@ -239,7 +240,8 @@ export default {
     updateCommodityItem(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
-          this.request.put("/commodity",this.update_commodity_item).then((res) => {
+          this.update_commodity_item.id=this.focus_id
+          this.request.put("/commodity/item",this.update_commodity_item).then((res) => {
             if (res.status === 200) {
               this.$message.success("修改成功")
             } else {
@@ -251,7 +253,7 @@ export default {
     },
     //delete
     deleteCommodityItem(){
-      this.request.delete("/commodity/"+this.focus_id).then((res) => {
+      this.request.delete("/commodity/item/"+this.focus_id).then((res) => {
         if (res.status === 200) {
           this.$message.success("删除成功")
         } else {
@@ -260,7 +262,7 @@ export default {
       });
     },
     showDeleteConfirm(row) {
-      MessageBox.confirm('确定要删除吗?', '提示', {
+      this.$confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -270,14 +272,19 @@ export default {
       }).catch(() => {
       });
     },
+    validatePrice(rule, value, callback) {
+      // 自定义价格验证规则示例
+      if (value <= 0) {
+        callback(new Error('商品价格必须大于零'));
+      } else {
+        callback();
+      }
+    },
+    handleDialogClose(){
+      this.dialogVisible=false
+    },
   },
-  validatePrice(rule, value, callback) {
-    // 自定义价格验证规则示例
-    if (value <= 0) {
-      callback(new Error('商品价格必须大于零'));
-    } else {
-      callback();
-    }
-  },
+
+
 }
 </script>

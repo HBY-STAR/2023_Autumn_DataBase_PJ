@@ -10,23 +10,23 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true">
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer1 = true">
             </Plus>
           </el-icon>
-          <el-drawer v-model="drawer" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
+          <el-drawer v-model="drawer1" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
             <div>
               <el-form label-width="120px" style="margin-left: 10px">
                 <el-form-item label="生产日期:">
-                  <span>{{ home_commodity_all[this.focus_commodity_item_id].Commodity.produce_at }}</span>
+                  <span>{{ this.home_commodity_all.find(item => item.id === this.focus_commodity_item_id).Commodity.produce_at }}</span>
                 </el-form-item>
                 <el-form-item label="生产地址:">
-                  <span>{{ home_commodity_all[this.focus_commodity_item_id].Commodity.produce_address }}</span>
+                  <span>{{ this.home_commodity_all.find(item => item.id === this.focus_commodity_item_id).Commodity.produce_address }}</span>
                 </el-form-item>
                 <el-form-item label="平台所在国家:">
-                  <span>{{ home_commodity_all[this.focus_commodity_item_id].Platform.country }}</span>
+                  <span>{{ this.home_commodity_all.find(item => item.id === this.focus_commodity_item_id).Platform.country }}</span>
                 </el-form-item>
                 <el-form-item label="上次更新时间:">
-                  <span>{{ home_commodity_all[this.focus_commodity_item_id].update }}</span>
+                  <span>{{ this.home_commodity_all.find(item => item.id === this.focus_commodity_item_id).update_at }}</span>
                 </el-form-item>
               </el-form>
             </div>
@@ -38,6 +38,7 @@
                 <el-date-picker
                   v-model="find_price_history.time_start"
                   type="date"
+                  value-format="YYYY-MM-DD hh:mm:ss"
                   placeholder="起始时间"
                 />
               </div>
@@ -45,23 +46,24 @@
                 <el-date-picker
                   v-model="find_price_history.time_end"
                   type="date"
+                  value-format="YYYY-MM-DD hh:mm:ss"
                   placeholder="结束时间"
                 />
               </div>
               <div>
                 <el-button @click="
-                  innerDrawer = true;
+                  innerDrawer1 = true;
                   this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
                   findPriceHistory();">查询
                 </el-button>
                 <el-drawer
-                  v-model="innerDrawer"
+                  v-model="innerDrawer1"
                   title="价格历史"
                   :append-to-body="true"
                   destroy-on-close
                   :before-close="handleClose2"
                 >
-                  <el-table :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
+                  <el-table  :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
                     <el-table-column label="更新时间" prop="update_at" width="200"/>
                     <el-table-column label="价格" prop="new_price" width="200"/>
                   </el-table>
@@ -72,7 +74,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="收藏" width="70">
+    <el-table-column label="收藏" width="100">
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
@@ -117,8 +119,9 @@ export default {
       focus_commodity_item_id:0,
       currentPage: 1,
       pageSize: 10,
-      drawer: false,
-      innerDrawer: false,
+      drawer1: false,
+      innerDrawer1: false,
+      showPrice:false,
       find_price_history:{
         commodity_item_id: -1,
         time_start: null,
@@ -164,15 +167,12 @@ export default {
       });
     },
     addToFavorite(){
-      if(localStorage.getItem("token")===null){
+      if(localStorage.getItem("token") === null){
         this.$message.error("请先登录");
-      }else if(localStorage.getItem("user_type") !== 'user')
-      {
-        this.$message.error("仅普通用户可收藏");
       }
       else{
         this.request.post('/favorites',this.focus_commodity_item_id).then(res=>{
-          if(res.status===200){
+          if(res.status === 200){
             this.$message.success("添加成功！")
           }
           else {
@@ -187,7 +187,9 @@ export default {
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
           if(res.status===200){
-            localStorage.setItem("commodity_price_history", JSON.stringify(res.data));
+            localStorage.setItem("commodity_price_history", JSON.stringify(res.data))
+            this.commodity_price_history = JSON.stringify(res.data)
+            this.showPrice=true
           }
           else {
             this.$message.error(res.message)
@@ -202,10 +204,11 @@ export default {
       return ''; // Return empty string for other rows
     },
     handleClose1(){
-      this.drawer=false
+      this.drawer1=false
     },
     handleClose2(){
-      this.innerDrawer=false
+      this.innerDrawer1=false
+      this.showPrice=false
     },
   }
 }

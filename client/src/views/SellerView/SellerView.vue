@@ -90,27 +90,16 @@ export default {
       seller_data: localStorage.getItem('seller_data')
         ? JSON.parse(localStorage.getItem('seller_data'))
         : {},
-      seller_commodity_item: localStorage.getItem('seller_commodity_item')
-        ? JSON.parse(localStorage.getItem('seller_commodity_item'))
-        : [],
     };
   },
   created() {
     this.findAll();
-    this.$router.push('/seller/commodity_item_data');
   },
   methods: {
     findAll() {
       this.request.get("/sellers/data").then((res) => {
         if (res.status === 200) {
           localStorage.setItem("seller_data", JSON.stringify(res.data));
-        } else {
-          this.$message.error(res.message);
-        }
-      });
-      this.request.get("/commodity/all").then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("seller_commodity_item", JSON.stringify(res.data));
         } else {
           this.$message.error(res.message);
         }

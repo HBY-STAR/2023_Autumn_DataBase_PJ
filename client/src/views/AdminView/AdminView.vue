@@ -12,7 +12,7 @@
         </el-aside>
         <el-main style="text-align: right; font-size: 16px">
           <div>
-            <span style="position: relative">{{ admin_data.username ? admin_data.username : '未登录' }}</span>
+            <span style="position: relative">{{IsAdmin()}}</span>
             <el-dropdown>
               <el-icon style="margin-left: 8px; margin-top: 1px; font-size: large">
                 <setting />
@@ -103,34 +103,13 @@ export default {
   name: "admin_view",
   data() {
     return {
-      admin_data: localStorage.getItem('admin_data')
-        ? JSON.parse(localStorage.getItem('admin_data'))
-        : {},
-      all_user_data: localStorage.getItem('all_user_data')
-        ? JSON.parse(localStorage.getItem('all_user_data'))
-        : [],
     };
   },
   created() {
-    this.findAll();
-    this.$router.push('/admin/all_user_data');
   },
   methods: {
-    findAll() {
-      this.request.get("/admins/me").then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("admin_data", JSON.stringify(res.data));
-        } else {
-          this.$message.error(res.message);
-        }
-      });
-      this.request.get("/users/all").then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("all_user_data", JSON.stringify(res.data));
-        } else {
-          this.$message.error(res.message);
-        }
-      });
+    IsAdmin(){
+      return localStorage.getItem("user_type")  ? 'admin' : '未登录'
     }
   }
 };

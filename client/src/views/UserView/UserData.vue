@@ -10,9 +10,9 @@
           <el-form-item label="用户名:">
             <span>{{ user_data.username }}</span>
           </el-form-item>
-          <el-form-item label="密码:">
-            <span>{{ user_data.password }}</span>
-          </el-form-item>
+<!--          <el-form-item label="密码:">-->
+<!--            <span>{{ user_data.password }}</span>-->
+<!--          </el-form-item>-->
           <el-form-item label="邮箱:">
             <span>{{ user_data.email }}</span>
           </el-form-item>
@@ -23,7 +23,7 @@
             <span>{{ type }}</span>
           </el-form-item>
           <el-form-item label="性别:">
-            <span>{{ user_data.gender }}</span>
+            <span>{{ user_data.gender ? '男' : '女' }}</span>
           </el-form-item>
         </el-form>
       </el-card>

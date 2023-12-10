@@ -103,9 +103,6 @@ export default {
   name: "user_view",
   data() {
     return {
-      home_commodity_all: localStorage.getItem("home_commodity_all")
-        ? JSON.parse(localStorage.getItem("home_commodity_all"))
-        : [],
       user_data: localStorage.getItem("user_data")
         ? JSON.parse(localStorage.getItem("user_data"))
         : {},
@@ -113,17 +110,9 @@ export default {
   },
   created() {
     this.findAll();
-    this.$router.push('/user/all_commodity_item_data');
   },
   methods: {
     findAll() {
-      this.request.get("/commodity/all").then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("home_commodity_all", JSON.stringify(res.data));
-        } else {
-          this.$message.error(res.message);
-        }
-      });
       this.request.get("/users/data").then((res) => {
         if (res.status === 200) {
           localStorage.setItem("user_data", JSON.stringify(res.data));

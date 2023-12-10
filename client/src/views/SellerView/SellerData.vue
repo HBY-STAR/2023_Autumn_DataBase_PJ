@@ -16,11 +16,11 @@
             {{ seller_data.username }}
           </span>
           </el-form-item>
-          <el-form-item label="密码:">
-          <span>
-            {{ seller_data.password }}
-          </span>
-          </el-form-item>
+<!--          <el-form-item label="密码:">-->
+<!--          <span>-->
+<!--            {{ seller_data.password }}-->
+<!--          </span>-->
+<!--          </el-form-item>-->
           <el-form-item label="邮箱:">
           <span>
             {{ seller_data.email }}

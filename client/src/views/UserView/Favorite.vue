@@ -5,27 +5,29 @@
     <el-table-column label="商家" prop="CommodityItem.Seller.username" width="150"/>
     <el-table-column label="平台" prop="CommodityItem.Platform.name" width="150"/>
     <el-table-column label="当前价格" prop="CommodityItem.price" width="150"/>
+    <el-table-column label="收藏时间" prop="update_at" width="180"/>
+    <el-table-column label="提醒价格" prop="price_limit" width="120"/>
     <el-table-column label="更多信息" width="100">
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true">
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id = scope.row.id; drawer = true">
             </Plus>
           </el-icon>
           <el-drawer v-model="drawer" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
             <div>
               <el-form label-width="120px" style="margin-left: 10px">
                 <el-form-item label="生产日期:">
-                  <span>{{ user_favorite[this.focus_commodity_item_id].Commodity.produce_at }}</span>
+                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).CommodityItem.Commodity.produce_at }}</span>
                 </el-form-item>
                 <el-form-item label="生产地址:">
-                  <span>{{ user_favorite[this.focus_commodity_item_id].Commodity.produce_address }}</span>
+                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).Commodity.produce_address }}</span>
                 </el-form-item>
                 <el-form-item label="平台所在国家:">
-                  <span>{{ user_favorite[this.focus_commodity_item_id].Platform.country }}</span>
+                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).Platform.country }}</span>
                 </el-form-item>
                 <el-form-item label="上次更新时间:">
-                  <span>{{ user_favorite[this.focus_commodity_item_id].update }}</span>
+                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).update_at }}</span>
                 </el-form-item>
               </el-form>
             </div>
@@ -37,6 +39,7 @@
                 <el-date-picker
                   v-model="find_price_history.time_start"
                   type="date"
+                  value-format="YYYY-MM-DD hh:mm:ss"
                   placeholder="起始时间"
                 />
               </div>
@@ -44,6 +47,7 @@
                 <el-date-picker
                   v-model="find_price_history.time_end"
                   type="date"
+                  value-format="YYYY-MM-DD hh:mm:ss"
                   placeholder="结束时间"
                 />
               </div>
@@ -71,8 +75,6 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="收藏时间" prop="create_at" width="150"/>
-    <el-table-column label="提醒价格" prop="price_limit" width="120"/>
     <el-table-column label="设置提醒价格" width="110">
       <template v-slot="scope">
         <div style="text-align: center">
@@ -81,7 +83,7 @@
             </Edit>
           </el-icon>
         </div>
-        <el-dialog v-model="dialogFormVisible" title="设置提醒价格">
+        <el-dialog v-model="dialogFormVisible" title="设置提醒价格" :before-close="HandleDialogClose" :append-to-body="true">
           <el-input-number v-model="input_limit" :min="0" :precision="2"/>
           <template #footer>
             <span class="dialog-footer">
@@ -123,6 +125,7 @@ export default {
 
       drawer: false,
       innerDrawer: false,
+      showPrice:false,
       find_price_history:{
         commodity_item_id: -1,
         time_start: null,
@@ -167,6 +170,7 @@ export default {
       this.request.post("/price/limit",this.set_price_limit).then((res) => {
         if (res.status === 200) {
           this.$message.success("设置成功")
+          location.reload();
         } else {
           this.$message.error(res.message);
         }
@@ -178,7 +182,9 @@ export default {
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
           if(res.status===200){
-            this.$message.success("添加成功！")
+            localStorage.setItem("commodity_price_history", JSON.stringify(res.data));
+            this.commodity_price_history = JSON.stringify(res.data)
+            this.showPrice=true
           }
           else {
             this.$message.error(res.message)
@@ -197,6 +203,10 @@ export default {
     },
     handleClose2(){
       this.innerDrawer=false
+      this.showPrice=false
+    },
+    HandleDialogClose(){
+      this.dialogFormVisible=false
     },
   }
 };

@@ -17,10 +17,12 @@
             </div>
             <el-dialog
               v-model="dialogVisible"
-              title="修改商家信息"
-              width="30%"
+              width="25%"
+              :append-to-body="true"
+              :before-close="handleDialogClose"
             >
-              <el-form :model="update_seller" :rules="update_rules" ref="update_rules" label-width="120px">
+              <div style="margin-bottom: 30px; text-align: center; font-size: 24px; color: cornflowerblue"><b>修改商家信息</b></div>
+              <el-form :model="update_seller" :rules="update_rules" ref="update_rules">
                 <el-form-item  prop="username">
                   <el-input v-model="update_seller.username" placeholder="请输入商家名" />
                 </el-form-item>
@@ -102,7 +104,7 @@
 
 <script>
 
-import { Edit, Delete, MessageBox } from "@element-plus/icons-vue";
+import { Edit, Delete} from "@element-plus/icons-vue";
 
 export default {
   name: "admin_seller_data",
@@ -194,6 +196,7 @@ export default {
     updateSeller(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
+          this.update_seller.id=this.focus_id
           this.request.put("/sellers",this.update_seller).then((res) => {
             if (res.status === 200) {
               this.$message.success("修改成功")
@@ -215,7 +218,7 @@ export default {
       });
     },
     showDeleteConfirm(row) {
-      MessageBox.confirm('确定要删除吗?', '提示', {
+      this.$confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -225,6 +228,9 @@ export default {
       }).catch(() => {
       });
     },
+    handleDialogClose(){
+      this.dialogVisible=false
+    }
   }
 }
 </script>

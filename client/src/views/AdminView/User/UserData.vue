@@ -6,7 +6,12 @@
         <el-table-column label="用户名" prop="username" width="150"/>
         <el-table-column label="密码" prop="password" width="150"/>
         <el-table-column label="年龄" prop="age" width="60"/>
-        <el-table-column label="性别" prop="gender" width="60"/>
+        <el-table-column label="性别" prop="gender" width="60">
+          <template v-slot="scope">
+            {{ scope.row.gender ? '男' : '女' }}
+          </template>
+        </el-table-column>
+
         <el-table-column label="邮箱" prop="email" width="150"/>
         <el-table-column label="电话" prop="phone" width="100"/>
         <el-table-column label="修改信息" width="90">
@@ -19,10 +24,12 @@
             </div>
             <el-dialog
               v-model="dialogVisible"
-              title="修改用户信息"
-              width="30%"
+              width="25%"
+              :append-to-body="true"
+              :before-close="handleDialogClose"
             >
-              <el-form :model="update_user" :rules="update_rules" ref="update_rules" label-width="120px">
+              <div style="margin-bottom: 30px; text-align: center; font-size: 24px; color: cornflowerblue"><b>修改用户信息</b></div>
+              <el-form :model="update_user" :rules="update_rules" ref="update_rules">
                 <el-form-item  prop="username">
                   <el-input v-model="update_user.username" placeholder="请输入用户名" />
                 </el-form-item>
@@ -91,7 +98,7 @@
             <el-input v-model="add_user.password" placeholder="请输入用户密码" />
           </el-form-item>
           <el-form-item  prop="age">
-            <el-input v-model="add_user.age" placeholder="请输入用户年龄" />
+            <el-input v-model="add_user.age" placeholder="请输入用户年龄"/>
           </el-form-item>
           <el-form-item prop="email">
             <el-input v-model="add_user.email" placeholder="请输入用户邮箱" />
@@ -122,7 +129,7 @@
 
 <script>
 
-import { Edit, Delete, MessageBox } from "@element-plus/icons-vue";
+import { Edit, Delete,} from "@element-plus/icons-vue";
 
 export default {
   name: "admin_user_data",
@@ -210,6 +217,8 @@ export default {
     addUser(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
+          this.add_user.age = parseInt(this.add_user.age)
+          this.add_user.gender = Boolean(this.add_user.gender)
           this.request.post("/users",this.add_user).then((res) => {
             if (res.status === 200) {
               this.$message.success("新建成功")
@@ -224,6 +233,9 @@ export default {
     updateUser(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
+          this.update_user.id = this.focus_id
+          this.update_user.age = parseInt(this.update_user.age)
+          this.update_user.gender = Boolean(this.update_user.gender)
           this.request.put("/users",this.update_user).then((res) => {
             if (res.status === 200) {
               this.$message.success("修改成功")
@@ -245,7 +257,7 @@ export default {
       });
     },
     showDeleteConfirm(row) {
-      MessageBox.confirm('确定要删除吗?', '提示', {
+      this.$confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -255,6 +267,9 @@ export default {
       }).catch(() => {
       });
     },
+    handleDialogClose(){
+      this.dialogVisible=false
+    }
   }
 }
 </script>
