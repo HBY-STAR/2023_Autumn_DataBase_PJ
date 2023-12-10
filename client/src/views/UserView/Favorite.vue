@@ -64,7 +64,14 @@
                   destroy-on-close
                   :before-close="handleClose2"
                 >
-                  <el-table :data="commodity_price_history" border show-empty style="width: 400px" :row-class-name="highlightLowestPriceRow">
+                  <el-table
+                    :data="commodity_price_history"
+                    border
+                    show-empty
+                    style="width: 400px"
+                    :row-class-name="highlightLowestPriceRow"
+                    :default-sort="{prop: 'update_at', order: 'descending'}"
+                  >
                     <el-table-column label="更新时间" prop="update_at" width="200"/>
                     <el-table-column label="价格" prop="new_price" width="200"/>
                   </el-table>
@@ -192,11 +199,9 @@ export default {
         })
       }
     },
-    highlightLowestPriceRow(row, index) {
-      if (index === this.lowestPriceRowIndex) {
-        return 'highlight'; // Apply the 'highlight' class to the row with the lowest price
-      }
-      return ''; // Return empty string for other rows
+    highlightLowestPriceRow({ row }) {
+      const lowestPrice = Math.min(...this.commodity_price_history.map(item => item.new_price));
+      return row.new_price === lowestPrice ? 'lowest-price-row' : '';
     },
     handleClose1(){
       this.drawer=false
@@ -214,7 +219,8 @@ export default {
 </script>
 
 <style>
-.highlight {
-  background-color: #ff0036; /* 设置您想要的高亮颜色 */
+.el-table .lowest-price-row {
+  background-color: #fa0404; /* 设置最低价格行的背景色 */
+  /* 可以根据需要添加其他样式 */
 }
 </style>
