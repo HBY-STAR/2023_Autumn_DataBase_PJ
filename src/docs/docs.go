@@ -212,6 +212,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/commodity/data": {
+            "get": {
+                "description": "获取自己的商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "获取自己的商品",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CommodityItem"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/commodity/item": {
             "put": {
                 "description": "更新商品",
@@ -1534,6 +1566,9 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                },
+                "seller_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1556,6 +1591,7 @@ const docTemplate = `{
             "required": [
                 "commodity_item_id",
                 "item_name",
+                "platform_id",
                 "price"
             ],
             "properties": {
@@ -1565,8 +1601,14 @@ const docTemplate = `{
                 "item_name": {
                     "type": "string"
                 },
+                "platform_id": {
+                    "type": "integer"
+                },
                 "price": {
                     "type": "number"
+                },
+                "seller_id": {
+                    "type": "integer"
                 }
             }
         },

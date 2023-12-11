@@ -9,7 +9,7 @@ type Message struct {
 	CommodityItem   *CommodityItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	CommodityItemID int            `json:"commodity_item_id"` //如果不constraint join时要注意
 	CurrentPrice    float32        `json:"current_price" gorm:"not null"`
-	CreateAt        MyTime         `json:"create_at"`
+	CreateAt        MyTime         `json:"create_at" gorm:"autoCreateTime"`
 	//PriceLimit   float64
 }
 
@@ -21,7 +21,13 @@ func (a ByCreatedAt) Less(i, j int) bool { return a[i].CreateAt.Time.Before(a[j]
 
 func GetMessagesByUserID(userID int) (messages []Message, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Preload("CommodityItem").Where("user_id=?", userID).Find(&messages).Error
+		return tx.
+			Preload("CommodityItem").
+			Preload("CommodityItem.Commodity").
+			Preload("CommodityItem.Platform").
+			Where("user_id=?", userID).
+			Find(&messages).
+			Error
 	})
 	return
 }

@@ -88,6 +88,8 @@ definitions:
         type: integer
       price:
         type: number
+      seller_id:
+        type: integer
     required:
     - commodity_id
     - item_name
@@ -109,11 +111,16 @@ definitions:
         type: integer
       item_name:
         type: string
+      platform_id:
+        type: integer
       price:
         type: number
+      seller_id:
+        type: integer
     required:
     - commodity_item_id
     - item_name
+    - platform_id
     - price
     type: object
   models.Commodity:
@@ -434,6 +441,27 @@ paths:
           schema:
             $ref: '#/definitions/common.HttpError'
       summary: 获取所有商品
+      tags:
+      - Item
+  /api/commodity/data:
+    get:
+      consumes:
+      - application/json
+      description: 获取自己的商品
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CommodityItem'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: 获取自己的商品
       tags:
       - Item
   /api/commodity/item:

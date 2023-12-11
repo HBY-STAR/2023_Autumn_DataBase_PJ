@@ -4,7 +4,6 @@ import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"time"
 )
 
 type CommodityItem struct {
@@ -17,12 +16,19 @@ type CommodityItem struct {
 	SellerID    int        `json:"seller_id" gorm:"not null"`
 	ItemName    string     `json:"item_name" gorm:"not null;size:64"`
 	Price       float32    `json:"price" gorm:"check:price > 0; not null"`
-	UpdateAt    MyTime     `json:"update_at"`
+	UpdateAt    MyTime     `json:"update_at" gorm:"autoUpdateTime"`
 }
 
 func GetItemByID(ID int) (item *CommodityItem, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Take(&item, ID).Error
+	})
+	return
+}
+
+func GetItemsBySellerID(sellerID int) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("seller_id = ?", sellerID).Find(&items).Error
 	})
 	return
 }
@@ -61,10 +67,14 @@ func (item *CommodityItem) Create() error {
 		if err != nil {
 			return err
 		}
+		err = tx.First(&item.Seller, item.SellerID).Error
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {
-		return common.NotFound("Commodity or Platform not found")
+		return common.NotFound("Commodity or Platform or Seller not found")
 	}
 	return DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Create(&item).Error
@@ -78,8 +88,33 @@ func DeleteItemByID(itemID int) error {
 }
 
 func (item *CommodityItem) Update() error {
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		var err error
+		if item.CommodityID != 0 {
+			err = tx.First(&item.Commodity, item.CommodityID).Error
+			if err != nil {
+				return err
+			}
+		}
+		if item.PlatformID != 0 {
+			err = tx.First(&item.Platform, item.PlatformID).Error
+			if err != nil {
+				return err
+			}
+		}
+		if item.SellerID != 0 {
+			err = tx.First(&item.Seller, item.SellerID).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return common.NotFound("Commodity or Platform or Seller not found")
+	}
 	return DB.Transaction(func(tx *gorm.DB) error {
-		item.UpdateAt = MyTime{time.Now()}
+		//item.UpdateAt = MyTime{time.Now()}
 		result := tx.Updates(&item)
 		if result.Error != nil {
 			return result.Error
@@ -142,11 +177,11 @@ func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error) {
 	}
 	var favorites []Favorite
 	var messages []Message
-	var t = time.Now()
+	//var t = time.Now()
 	var priceChange = PriceChange{
 		CommodityItemID: item.ID,
 		NewPrice:        item.Price,
-		UpdateAt:        MyTime{t},
+		//UpdateAt:        MyTime{t},
 	}
 	//err = tx.Transaction(func(tx *gorm.DB) (err error) {
 	// insert priceChange
@@ -165,7 +200,7 @@ func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error) {
 			UserID:          favorite.UserID,
 			CommodityItemID: item.ID,
 			CurrentPrice:    item.Price,
-			CreateAt:        MyTime{t},
+			//CreateAt:        MyTime{t},
 		})
 	}
 	// insert messages
