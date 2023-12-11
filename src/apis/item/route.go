@@ -8,6 +8,7 @@ func RegisterRoutesWithoutAuthorization(app fiber.Router) {
 }
 
 func RegisterRoutes(app fiber.Router) {
+	app.Get("/commodity/data", GetMyCommodity)
 	app.Post("/commodity/item", AddCommodity)
 	app.Put("/commodity/item", UpdateCommodity)
 	app.Delete("/commodity/item/:id", DeleteCommodity)

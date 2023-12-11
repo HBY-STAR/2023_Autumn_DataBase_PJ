@@ -24,6 +24,31 @@ func GetAllCommodity(c *fiber.Ctx) error {
 	return c.JSON(&items)
 }
 
+// GetMyCommodity @GetMyCommodity
+// @Router /api/commodity/data [get]
+// @Summary 获取自己的商品
+// @Description 获取自己的商品
+// @Tags Item
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.CommodityItem
+// @Failure 403 {object} common.HttpError
+// @Authorization Bearer {token}
+func GetMyCommodity(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "seller" {
+		return common.Forbidden("Only seller can get their items")
+	}
+	items, err := GetItemsBySellerID(tmpUser.ID)
+	if err != nil {
+		return err
+	}
+	return c.JSON(&items)
+}
+
 // SearchCommodity @SearchCommodity
 // @Router /api/search [post]
 // @Summary 搜索商品
@@ -91,9 +116,17 @@ func AddCommodity(c *fiber.Ctx) error {
 	var commodityItem = CommodityItem{
 		ItemName:    createItemModel.ItemName,
 		Price:       createItemModel.Price,
-		SellerID:    tmpUser.ID,
 		PlatformID:  createItemModel.PlatformID,
 		CommodityID: createItemModel.CommodityID,
+	}
+
+	if tmpUser.UserType == "seller" {
+		commodityItem.SellerID = tmpUser.ID
+	} else {
+		if commodityItem.SellerID == 0 {
+			return common.BadRequest("Invalid seller id")
+		}
+		commodityItem.SellerID = createItemModel.SellerID
 	}
 
 	return commodityItem.Create()
@@ -126,15 +159,32 @@ func AddBatchCommodity(c *fiber.Ctx) error {
 	}
 	// check if valid
 	var commodityItems []CommodityItem
-	for _, item := range createItemModel {
-		commodityItems = append(commodityItems, CommodityItem{
-			ItemName:    item.ItemName,
-			Price:       item.Price,
-			SellerID:    tmpUser.ID,
-			PlatformID:  item.PlatformID,
-			CommodityID: item.CommodityID,
-		})
+
+	if tmpUser.UserType == "seller" {
+		for _, item := range createItemModel {
+			commodityItems = append(commodityItems, CommodityItem{
+				ItemName:    item.ItemName,
+				Price:       item.Price,
+				SellerID:    tmpUser.ID,
+				PlatformID:  item.PlatformID,
+				CommodityID: item.CommodityID,
+			})
+		}
+	} else {
+		for _, item := range createItemModel {
+			if item.SellerID == 0 {
+				return common.BadRequest("Invalid seller id")
+			}
+			commodityItems = append(commodityItems, CommodityItem{
+				ItemName:    item.ItemName,
+				Price:       item.Price,
+				SellerID:    item.SellerID,
+				PlatformID:  item.PlatformID,
+				CommodityID: item.CommodityID,
+			})
+		}
 	}
+
 	return CreateItems(commodityItems)
 }
 
@@ -176,6 +226,11 @@ func UpdateCommodity(c *fiber.Ctx) error {
 		if is {
 			return common.Forbidden("Price has been changed today")
 		}
+	}
+	if tmpUser.UserType == "seller" {
+		commodityItem.SellerID = tmpUser.ID
+	} else if commodityItem.SellerID != 0 {
+		commodityItem.SellerID = updateItemModel.SellerID
 	}
 	return commodityItem.Update()
 }

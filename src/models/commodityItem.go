@@ -26,6 +26,13 @@ func GetItemByID(ID int) (item *CommodityItem, err error) {
 	return
 }
 
+func GetItemsBySellerID(sellerID int) (items []CommodityItem, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Preload(clause.Associations).Where("seller_id = ?", sellerID).Find(&items).Error
+	})
+	return
+}
+
 func GetItems() (items []CommodityItem, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Preload(clause.Associations).Find(&items).Error
@@ -60,10 +67,14 @@ func (item *CommodityItem) Create() error {
 		if err != nil {
 			return err
 		}
+		err = tx.First(&item.Seller, item.SellerID).Error
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {
-		return common.NotFound("Commodity or Platform not found")
+		return common.NotFound("Commodity or Platform or Seller not found")
 	}
 	return DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Create(&item).Error
@@ -77,6 +88,31 @@ func DeleteItemByID(itemID int) error {
 }
 
 func (item *CommodityItem) Update() error {
+	err := DB.Transaction(func(tx *gorm.DB) error {
+		var err error
+		if item.CommodityID != 0 {
+			err = tx.First(&item.Commodity, item.CommodityID).Error
+			if err != nil {
+				return err
+			}
+		}
+		if item.PlatformID != 0 {
+			err = tx.First(&item.Platform, item.PlatformID).Error
+			if err != nil {
+				return err
+			}
+		}
+		if item.SellerID != 0 {
+			err = tx.First(&item.Seller, item.SellerID).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return common.NotFound("Commodity or Platform or Seller not found")
+	}
 	return DB.Transaction(func(tx *gorm.DB) error {
 		//item.UpdateAt = MyTime{time.Now()}
 		result := tx.Updates(&item)
