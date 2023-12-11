@@ -194,7 +194,6 @@ export default {
           this.request.post("/commodity/item",this.addCommodity).then((res) => {
             if (res.status === 200) {
               this.$message.success("发布成功")
-              location.reload();
             } else {
               this.$message.error(res.message);
             }

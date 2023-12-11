@@ -84,6 +84,10 @@
                   <el-table-column label="更新时间" prop="update_at" width="200"/>
                   <el-table-column label="价格" prop="new_price" width="200"/>
                 </el-table>
+
+                <div style="width: 400px;height: 300px">
+                  <canvas ref="lineChart" width="400" height="300" style="margin-top: 20px;"></canvas>
+                </div>
               </div>
             </div>
           </el-drawer>
@@ -197,6 +201,16 @@ export default {
   },
   created() {
   },
+  watch: {
+    commodity_price_history() {
+      // 监听数据变化，重新绘制图表
+      this.drawChart();
+    }
+  },
+  mounted() {
+    // 组件挂载后立即绘制图表
+    this.drawChart();
+  },
   methods: {
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -264,7 +278,84 @@ export default {
       this.commodity_price_history=[]
       this.drawer=false
     },
+    drawChart() {
+      const canvas = this.$refs.lineChart;
+      if (!canvas) {
+        // 确保 canvas 存在
+        return;
+      }
+      const ctx = canvas.getContext("2d");
+      // 清空画布
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      const data = this.commodity_price_history;
+
+      if (data.length === 0) {
+        // 如果数据为空，显示提示信息或者不进行绘制
+        // 可以添加代码显示“暂无数据”之类的提示
+        return;
+      }
+      // 设置字体样式和位置
+      ctx.font = "12px Arial";
+      ctx.fillStyle = "black";
+      // 绘制 x 轴标题
+      ctx.fillText("时间", canvas.width / 2, canvas.height - 10);
+      // 绘制 y 轴标题，需要旋转文字
+      ctx.save();
+      ctx.translate(20, canvas.height / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = "right";
+      ctx.fillText("价格", 0, 0);
+      ctx.restore();
+      // 获取更新时间和价格数组
+      const updateTimes = data.map(item => item.update_at);
+      const prices = data.map(item => item.new_price);
+      // 绘制坐标轴
+      const xAxis = 30; // X轴起点横坐标
+      const yAxis = 270; // Y轴起点纵坐标
+      const yMax = Math.max(...prices);
+      const yMin = Math.min(...prices);
+      const yRange = yMax - yMin;
+      const xInterval = (canvas.width - xAxis) / updateTimes.length;
+      const yInterval = (yAxis - 50) / yRange;
+      // 绘制X轴和Y轴
+      ctx.beginPath();
+      ctx.strokeStyle = 'black';
+      // 绘制X轴线段
+      ctx.moveTo(xAxis, yAxis);
+      ctx.lineTo(canvas.width - 20, yAxis);
+      // 绘制X轴箭头
+      ctx.lineTo(canvas.width - 25, yAxis - 5); // 右上角
+      ctx.moveTo(canvas.width - 20, yAxis);
+      ctx.lineTo(canvas.width - 25, yAxis + 5); // 右下角
+      // 绘制Y轴线段
+      ctx.moveTo(xAxis, yAxis);
+      ctx.lineTo(xAxis, 50);
+      // 绘制Y轴箭头
+      ctx.lineTo(xAxis - 5, 55); // 左下角
+      ctx.moveTo(xAxis, 50);
+      ctx.lineTo(xAxis + 5, 55); // 右下角
+      // 执行绘制
+      ctx.stroke();
+      // 绘制价格折线
+      ctx.beginPath();
+      ctx.strokeStyle = "green";
+      ctx.lineWidth = 2;
+      updateTimes.forEach((time, index) => {
+        const x = xAxis + xInterval * index;
+        const y = yAxis - ((prices[index] - yMin) * yInterval);
+        if (index === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+        ctx.fillStyle = "blue";
+        ctx.fillText(this.commodity_price_history.find(item => item.update_at === time).new_price, x, y - 10);
+        // 绘制更新时间标签
+        //ctx.fillText(time, x - 10, yAxis + 10);
+      });
+      ctx.stroke();
+    },
   }
 }
 </script>

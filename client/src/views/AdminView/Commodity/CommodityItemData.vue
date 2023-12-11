@@ -167,7 +167,7 @@ export default {
       },
       //update
       update_commodity_item:{
-        id:null,
+        commodity_item_id:null,
         seller_id:null,
         commodity_id: null,
         platform_id: null,
@@ -229,6 +229,10 @@ export default {
     addCommodityItem(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
+          this.add_commodity_item.commodity_id=parseInt(this.add_commodity_item.commodity_id)
+          this.add_commodity_item.seller_id=parseInt(this.add_commodity_item.seller_id)
+          this.add_commodity_item.platform_id=parseInt(this.add_commodity_item.platform_id)
+          this.add_commodity_item.price=parseFloat(this.add_commodity_item.price)
           this.request.post("/commodity/item",this.add_commodity_item).then((res) => {
             if (res.status === 200) {
               this.$message.success("新建成功")
@@ -246,7 +250,11 @@ export default {
     updateCommodityItem(){
       this.$refs["update_rules"].validate((valid) => {
         if (valid) {
-          this.update_commodity_item.id=this.focus_id
+          this.update_commodity_item.commodity_item_id=this.focus_id
+          this.update_commodity_item.commodity_id = parseInt(this.update_commodity_item.commodity_id)
+          this.update_commodity_item.platform_id=parseInt(this.update_commodity_item.platform_id)
+          this.update_commodity_item.price=parseFloat(this.update_commodity_item.price)
+          this.update_commodity_item.seller_id=0
           this.request.put("/commodity/item",this.update_commodity_item).then((res) => {
             if (res.status === 200) {
               this.$message.success("修改成功")
