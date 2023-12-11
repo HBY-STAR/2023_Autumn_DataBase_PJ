@@ -10,10 +10,10 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer1 = true">
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id=scope.row.id; drawer = true">
             </Plus>
           </el-icon>
-          <el-drawer v-model="drawer1" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
+          <el-drawer v-model="drawer" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
             <div>
               <el-form label-width="120px" style="margin-left: 10px">
                 <el-form-item label="生产日期:">
@@ -34,30 +34,24 @@
               <div style="height: 40px; margin-top: 100px">
                 <span style="margin-top: 20px; margin-bottom: 20px">查询价格历史:</span>
               </div>
-              <div style="height: 50px">
-                <el-date-picker
-                  v-model="find_price_history.time_start"
-                  type="date"
-                  value-format="YYYY-MM-DD hh:mm:ss"
-                  placeholder="起始时间"
-                />
-              </div>
-              <div style="height: 50px">
-                <el-date-picker
-                  v-model="find_price_history.time_end"
-                  type="date"
-                  value-format="YYYY-MM-DD hh:mm:ss"
-                  placeholder="结束时间"
-                />
-              </div>
+              <el-date-picker style="margin-bottom: 20px"
+                v-model="range"
+                type="daterange"
+                unlink-panels
+                range-separator="到"
+                start-placeholder="起始时间"
+                end-placeholder="结束时间"
+                value-format="YYYY-MM-DD hh:mm:ss"
+                :shortcuts="shortcuts"
+              />
               <div>
                 <el-button @click="
-                  innerDrawer1 = true;
+                  innerDrawer = true;
                   this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
                   findPriceHistory();">查询
                 </el-button>
                 <el-drawer
-                  v-model="innerDrawer1"
+                  v-model="innerDrawer"
                   title="价格历史（若数据为空尝试刷新后再查询）"
                   :append-to-body="true"
                   destroy-on-close
@@ -109,8 +103,6 @@
 import {Star} from "@element-plus/icons-vue";
 import {Plus} from "@element-plus/icons-vue";
 
-
-
 export default {
   name: "home_commodity_all",
   components: {Star, Plus},
@@ -125,8 +117,8 @@ export default {
       focus_commodity_item_id:0,
       currentPage: 1,
       pageSize: 10,
-      drawer1: false,
-      innerDrawer1: false,
+      drawer: false,
+      innerDrawer: false,
       showPrice:false,
       //key
       table_key1:'',
@@ -136,6 +128,37 @@ export default {
         time_start: null,
         time_end: null,
       },
+      //date
+      range: [],
+      shortcuts:[
+        {
+          text: '近一周',
+          value: function () {
+            const end = new Date();
+            const start = new Date();
+            start.setDate(end.getDate() - 7);
+            return [start, end];
+          },
+        },
+        {
+          text: '近一月',
+          value: function () {
+            const end = new Date();
+            const start = new Date();
+            start.setMonth(end.getMonth() - 1);
+            return [start, end];
+          },
+        },
+        {
+          text: '近一年',
+          value: function () {
+            const end = new Date();
+            const start = new Date();
+            start.setFullYear(end.getFullYear() - 1);
+            return [start, end];
+          },
+        },
+      ],
     }
   },
   computed: {
@@ -180,6 +203,8 @@ export default {
     },
     findPriceHistory(){
       this.find_price_history.commodity_item_id=this.focus_commodity_item_id
+      this.find_price_history.time_start=this.range[0]
+      this.find_price_history.time_end=this.range[1]
       if(this.find_price_history.commodity_item_id===-1){
         this.$message.error('未选中任何商品')
       }else {
