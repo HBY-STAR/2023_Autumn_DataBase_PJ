@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
 	. "src/models"
+	"src/utils"
 )
 
 //// GetCurrentUser @GetCurrentUser
@@ -93,6 +94,7 @@ func AddUser(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	user.Password = utils.MakePassword(user.Password)
 	return user.Create()
 }
 
@@ -124,6 +126,9 @@ func UpdateUser(c *fiber.Ctx) error {
 	}
 	if tmpUser.UserType == "user" && tmpUser.ID != user.ID {
 		return common.Forbidden("You can only update your own info")
+	}
+	if len(user.Password) != 0 {
+		user.Password = utils.MakePassword(user.Password)
 	}
 	return user.Update()
 }

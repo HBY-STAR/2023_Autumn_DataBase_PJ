@@ -12,7 +12,7 @@ type PriceChange struct {
 	CommodityItem   *CommodityItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CommodityItemID int            `json:"commodity_item_id" gorm:"not null"`
 	NewPrice        float32        `json:"new_price" gorm:"not null"`
-	UpdateAt        MyTime         `json:"update_at"`
+	UpdateAt        MyTime         `json:"update_at" gorm:"autoUpdateTime"`
 }
 
 type ByUpdateAt []PriceChange

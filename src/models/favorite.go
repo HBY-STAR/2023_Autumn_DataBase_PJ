@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
-	"time"
 )
 
 type Favorite struct {
@@ -12,7 +11,7 @@ type Favorite struct {
 	CommodityItem   *CommodityItem `gorm:"ForeignKey:CommodityItemID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	CommodityItemID int            `json:"commodity_item_id" gorm:"PrimaryKey; not null;autoIncrement:false"`
 	PriceLimit      float32        `json:"price_limit" gorm:"not null;default:0"`
-	UpdateAt        MyTime         `json:"update_at"`
+	UpdateAt        MyTime         `json:"update_at" gorm:"autoUpdateTime"`
 }
 
 func GetFavoritesByUserID(userID int) (favorites []Favorite, err error) {
@@ -75,13 +74,13 @@ func CreateCommodityFavorite(commodityId int, userID int) error {
 			return common.NotFound("Commodity not found")
 		}
 		var favorites []Favorite
-		t := MyTime{time.Now()}
+		//t := MyTime{time.Now()}
 		for _, commodityItem := range commodityItems {
 			favorites = append(favorites, Favorite{
 				UserID:          userID,
 				CommodityItemID: commodityItem.ID,
 				PriceLimit:      0,
-				UpdateAt:        t,
+				//UpdateAt:        t,
 			})
 		}
 		return tx.Create(&favorites).Error

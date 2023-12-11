@@ -4,7 +4,6 @@ import (
 	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"time"
 )
 
 type CommodityItem struct {
@@ -17,7 +16,7 @@ type CommodityItem struct {
 	SellerID    int        `json:"seller_id" gorm:"not null"`
 	ItemName    string     `json:"item_name" gorm:"not null;size:64"`
 	Price       float32    `json:"price" gorm:"check:price > 0; not null"`
-	UpdateAt    MyTime     `json:"update_at"`
+	UpdateAt    MyTime     `json:"update_at" gorm:"autoUpdateTime"`
 }
 
 func GetItemByID(ID int) (item *CommodityItem, err error) {
@@ -79,7 +78,7 @@ func DeleteItemByID(itemID int) error {
 
 func (item *CommodityItem) Update() error {
 	return DB.Transaction(func(tx *gorm.DB) error {
-		item.UpdateAt = MyTime{time.Now()}
+		//item.UpdateAt = MyTime{time.Now()}
 		result := tx.Updates(&item)
 		if result.Error != nil {
 			return result.Error
@@ -142,11 +141,11 @@ func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error) {
 	}
 	var favorites []Favorite
 	var messages []Message
-	var t = time.Now()
+	//var t = time.Now()
 	var priceChange = PriceChange{
 		CommodityItemID: item.ID,
 		NewPrice:        item.Price,
-		UpdateAt:        MyTime{t},
+		//UpdateAt:        MyTime{t},
 	}
 	//err = tx.Transaction(func(tx *gorm.DB) (err error) {
 	// insert priceChange
@@ -165,7 +164,7 @@ func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error) {
 			UserID:          favorite.UserID,
 			CommodityItemID: item.ID,
 			CurrentPrice:    item.Price,
-			CreateAt:        MyTime{t},
+			//CreateAt:        MyTime{t},
 		})
 	}
 	// insert messages
