@@ -13,12 +13,15 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.3.4",
-    "echarts": "^5.4.3",
+    "chart.js": "^4.4.1",
+    "chartjs": "^0.3.24",
+    "echarts": "^4.9.0",
     "element-plus": "^2.2.33",
     "mockjs": "^1.1.0",
     "pinia": "^2.0.32",
     "qs": "^6.11.1",
     "vue": "^3.2.47",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
