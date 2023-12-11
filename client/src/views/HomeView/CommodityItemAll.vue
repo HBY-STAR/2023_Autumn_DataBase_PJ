@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="currentTableData" border  show-empty>
+  <el-table :data="currentTableData" border  show-empty  :key="table_key1">
     <el-table-column label="商品序号" prop="id" width="180"/>
     <el-table-column label="商品名" prop="item_name" width="200"/>
     <el-table-column label="种类" prop="Commodity.category" width="200"/>
@@ -58,15 +58,15 @@
                 </el-button>
                 <el-drawer
                   v-model="innerDrawer1"
-                  title="价格历史"
+                  title="价格历史（若数据为空尝试刷新后再查询）"
                   :append-to-body="true"
                   destroy-on-close
                   :before-close="handleClose2"
                 >
                   <el-table
                     :data="commodity_price_history"
-                    border
                     show-empty
+                    border
                     style="width: 400px"
                     :row-class-name="highlightLowestPriceRow"
                     :default-sort="{prop: 'update_at', order: 'descending'}"
@@ -122,13 +122,15 @@ export default {
       commodity_price_history: localStorage.getItem('commodity_price_history')
         ? JSON.parse(localStorage.getItem('commodity_price_history'))
         : [],
-
       focus_commodity_item_id:0,
       currentPage: 1,
       pageSize: 10,
       drawer1: false,
       innerDrawer1: false,
       showPrice:false,
+      //key
+      table_key1:'',
+      table_key2:'',
       find_price_history:{
         commodity_item_id: -1,
         time_start: null,
@@ -177,19 +179,22 @@ export default {
       }
     },
     findPriceHistory(){
+      this.find_price_history.commodity_item_id=this.focus_commodity_item_id
       if(this.find_price_history.commodity_item_id===-1){
         this.$message.error('未选中任何商品')
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
           if(res.status===200){
             localStorage.setItem("commodity_price_history", JSON.stringify(res.data))
-            this.commodity_price_history = JSON.stringify(res.data)
+            this.commodity_price_history=localStorage.getItem('commodity_price_history')
             this.showPrice=true
+            this.table_key2 = Math.random()
           }
           else {
             this.$message.error(res.message)
           }
         })
+        this.innerDrawer = true;
       }
     },
     highlightLowestPriceRow({ row }) {
@@ -197,11 +202,15 @@ export default {
       return row.new_price === lowestPrice ? 'lowest-price-row' : '';
     },
     handleClose1(){
-      this.drawer1=false
+      this.find_price_history.time_start=null
+      this.find_price_history.time_end=null
+      this.drawer=false
     },
     handleClose2(){
-      this.innerDrawer1=false
-      this.showPrice=false
+      this.find_price_history.time_start=null
+      this.find_price_history.time_end=null
+      this.innerDrawer=false
+      this.commodity_price_history=[]
     },
   }
 }

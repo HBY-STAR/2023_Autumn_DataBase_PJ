@@ -1,12 +1,12 @@
 <template>
   <div style="display: flex">
-    <div style="width: 800px;">
-      <el-table :data="currentTableData1" border height="300px" show-empty style="width: 800px">
-        <el-table-column label="可发布商品ID" prop="id" width="150"/>
+    <div style="width: 900px;">
+      <el-table :data="currentTableData1" border height="300px" show-empty style="width: 900px">
+        <el-table-column label="可发布商品ID" prop="id" width="120"/>
         <el-table-column label="默认名称" prop="default_name" width="150"/>
-        <el-table-column label="种类" prop="type" width="150"/>
-        <el-table-column label="生产日期" prop="produce_at" width="150"/>
-        <el-table-column label="生产地址" prop="produce_address" width="200"/>
+        <el-table-column label="种类" prop="category" width="150"/>
+        <el-table-column label="生产日期" prop="produce_at" width="200"/>
+        <el-table-column label="生产地址" prop="produce_address" width="280"/>
       </el-table>
       <el-pagination
         style="margin-top: 10px"
@@ -18,11 +18,11 @@
         :total="commodities_all.length"
         position="bottom"
       />
-      <el-table :data="currentTableData2" border height="180px" show-empty style="width: 800px; margin-top: 30px">
+      <el-table :data="currentTableData2" border height="180px" show-empty style="width: 900px; margin-top: 30px">
         <el-table-column label="可发布平台ID" prop="id" width="150"/>
         <el-table-column label="平台名" prop="name" width="150"/>
         <el-table-column label="所在国家" prop="country" width="150"/>
-        <el-table-column label="url" prop="url" width="350"/>
+        <el-table-column label="url" prop="url" width="450"/>
       </el-table>
       <el-pagination
         style="margin-top: 10px"
@@ -36,7 +36,7 @@
       />
     </div>
     <div>
-      <el-card style="margin-left: 40px; width: 400px">
+      <el-card style="margin-left: 40px; width: 350px">
         <div style="margin: 10px 0; text-align: center; font-size: 24px; color: cornflowerblue"><b>发布商品</b></div>
         <div style="height: 20px"></div>
         <el-form :model="addCommodity" :rules="addRules" ref="addRules">
@@ -106,10 +106,10 @@ export default {
       focus_commodity_id:0,
       //page1
       currentPage1: 1,
-      pageSize1:20,
+      pageSize1:10,
       //page2
       currentPage2: 1,
-      pageSize2:10,
+      pageSize2:5,
       //add
       addCommodity:{
         commodity_id: null,
@@ -130,7 +130,6 @@ export default {
         ],
         price: [
           { required: true, message: '商品价格不能为空', trigger: 'blur' },
-          { type: 'number', message: '请输入有效的数字', trigger: 'blur' },
           { validator: this.validatePrice, trigger: 'blur' },
         ],
       }
@@ -185,6 +184,9 @@ export default {
     addCommodityItem(){
       this.$refs["addRules"].validate((valid) => {
         if (valid) {
+          this.addCommodity.price=parseFloat(this.addCommodity.price)
+          this.addCommodity.commodity_id=parseInt(this.addCommodity.commodity_id)
+          this.addCommodity.platform_id=parseInt(this.addCommodity.platform_id)
           this.request.post("/commodity/item",this.addCommodity).then((res) => {
             if (res.status === 200) {
               this.$message.success("发布成功")

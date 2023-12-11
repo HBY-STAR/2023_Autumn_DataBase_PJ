@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="currentTableData" border show-empty>
+  <el-table :data="currentTableData" border show-empty :key="table_key1">
     <el-table-column label="商品序号" prop="id" width="180"/>
     <el-table-column label="商品名" prop="item_name" width="200"/>
     <el-table-column label="种类" prop="Commodity.category" width="200"/>
@@ -50,22 +50,18 @@
                 />
               </div>
               <div>
-                <el-button @click="
-                  innerDrawer = true;
-                  this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
-                  findPriceHistory();">查询
-                </el-button>
+                <el-button @click="findPriceHistory">查询</el-button>
                 <el-drawer
                   v-model="innerDrawer"
-                  title="价格历史"
+                  title="价格历史（若数据为空尝试刷新后再查询）"
                   :append-to-body="true"
                   destroy-on-close
                   :before-close="handleClose2"
                 >
                   <el-table
                     :data="commodity_price_history"
-                    border
                     show-empty
+                    border
                     style="width: 400px"
                     :row-class-name="highlightLowestPriceRow"
                     :default-sort="{prop: 'update_at', order: 'descending'}"
@@ -92,6 +88,7 @@
           v-model="dialogVisible"
           title="修改商品"
           width="30%"
+          append-to-body
         >
           <el-form :model="update_commodity_item" :rules="updateRules" ref="updateRules" label-width="120px">
             <el-form-item label="商品名" prop="item_name">
@@ -192,6 +189,9 @@ export default {
       innerDrawer: false,
       //dialog
       dialogVisible:false,
+      //key
+      table_key1:'',
+      table_key2:'',
     }
   },
   computed: {
@@ -216,6 +216,7 @@ export default {
   created() {
     if(localStorage.getItem('seller_commodity_item') === null){
       this.findAll()
+      this.commodity_price_history=[]
     }
   },
   methods: {
@@ -226,6 +227,7 @@ export default {
       this.request.get("/commodity/all").then((res) => {
         if (res.status === 200) {
           localStorage.setItem("seller_commodity_item", JSON.stringify(res.data));
+          this.table_key1 = Math.random()
         } else {
           this.$message.error(res.message);
         }
@@ -238,7 +240,7 @@ export default {
           this.request.put("/commodity/item",this.update_commodity_item).then((res) => {
             if (res.status === 200) {
               this.$message.success("设置成功")
-              location.reload();
+              this.table_key1 = Math.random()
             } else {
               this.$message.error(res.message);
             }
@@ -258,6 +260,7 @@ export default {
       this.request.delete("/commodity/item/"+this.focus_commodity_item_id).then((res) => {
         if (res.status === 200) {
           this.$message.success("删除成功")
+          this.table_key1 = Math.random()
           location.reload();
         } else {
           this.$message.error(res.message);
@@ -265,19 +268,22 @@ export default {
       });
     },
     findPriceHistory(){
+      this.find_price_history.commodity_item_id=this.focus_commodity_item_id
       if(this.find_price_history.commodity_item_id===-1){
         this.$message.error('未选中任何商品')
       }else {
         this.request.post('/price/history',this.find_price_history).then(res=>{
           if(res.status===200){
             localStorage.setItem("commodity_price_history", JSON.stringify(res.data))
-            this.commodity_price_history = JSON.stringify(res.data)
+            this.commodity_price_history=localStorage.getItem('commodity_price_history')
             this.showPrice=true
+            this.table_key2 = Math.random()
           }
           else {
             this.$message.error(res.message)
           }
         })
+        this.innerDrawer = true;
       }
     },
     highlightLowestPriceRow({ row }) {
@@ -285,7 +291,7 @@ export default {
       return row.new_price === lowestPrice ? 'lowest-price-row' : '';
     },
     showConfirmationDialog(itemId) {
-      this.$confirm('您确定要删除这个商品吗?', '提示', {
+      this.$confirm('确定要删除这个商品吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -301,11 +307,15 @@ export default {
         });
     },
     handleClose1(){
+      this.find_price_history.time_start=null
+      this.find_price_history.time_end=null
       this.drawer=false
     },
     handleClose2(){
+      this.find_price_history.time_start=null
+      this.find_price_history.time_end=null
       this.innerDrawer=false
-      this.showPrice=false
+      this.commodity_price_history=[]
     },
   },
 }
