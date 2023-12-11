@@ -214,9 +214,11 @@ func UpdateCommodity(c *fiber.Ctx) error {
 		return common.BadRequest("Invalid request body")
 	}
 	var commodityItem = CommodityItem{
-		ID:       updateItemModel.CommodityItemID,
-		ItemName: updateItemModel.ItemName,
-		Price:    updateItemModel.Price,
+		ID:          updateItemModel.CommodityItemID,
+		ItemName:    updateItemModel.ItemName,
+		Price:       updateItemModel.Price,
+		CommodityID: updateItemModel.CommodityID,
+		PlatformID:  updateItemModel.PlatformID,
 	}
 	if commodityItem.Price > 0 {
 		is, err := IsPriceChangeToday(commodityItem.ID)
