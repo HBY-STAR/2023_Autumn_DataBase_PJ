@@ -25,6 +25,7 @@ func GetMessagesByUserID(userID int) (messages []Message, err error) {
 			Preload("CommodityItem").
 			Preload("CommodityItem.Commodity").
 			Preload("CommodityItem.Platform").
+			Preload("CommodityItem.Seller").
 			Where("user_id=?", userID).
 			Find(&messages).
 			Error

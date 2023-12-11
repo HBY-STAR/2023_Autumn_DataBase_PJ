@@ -20,6 +20,7 @@ func GetFavoritesByUserID(userID int) (favorites []Favorite, err error) {
 			Preload("CommodityItem").
 			Preload("CommodityItem.Commodity").
 			Preload("CommodityItem.Platform").
+			Preload("CommodityItem.Seller").
 			Where("user_id = ?", userID).
 			Find(&favorites).
 			Error
