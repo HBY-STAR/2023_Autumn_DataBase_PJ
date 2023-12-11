@@ -123,10 +123,10 @@ func AddCommodity(c *fiber.Ctx) error {
 	if tmpUser.UserType == "seller" {
 		commodityItem.SellerID = tmpUser.ID
 	} else {
+		commodityItem.SellerID = createItemModel.SellerID
 		if commodityItem.SellerID == 0 {
 			return common.BadRequest("Invalid seller id")
 		}
-		commodityItem.SellerID = createItemModel.SellerID
 	}
 
 	return commodityItem.Create()

@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
 	. "src/models"
+	"src/utils"
 )
 
 //// GetCurSeller @GetCurSeller
@@ -94,7 +95,7 @@ func AddSeller(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
+	seller.Password = utils.MakePassword(seller.Password)
 	return seller.Create()
 }
 
