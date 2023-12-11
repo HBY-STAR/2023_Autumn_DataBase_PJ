@@ -46,9 +46,10 @@
               />
               <div>
                 <el-button @click="
-                  innerDrawer = true;
                   this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
-                  findPriceHistory();">查询
+                  findPriceHistory();
+                  innerDrawer = true;
+                ">查询
                 </el-button>
                 <el-drawer
                   v-model="innerDrawer"
@@ -184,6 +185,8 @@ export default {
         } else {
           this.$message.error(res.message);
         }
+      }).catch(error => {
+        this.$message.error(error.response.data.message);
       });
     },
     addToFavorite(){

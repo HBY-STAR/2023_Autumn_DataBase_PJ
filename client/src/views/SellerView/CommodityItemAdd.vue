@@ -172,6 +172,8 @@ export default {
         } else {
           this.$message.error(res.message);
         }
+      }).catch(error => {
+        this.$message.error(error.response.data.message);
       });
       this.request.get("/platform/all").then((res) => {
         if (res.status === 200) {
@@ -179,6 +181,8 @@ export default {
         } else {
           this.$message.error(res.message);
         }
+      }).catch(error => {
+        this.$message.error(error.response.data.message);
       });
     },
     addCommodityItem(){
@@ -194,6 +198,8 @@ export default {
             } else {
               this.$message.error(res.message);
             }
+          }).catch(error => {
+            this.$message.error(error.response.data.message);
           });
         }
       });

@@ -119,7 +119,9 @@ export default {
         } else {
           this.$message.error(res.message);
         }
-      })
+      }).catch(error => {
+        this.$message.error(error.response.data.message);
+      });
     }
   }
 };

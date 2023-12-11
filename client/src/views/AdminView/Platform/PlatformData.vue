@@ -164,6 +164,9 @@ export default {
         } else {
           this.$message.error(res.message);
         }
+      }).catch(error => {
+        // 这里处理通过拦截器输出的错误信息
+        this.$message.error(error.response.data.message);
       });
     },
     //add
@@ -176,6 +179,9 @@ export default {
             } else {
               this.$message.error(res.message);
             }
+          }).catch(error => {
+            // 这里处理通过拦截器输出的错误信息
+            this.$message.error(error.response.data.message);
           });
         }
       });
@@ -191,6 +197,9 @@ export default {
             } else {
               this.$message.error(res.message);
             }
+          }).catch(error => {
+            // 这里处理通过拦截器输出的错误信息
+            this.$message.error(error.response.data.message);
           });
         }
       });
@@ -203,6 +212,9 @@ export default {
         } else {
           this.$message.error(res.message);
         }
+      }).catch(error => {
+        // 这里处理通过拦截器输出的错误信息
+        this.$message.error(error.response.data.message);
       });
     },
     showDeleteConfirm(row) {

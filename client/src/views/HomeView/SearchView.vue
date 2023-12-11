@@ -10,8 +10,8 @@
           <el-option label="按种类" value= 'category' />
         </el-select>
         <el-select v-model="search_info.accurate" placeholder="选项"  style="width: 100px;margin-left: 20px">
-          <el-option label="精确查找" value= true />
-          <el-option label="模糊查找" value = false />
+          <el-option label="精确查找" value= 'true' />
+          <el-option label="模糊查找" value = 'false' />
         </el-select>
       </template>
       <template #append>
@@ -71,7 +71,7 @@
                   this.find_price_history.commodity_item_id=this.focus_commodity_item_id;
                   findPriceHistory();
                   innerDrawer = true;
-                  ">查询
+                ">查询
                 </el-button>
                 <el-drawer
                   v-model="innerDrawer"
@@ -233,15 +233,16 @@ export default {
       if(this.search_info.search==null || this.search_info.accurate==null || this.search_info.range == null){
         this.$message.error('请确定范围选项并输入要搜索的内容');
       }else {
-        this.search_info.accurate=Boolean(this.search_info.accurate)
+        this.search_info.accurate = this.search_info.accurate === 'true'
         this.request.post("/search",this.search_info).then((res) => {
           if (res.status === 200) {
             localStorage.setItem("search_commodity_item", JSON.stringify(res.data));
-            this.search_commodity_item = JSON.stringify(res.data)
-            location.reload();
+            location.reload()
           } else {
             this.$message.error(res.message);
           }
+        }).catch(error => {
+          this.$message.error(error.response.data.message);
         });
       }
     },
