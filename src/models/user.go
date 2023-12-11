@@ -15,6 +15,18 @@ type User struct {
 	Phone    string `json:"phone" gorm:"not null;type:char(13)"`
 }
 
+//func (user User) MarshalJSON() ([]byte, error) {
+//	var userMap = map[string]interface{}{
+//		"id":       user.ID,
+//		"username": user.Username,
+//		"email":    user.Email,
+//		"age":      user.Age,
+//		"gender":   user.Gender,
+//		"phone":    user.Phone,
+//	}
+//	return json.Marshal(userMap)
+//}
+
 func GetUsers() (users []User, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Find(&users).Error

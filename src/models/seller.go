@@ -14,6 +14,16 @@ type Seller struct {
 	Address string `json:"address" gorm:"not null;size:64"`
 }
 
+//func (seller Seller) MarshalJSON() ([]byte, error) {
+//	var sellerMap = map[string]interface{}{
+//		"id":       seller.ID,
+//		"username": seller.Username,
+//		"email":    seller.Email,
+//		"address":  seller.Address,
+//	}
+//	return json.Marshal(sellerMap)
+//}
+
 func GetSellers() (sellers []Seller, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
 		return tx.Find(&sellers).Error
