@@ -21,7 +21,13 @@ func (a ByCreatedAt) Less(i, j int) bool { return a[i].CreateAt.Time.Before(a[j]
 
 func GetMessagesByUserID(userID int) (messages []Message, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Preload("CommodityItem").Where("user_id=?", userID).Find(&messages).Error
+		return tx.
+			Preload("CommodityItem").
+			Preload("CommodityItem.Commodity").
+			Preload("CommodityItem.Platform").
+			Where("user_id=?", userID).
+			Find(&messages).
+			Error
 	})
 	return
 }

@@ -16,7 +16,13 @@ type Favorite struct {
 
 func GetFavoritesByUserID(userID int) (favorites []Favorite, err error) {
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Preload("CommodityItem").Where("user_id = ?", userID).Find(&favorites).Error
+		return tx.
+			Preload("CommodityItem").
+			Preload("CommodityItem.Commodity").
+			Preload("CommodityItem.Platform").
+			Where("user_id = ?", userID).
+			Find(&favorites).
+			Error
 	})
 	return favorites, err
 }
