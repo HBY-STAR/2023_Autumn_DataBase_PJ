@@ -5,7 +5,7 @@
     <el-table-column label="商品名" prop="CommodityItem.item_name" width="200"/>
     <el-table-column label="当前价格" prop="CommodityItem.price" width="200"/>
     <el-table-column label="商家" prop="CommodityItem.Seller.username" width="200"/>
-    <el-table-column label="平台" prop="CommodityItem.Platform.name" width="170"/>
+    <el-table-column label="平台" prop="CommodityItem.Platform.name" width="200"/>
   </el-table>
 </template>
 
