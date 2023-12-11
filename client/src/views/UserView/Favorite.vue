@@ -35,22 +35,16 @@
               <div style="height: 40px; margin-top: 100px">
                 <span style="margin-top: 20px; margin-bottom: 20px">查询价格历史:</span>
               </div>
-              <div style="height: 50px">
-                <el-date-picker
-                  v-model="find_price_history.time_start"
-                  type="date"
-                  value-format="YYYY-MM-DD hh:mm:ss"
-                  placeholder="起始时间"
-                />
-              </div>
-              <div style="height: 50px">
-                <el-date-picker
-                  v-model="find_price_history.time_end"
-                  type="date"
-                  value-format="YYYY-MM-DD hh:mm:ss"
-                  placeholder="结束时间"
-                />
-              </div>
+              <el-date-picker style="margin-bottom: 20px"
+                              v-model="range"
+                              type="daterange"
+                              unlink-panels
+                              range-separator="到"
+                              start-placeholder="起始时间"
+                              end-placeholder="结束时间"
+                              value-format="YYYY-MM-DD hh:mm:ss"
+                              :shortcuts="shortcuts"
+              />
               <div>
                 <el-button @click="
                   innerDrawer = true;
@@ -140,6 +134,37 @@ export default {
         time_start: null,
         time_end: null,
       },
+      //date
+      range: [],
+      shortcuts:[
+        {
+          text: '近一周',
+          value: function () {
+            const end = new Date();
+            const start = new Date();
+            start.setDate(end.getDate() - 7);
+            return [start, end];
+          },
+        },
+        {
+          text: '近一月',
+          value: function () {
+            const end = new Date();
+            const start = new Date();
+            start.setMonth(end.getMonth() - 1);
+            return [start, end];
+          },
+        },
+        {
+          text: '近一年',
+          value: function () {
+            const end = new Date();
+            const start = new Date();
+            start.setFullYear(end.getFullYear() - 1);
+            return [start, end];
+          },
+        },
+      ],
     };
   },
   computed: {
@@ -187,6 +212,8 @@ export default {
     },
     findPriceHistory(){
       this.find_price_history.commodity_item_id=this.focus_commodity_item_id
+      this.find_price_history.time_start=this.range[0]
+      this.find_price_history.time_end=this.range[1]
       if(this.find_price_history.commodity_item_id===-1){
         this.$message.error('未选中任何商品')
       }else {
