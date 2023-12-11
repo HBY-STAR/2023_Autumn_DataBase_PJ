@@ -58,11 +58,12 @@
                   destroy-on-close
                   :before-close="handleClose2"
                 >
+                  <span>{{this.home_commodity_all.find(item => item.id === this.focus_commodity_item_id).item_name}}</span>
                   <el-table
                     :data="commodity_price_history"
                     show-empty
                     border
-                    style="width: 400px"
+                    style="width: 400px;margin-top: 20px"
                     :row-class-name="highlightLowestPriceRow"
                     :default-sort="{prop: 'update_at', order: 'descending'}"
                   >
@@ -201,7 +202,9 @@ export default {
           else {
             this.$message.error(res.message)
           }
-        })
+        }).catch(error => {
+          this.$message.error(error.response.data.message);
+        });
       }
     },
     findPriceHistory(){
@@ -221,7 +224,9 @@ export default {
           else {
             this.$message.error(res.message)
           }
-        })
+        }).catch(error => {
+          this.$message.error(error.response.data.message);
+        });
         this.innerDrawer = true;
       }
     },

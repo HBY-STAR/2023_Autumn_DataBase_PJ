@@ -11,23 +11,23 @@
       <template v-slot="scope">
         <div style="text-align: center">
           <el-icon>
-            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id = scope.row.id; drawer = true">
+            <Plus style="height: 25px; width: 25px;text-align: center;color: #7300ff" @click="this.focus_commodity_item_id = scope.row.commodity_item_id; drawer = true">
             </Plus>
           </el-icon>
           <el-drawer v-model="drawer" title="商品更多信息" size="50%" destroy-on-close :append-to-body="true" :before-close="handleClose1">
             <div>
               <el-form label-width="120px" style="margin-left: 10px">
                 <el-form-item label="生产日期:">
-                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).CommodityItem.Commodity.produce_at }}</span>
+                  <span>{{ this.user_favorite.find(item => item.commodity_item_id === this.focus_commodity_item_id).CommodityItem.Commodity.produce_at }}</span>
                 </el-form-item>
                 <el-form-item label="生产地址:">
-                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).Commodity.produce_address }}</span>
+                  <span>{{ this.user_favorite.find(item => item.commodity_item_id === this.focus_commodity_item_id).CommodityItem.Commodity.produce_address }}</span>
                 </el-form-item>
                 <el-form-item label="平台所在国家:">
-                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).Platform.country }}</span>
+                  <span>{{ this.user_favorite.find(item => item.commodity_item_id === this.focus_commodity_item_id).CommodityItem.Platform.country }}</span>
                 </el-form-item>
                 <el-form-item label="上次更新时间:">
-                  <span>{{ this.user_favorite.find(item => item.id === this.focus_commodity_item_id).update_at }}</span>
+                  <span>{{ this.user_favorite.find(item => item.commodity_item_id === this.focus_commodity_item_id).update_at }}</span>
                 </el-form-item>
               </el-form>
             </div>
@@ -231,7 +231,9 @@ export default {
           else {
             this.$message.error(res.message)
           }
-        })
+        }).catch(error => {
+          this.$message.error(error.response.data.message);
+        });
         this.innerDrawer = true;
       }
     },
