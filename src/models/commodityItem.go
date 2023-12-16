@@ -9,14 +9,14 @@ import (
 type CommodityItem struct {
 	ID          int        `json:"id" gorm:"primaryKey"`
 	Commodity   *Commodity `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CommodityID int        `json:"commodity_id" gorm:"not null"`
+	CommodityID int        `json:"commodity_id" gorm:"not null;uniqueIndex:idx_item"`
 	Platform    *Platform  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	PlatformID  int        `json:"platform_id" gorm:"not null"`
+	PlatformID  int        `json:"platform_id" gorm:"not null;uniqueIndex:idx_item"`
 	Seller      *Seller    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	SellerID    int        `json:"seller_id" gorm:"not null"`
-	ItemName    string     `json:"item_name" gorm:"not null;size:64"`
+	SellerID    int        `json:"seller_id" gorm:"not null;uniqueIndex:idx_item"`
+	ItemName    string     `json:"item_name" gorm:"not null;size:64;index"`
 	Price       float32    `json:"price" gorm:"check:price > 0; not null"`
-	UpdateAt    MyTime     `json:"update_at" gorm:"autoUpdateTime"`
+	UpdateAt    MyTime     `json:"update_at" gorm:"autoUpdateTime;index:,sort:desc"`
 }
 
 func GetItemByID(ID int) (item *CommodityItem, err error) {

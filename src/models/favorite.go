@@ -7,9 +7,9 @@ import (
 
 type Favorite struct {
 	User            *User          `gorm:"ForeignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	UserID          int            `json:"user_id" gorm:"PrimaryKey; not null;autoIncrement:false"`
+	UserID          int            `json:"user_id" gorm:"PrimaryKey; not null;autoIncrement:false;uniqueIndex:favorite,priority:1"`
 	CommodityItem   *CommodityItem `gorm:"ForeignKey:CommodityItemID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CommodityItemID int            `json:"commodity_item_id" gorm:"PrimaryKey; not null;autoIncrement:false"`
+	CommodityItemID int            `json:"commodity_item_id" gorm:"PrimaryKey; not null;autoIncrement:false;uniqueIndex:favorite,priority:2"`
 	PriceLimit      float32        `json:"price_limit" gorm:"not null;default:0"`
 	UpdateAt        MyTime         `json:"update_at" gorm:"autoUpdateTime"`
 }
