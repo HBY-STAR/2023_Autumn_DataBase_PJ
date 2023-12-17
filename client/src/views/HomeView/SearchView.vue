@@ -109,7 +109,7 @@
     style="margin-top: 20px"
     @current-change="handleCurrentChange"
     :current-page="currentPage"
-    :page-size="20"
+    :page-size=pageSize
     layout="total, prev, pager, next, jumper"
     :total="search_commodity_item.length"
     position="bottom"
@@ -215,17 +215,15 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-    addToFavorite(){
-      if(localStorage.getItem("token")===null){
+    addToFavorite() {
+      if (localStorage.getItem("token") === null) {
         this.$message.error("请先登录");
-      }
-      else{
-        this.request.post('/favorites',this.focus_commodity_item_id).then(res=>{
-          if(res.status===200){
-            this.$message.success("添加成功！")
-          }
-          else {
-            this.$message.error(res.message)
+      } else {
+        this.request.post("/favorites", {item_id: this.focus_commodity_item_id}).then(res => {
+          if (res.status === 200) {
+            this.$message.success("添加成功！");
+          } else {
+            this.$message.error(res.message);
           }
         }).catch(error => {
           this.$message.error(error.response.data.message);
