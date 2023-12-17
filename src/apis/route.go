@@ -10,6 +10,7 @@ import (
 	"src/apis/message"
 	"src/apis/platform"
 	"src/apis/priceChange"
+	"src/apis/query"
 	"src/apis/seller"
 	"src/apis/user"
 	"src/models"
@@ -47,6 +48,7 @@ func RegisterRoutes(app *fiber.App) {
 	platform.RegisterRoutes(group)
 	priceChange.RegisterRoutes(group)
 	seller.RegisterRoutes(group)
+	query.RegisterRoutes(group)
 }
 
 func MiddlewareGetUser(c *fiber.Ctx) error {
