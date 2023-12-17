@@ -13,8 +13,10 @@
 ## 使用说明
 
 ### 环境配置
-1. `cd ./client``npm install`下载vue依赖
-2. `cd ./src` `go mod download`下载go依赖
+1. `cd ./client`
+`npm install`下载vue依赖
+2. `cd ./src`
+`go mod download`下载go依赖
 3. `go install github.com/swaggo/swag/cmd/swag@latest`
 `swag init --parseDependency --parseDepth 1`下载swagger自动生成api文档
 
