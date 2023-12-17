@@ -5,7 +5,7 @@ import "github.com/gofiber/fiber/v2"
 func RegisterRoutesWithoutAuthorization(app fiber.Router) {
 	app.Get("/commodity/all", GetAllCommodity)
 	app.Post("/search", SearchCommodity)
-	app.Get("/item/commodity", GetItemsByCommodity)
+	app.Get("/item/commodity/:id", GetItemsByCommodity)
 }
 
 func RegisterRoutes(app fiber.Router) {
