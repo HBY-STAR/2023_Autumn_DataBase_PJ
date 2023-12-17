@@ -33,17 +33,28 @@ func GetFavoriteStatisticsAll() (favoriteStatisticsResponse []FavoriteStatistics
 	return
 }
 
-func GetFavoriteStatisticsSome(gender bool, ageStart int, ageEnd int) (favoriteStatisticsResponse []FavoriteStatisticsResponse, err error) {
+func GetFavoriteStatisticsSome(gender *bool, ageStart int, ageEnd int) (favoriteStatisticsResponse []FavoriteStatisticsResponse, err error) {
 	var favStats []FavoriteStatistics
 	err = DB.Transaction(func(tx *gorm.DB) error {
-		return tx.Model(&Favorite{}).
-			Joins("JOIN user ON user.id = favorite.user_id").
-			Where("user.gender = ? AND user.age BETWEEN ? AND ?", gender, ageStart, ageEnd).
-			Limit(10).
-			Select("count(*) as count, commodity_item_id").
-			Group("commodity_item_id").
-			Order("count DESC").
-			Scan(&favStats).Error
+		if gender != nil {
+			return tx.Model(&Favorite{}).
+				Joins("JOIN user ON user.id = favorite.user_id").
+				Where("user.gender = ? AND user.age BETWEEN ? AND ?", gender, ageStart, ageEnd).
+				Limit(10).
+				Select("count(*) as count, commodity_item_id").
+				Group("commodity_item_id").
+				Order("count DESC").
+				Scan(&favStats).Error
+		} else {
+			return tx.Model(&Favorite{}).
+				Joins("JOIN user ON user.id = favorite.user_id").
+				Where("user.age BETWEEN ? AND ?", ageStart, ageEnd).
+				Limit(10).
+				Select("count(*) as count, commodity_item_id").
+				Group("commodity_item_id").
+				Order("count DESC").
+				Scan(&favStats).Error
+		}
 	})
 	if err != nil {
 		return
