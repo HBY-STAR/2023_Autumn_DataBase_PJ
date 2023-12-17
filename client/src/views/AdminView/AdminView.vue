@@ -36,7 +36,6 @@
       <el-aside width="200px" height="640px">
         <el-container>
           <el-header
-            class="layout_header"
             style="text-align: center; font-size: 18px; background-color: antiquewhite;border-radius: 5px;margin-right: 20px"
             height="50px"
           >
@@ -86,6 +85,30 @@
                   <div @click="router.push('/admin/all_commodity_data')">可发布商品管理</div>
                 </template>
               </el-menu-item>
+              <el-menu-item index="6">
+                <template #title>
+                  <el-icon>
+                    <star />
+                  </el-icon>
+                  <div @click="router.push('/admin/statistics_favorite')">收藏统计</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="7">
+                <template #title>
+                  <el-icon>
+                    <money />
+                  </el-icon>
+                  <div @click="router.push('/admin/statistics_commodity_price')">商品价格统计</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="8">
+                <template #title>
+                  <el-icon>
+                    <shopping-cart />
+                  </el-icon>
+                  <div @click="router.push('/admin/statistics_commodity_seller')">商家价格差统计</div>
+                </template>
+              </el-menu-item>
             </el-menu>
           </el-main>
         </el-container>
@@ -118,7 +141,7 @@ export default {
 
 <script setup>
 
-import { Setting } from "@element-plus/icons-vue";
+import { Money, Setting, ShoppingCart } from "@element-plus/icons-vue";
 import { RouterLink } from "vue-router";
 import router from "@/router";
 

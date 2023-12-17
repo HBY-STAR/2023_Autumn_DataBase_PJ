@@ -54,6 +54,21 @@ const router = createRouter({
           name: 'all_platform_data',
           component:()=>import('../views/AdminView/Platform/PlatformData.vue')
         },
+        {
+          path: 'statistics_favorite',
+          name: 'statistics_favorite',
+          component:()=>import('../views/AdminView/Statistics/StatisticsFavorite.vue')
+        },
+        {
+          path: 'statistics_commodity_price',
+          name: 'statistics_commodity_price',
+          component:()=>import('../views/AdminView/Statistics/StatisticsCommodityPrice.vue')
+        },
+        {
+          path: 'statistics_commodity_seller',
+          name: 'statistics_commodity_seller',
+          component:()=>import('../views/AdminView/Statistics/StatisticsCommoditySeller.vue')
+        },
       ]
     },
     //用户界面
