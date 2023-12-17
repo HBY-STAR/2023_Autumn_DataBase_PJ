@@ -39,7 +39,7 @@ func GetPriceChange(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func UpdatePriceChange(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -71,7 +71,7 @@ func UpdatePriceChange(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddBatchPriceChange(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

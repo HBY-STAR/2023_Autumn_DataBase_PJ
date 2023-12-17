@@ -33,7 +33,7 @@ func GetAllPlatform(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddPlatform(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -62,7 +62,7 @@ func AddPlatform(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func UpdatePlatform(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -91,7 +91,7 @@ func UpdatePlatform(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func DeletePlatform(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

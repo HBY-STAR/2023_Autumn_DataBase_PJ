@@ -3,6 +3,7 @@ package models
 import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"time"
 )
 
 func GetFavoriteStatisticsAll() (favoriteStatisticsResponse []FavoriteStatisticsResponse, err error) {
@@ -76,4 +77,8 @@ func GetFavoriteStatisticsSome(gender bool, ageStart int, ageEnd int) (favoriteS
 	// Preload("CommodityItem.Platform").
 	// Preload("CommodityItem.Seller").
 	//	preload will happen after the query, so it will not work if select CommodityItem
+}
+
+func GetPriceStatisticsHistory(commodityItemID int, timeStart time.Time, timeEnd time.Time) (priceStatisticsResponse []PriceStatisticsResponse, err error) {
+	return
 }

@@ -25,7 +25,7 @@ import (
 // @Produce json
 // @Success 200 {object} models.User
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetUserInfo(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -53,7 +53,7 @@ func GetUserInfo(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} models.User
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetAllUsers(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -80,7 +80,7 @@ func GetAllUsers(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddUser(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -110,7 +110,7 @@ func AddUser(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func UpdateUser(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -145,7 +145,7 @@ func UpdateUser(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func DeleteUser(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

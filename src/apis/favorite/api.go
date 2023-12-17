@@ -18,7 +18,7 @@ import (
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddFavorite(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -52,7 +52,7 @@ func AddFavorite(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddCommodityFavorite(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -82,7 +82,7 @@ func AddCommodityFavorite(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddPriceLimit(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -114,7 +114,7 @@ func AddPriceLimit(c *fiber.Ctx) error {
 // @Success 200 {array} models.Favorite
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetAllFavorites(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -143,7 +143,7 @@ func GetAllFavorites(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func DeleteFavorite(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

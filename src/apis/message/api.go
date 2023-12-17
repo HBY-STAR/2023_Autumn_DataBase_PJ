@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Success 200 {array} models.Message
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetAllMessages(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

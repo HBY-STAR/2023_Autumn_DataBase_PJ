@@ -22,7 +22,7 @@ import (
 // @Produce json
 // @Success 200 {object} models.Seller
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetSeller(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -50,7 +50,7 @@ func GetSeller(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} models.Seller
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetAllSeller(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -80,7 +80,7 @@ func GetAllSeller(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddSeller(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -111,7 +111,7 @@ func AddSeller(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func UpdateSeller(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -142,7 +142,7 @@ func UpdateSeller(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func DeleteSeller(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

@@ -33,7 +33,7 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func CreateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -64,7 +64,7 @@ func CreateCommodity(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func DeleteCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -93,7 +93,7 @@ func DeleteCommodity(c *fiber.Ctx) error {
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
 // @Failure 404 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func UpdateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {

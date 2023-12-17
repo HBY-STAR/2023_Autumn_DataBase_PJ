@@ -107,6 +107,8 @@ definitions:
     type: object
   item.UpdateItemModel:
     properties:
+      commodity_id:
+        type: integer
       commodity_item_id:
         type: integer
       item_name:
@@ -118,6 +120,7 @@ definitions:
       seller_id:
         type: integer
     required:
+    - commodity_id
     - commodity_item_id
     - item_name
     - platform_id
@@ -174,6 +177,13 @@ definitions:
       user_id:
         type: integer
     type: object
+  models.FavoriteStatisticsResponse:
+    properties:
+      commodityItem:
+        $ref: '#/definitions/models.CommodityItem'
+      count:
+        type: integer
+    type: object
   models.Message:
     properties:
       commodity_item_id:
@@ -220,6 +230,15 @@ definitions:
         type: number
       update_at:
         $ref: '#/definitions/models.MyTime'
+    type: object
+  models.PriceStatisticsResponse:
+    properties:
+      commodityItem:
+        $ref: '#/definitions/models.CommodityItem'
+      priceChange:
+        items:
+          $ref: '#/definitions/models.PriceChange'
+        type: array
     type: object
   models.Seller:
     properties:
@@ -282,6 +301,30 @@ definitions:
         description: CommodityItemID int     `json:"commodity_item_id"`
         type: number
     type: object
+  query.FavoriteStatisticsRequest:
+    properties:
+      age_end:
+        type: integer
+      age_start:
+        type: integer
+      all:
+        type: boolean
+      gender:
+        type: boolean
+    type: object
+  query.PriceStatisticsRequest:
+    properties:
+      commodity_id:
+        type: integer
+      time_end:
+        $ref: '#/definitions/models.MyTime'
+      time_start:
+        $ref: '#/definitions/models.MyTime'
+    required:
+    - commodity_id
+    - time_end
+    - time_start
+    type: object
   seller.CreateSellerRequest:
     properties:
       address:
@@ -329,6 +372,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -360,6 +408,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/commodity.CreateCommodityRequest'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -387,6 +440,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Commodity'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -448,6 +506,12 @@ paths:
       consumes:
       - application/json
       description: 获取自己的商品
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -473,6 +537,11 @@ paths:
       - description: commodity id
         in: path
         name: id
+        required: true
+        type: string
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -502,6 +571,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/item.CreateItemModel'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -529,6 +603,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/item.UpdateItemModel'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -545,6 +624,33 @@ paths:
       summary: 更新商品
       tags:
       - Item
+  /api/commodity/item/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据商品ID获取多个商品项
+      parameters:
+      - description: commodity_id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CommodityItem'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: 根据商品ID获取多个商品项
+      tags:
+      - Item
   /api/commodity/item/batch:
     post:
       consumes:
@@ -559,6 +665,11 @@ paths:
           items:
             $ref: '#/definitions/item.CreateItemModel'
           type: array
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -575,6 +686,43 @@ paths:
       summary: 批量添加商品
       tags:
       - Item
+  /api/favorite/statistics:
+    post:
+      consumes:
+      - application/json
+      description: Get favorite statistics
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/query.FavoriteStatisticsRequest'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.FavoriteStatisticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Get favorite statistics
+      tags:
+      - Query
   /api/favorites:
     post:
       consumes:
@@ -587,6 +735,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/favorite.AddFavoriteModel'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -618,6 +771,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -639,6 +797,12 @@ paths:
       consumes:
       - application/json
       description: GetAllFavorites
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -671,6 +835,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/favorite.AddCommodityFavoriteModel'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -734,6 +903,12 @@ paths:
       consumes:
       - application/json
       description: Get all messages
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -761,6 +936,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -788,6 +968,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/platform.CreatePlatformRequest'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -815,6 +1000,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Platform'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -883,6 +1073,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/priceChange.UpdatePriceChangeModel'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -913,6 +1108,11 @@ paths:
           items:
             $ref: '#/definitions/models.PriceChange'
           type: array
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -941,6 +1141,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/favorite.PriceLimitModel'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -961,6 +1166,43 @@ paths:
       summary: AddPriceLimit
       tags:
       - Favorite
+  /api/price/statistics:
+    post:
+      consumes:
+      - application/json
+      description: Get price statistics
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/query.PriceStatisticsRequest'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PriceStatisticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Get price statistics
+      tags:
+      - Query
   /api/search:
     post:
       consumes:
@@ -996,6 +1238,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1023,6 +1270,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/seller.CreateSellerRequest'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1050,6 +1302,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Seller'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1075,6 +1332,12 @@ paths:
       consumes:
       - application/json
       description: Get all sellers
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1096,6 +1359,12 @@ paths:
       consumes:
       - application/json
       description: Get seller info
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1121,6 +1390,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1152,6 +1426,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/user.CreateUserRequest'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1179,6 +1458,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.User'
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1204,6 +1488,12 @@ paths:
       consumes:
       - application/json
       description: Get all users
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -1225,6 +1515,12 @@ paths:
       consumes:
       - application/json
       description: Get user info
+      parameters:
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:

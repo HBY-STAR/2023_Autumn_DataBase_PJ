@@ -33,7 +33,7 @@ func GetAllCommodity(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} models.CommodityItem
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func GetMyCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -98,7 +98,7 @@ func SearchCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -143,7 +143,7 @@ func AddCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func AddBatchCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -199,7 +199,7 @@ func AddBatchCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func UpdateCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -248,7 +248,7 @@ func UpdateCommodity(c *fiber.Ctx) error {
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @Authorization Bearer {token}
+// @param Authorization header string true "Bearer和token空格拼接"
 func DeleteCommodity(c *fiber.Ctx) error {
 	tmpUser, err := GetGeneralUser(c)
 	if err != nil {
@@ -263,4 +263,26 @@ func DeleteCommodity(c *fiber.Ctx) error {
 	}
 
 	return DeleteItemByID(id)
+}
+
+// GetItemsByCommodity @GetItemsByCommodity
+// @Router /api/commodity/item/{id} [get]
+// @Summary 根据商品ID获取多个商品项
+// @Description 根据商品ID获取多个商品项
+// @Tags Item
+// @Accept json
+// @Produce json
+// @Param id path string true "commodity_id"
+// @Success 200 {array} models.CommodityItem
+// @Failure 403 {object} common.HttpError
+func GetItemsByCommodity(c *fiber.Ctx) error {
+	commodityID, err := c.ParamsInt("commodity_id")
+	if err != nil {
+		return err
+	}
+	items, err := GetItemsByCommodityID(commodityID)
+	if err != nil {
+		return err
+	}
+	return c.JSON(&items)
 }

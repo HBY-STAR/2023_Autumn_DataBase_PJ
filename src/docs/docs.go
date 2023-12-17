@@ -44,6 +44,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Commodity"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -91,6 +98,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/commodity.CreateCommodityRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -129,6 +143,13 @@ const docTemplate = `{
                         "description": "commodity id",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -225,6 +246,15 @@ const docTemplate = `{
                     "Item"
                 ],
                 "summary": "获取自己的商品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -266,6 +296,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/item.UpdateItemModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -307,6 +344,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/item.CreateItemModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -345,6 +389,13 @@ const docTemplate = `{
                         "description": "commodity id",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -392,11 +443,115 @@ const docTemplate = `{
                                 "$ref": "#/definitions/item.CreateItemModel"
                             }
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/commodity/item/{id}": {
+            "get": {
+                "description": "根据商品ID获取多个商品项",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Item"
+                ],
+                "summary": "根据商品ID获取多个商品项",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "commodity_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CommodityItem"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/favorite/statistics": {
+            "post": {
+                "description": "Get favorite statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Query"
+                ],
+                "summary": "Get favorite statistics",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/query.FavoriteStatisticsRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.FavoriteStatisticsResponse"
+                            }
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -435,6 +590,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/favorite.AddFavoriteModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -475,6 +637,15 @@ const docTemplate = `{
                     "Favorite"
                 ],
                 "summary": "GetAllFavorites",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -522,6 +693,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/favorite.AddCommodityFavoriteModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -568,6 +746,13 @@ const docTemplate = `{
                         "description": "item id",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -661,6 +846,15 @@ const docTemplate = `{
                     "Message"
                 ],
                 "summary": "Get all messages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -702,6 +896,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Platform"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -743,6 +944,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/platform.CreatePlatformRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -781,6 +989,13 @@ const docTemplate = `{
                         "description": "platform id",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -851,6 +1066,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/priceChange.UpdatePriceChangeModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -932,6 +1154,13 @@ const docTemplate = `{
                                 "$ref": "#/definitions/models.PriceChange"
                             }
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -975,6 +1204,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/favorite.PriceLimitModel"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -995,6 +1231,62 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/price/statistics": {
+            "post": {
+                "description": "Get price statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Query"
+                ],
+                "summary": "Get price statistics",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/query.PriceStatisticsRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PriceStatisticsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "$ref": "#/definitions/common.HttpError"
                         }
@@ -1061,6 +1353,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.Seller"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1108,6 +1407,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/seller.CreateSellerRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1147,6 +1453,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1181,6 +1494,15 @@ const docTemplate = `{
                     "Seller"
                 ],
                 "summary": "Get all sellers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1213,6 +1535,15 @@ const docTemplate = `{
                     "Seller"
                 ],
                 "summary": "Get seller info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1251,6 +1582,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.User"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1298,6 +1636,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/user.CreateUserRequest"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1336,6 +1681,13 @@ const docTemplate = `{
                         "description": "user id",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -1377,6 +1729,15 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get all users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1409,6 +1770,15 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get user info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1589,12 +1959,16 @@ const docTemplate = `{
         "item.UpdateItemModel": {
             "type": "object",
             "required": [
+                "commodity_id",
                 "commodity_item_id",
                 "item_name",
                 "platform_id",
                 "price"
             ],
             "properties": {
+                "commodity_id": {
+                    "type": "integer"
+                },
                 "commodity_item_id": {
                     "type": "integer"
                 },
@@ -1690,6 +2064,17 @@ const docTemplate = `{
                 }
             }
         },
+        "models.FavoriteStatisticsResponse": {
+            "type": "object",
+            "properties": {
+                "commodityItem": {
+                    "$ref": "#/definitions/models.CommodityItem"
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Message": {
             "type": "object",
             "properties": {
@@ -1759,6 +2144,20 @@ const docTemplate = `{
                 },
                 "update_at": {
                     "$ref": "#/definitions/models.MyTime"
+                }
+            }
+        },
+        "models.PriceStatisticsResponse": {
+            "type": "object",
+            "properties": {
+                "commodityItem": {
+                    "$ref": "#/definitions/models.CommodityItem"
+                },
+                "priceChange": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.PriceChange"
+                    }
                 }
             }
         },
@@ -1851,6 +2250,42 @@ const docTemplate = `{
                 "new_price": {
                     "description": "CommodityItemID int     ` + "`" + `json:\"commodity_item_id\"` + "`" + `",
                     "type": "number"
+                }
+            }
+        },
+        "query.FavoriteStatisticsRequest": {
+            "type": "object",
+            "properties": {
+                "age_end": {
+                    "type": "integer"
+                },
+                "age_start": {
+                    "type": "integer"
+                },
+                "all": {
+                    "type": "boolean"
+                },
+                "gender": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "query.PriceStatisticsRequest": {
+            "type": "object",
+            "required": [
+                "commodity_id",
+                "time_end",
+                "time_start"
+            ],
+            "properties": {
+                "commodity_id": {
+                    "type": "integer"
+                },
+                "time_end": {
+                    "$ref": "#/definitions/models.MyTime"
+                },
+                "time_start": {
+                    "$ref": "#/definitions/models.MyTime"
                 }
             }
         },
