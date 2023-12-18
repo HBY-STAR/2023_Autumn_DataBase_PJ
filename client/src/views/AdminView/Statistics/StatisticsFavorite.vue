@@ -4,7 +4,8 @@
       <el-option label="默认所有用户" value= 'true' />
       <el-option label="指定用户种类" value= 'false' />
     </el-select>
-    <el-select v-model="search_info.gender" placeholder="性别"  style="width: 100px">
+    <el-select v-model="search_info.gender" placeholder="性别"  style="width: 120px">
+      <el-option label="不区分" value= 'null' />
       <el-option label="男" value= 'true' />
       <el-option label="女" value = 'false' />
     </el-select>
@@ -24,12 +25,12 @@
       controls-position="right"
       placeholder="请输入结束年龄"
     />
-    <el-button @click="SearchStatusFavorite">
+    <el-button @click="renderChart">
       <el-icon><Search /></el-icon>
     </el-button>
   </div>
   <div style="margin-top: 20px">
-    <canvas id="myChart" width="200" height="80"></canvas>
+    <canvas id="myChart" width="150" height="60"></canvas>
   </div>
 </template>
 
@@ -47,8 +48,24 @@ export default {
         datasets: [
           {
             label: '',
-            backgroundColor: 'rgba(30,98,224,0.61)',
-            borderColor: 'rgba(43,250,11,0.49)',
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 205, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)',
+              'rgb(153, 102, 255)',
+              'rgb(201, 203, 207)'
+            ],
             borderWidth: 1,
             data: [],
           },
@@ -64,7 +81,6 @@ export default {
   },
   created() {
     this.search_info.all='true'
-    this.SearchStatusFavorite()
   },
   mounted() {
     this.renderChart();
@@ -72,7 +88,17 @@ export default {
   methods: {
     renderChart() {
       const ctx = document.getElementById('myChart').getContext('2d');
-      new Chart(ctx, {
+      // 销毁之前的图表实例
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
+      }
+
+      if(this.search_info.all!=null){
+        this.SearchStatisticsFavorite()
+      }
+
+      // 创建新的图表实例
+      this.chartInstance = new Chart(ctx, {
         type: 'bar',
         data: this.chartData,
         options: {
@@ -84,7 +110,7 @@ export default {
         },
       });
     },
-    SearchStatusFavorite(){
+    SearchStatisticsFavorite(){
       this.search_info.all = this.search_info.all === 'true'
       if(this.search_info.all === true){
         this.search_info.gender=null
@@ -93,46 +119,108 @@ export default {
         // request
         this.request.post("/favorite/statistics",this.search_info).then((res) => {
           if (res.status === 200) {
-            this.chartData.labels = res.data.CommodityItem.item_name
-            this.chartData.datasets=[
-              {
-                label: '所有用户收藏前10的商品',
-                backgroundColor: 'rgba(30,98,224,0.61)',
-                borderColor: 'rgba(43,250,11,0.49)',
-                borderWidth: 1,
-                data: res.data.count
-              },
-            ]
+            if(res.data.length<1){
+              this.$message.warning('数据为空');
+            }else {
+              this.chartData.labels=[];
+              this.chartData.datasets=[
+                {
+                  label: '所有用户收藏前10的商品',
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                  ],
+                  borderWidth: 1,
+                  data: [],
+                },
+              ];
+              res.data.forEach(item => {
+                this.chartData.labels.push(item.CommodityItem.item_name);
+              });
+              res.data.forEach(item => {
+                this.chartData.datasets[0].data.push(item.count);
+              });
+            }
+
           }
         }).catch(error => {
-          this.$message.error(error.response.data.message);
+          this.$message.error(error);
         });
       }else {
         if(this.search_info.gender==null||this.search_info.age_start==null||this.search_info.age_end==null){
           this.$message.error('若指定用户范围，请指定完整的性别和年龄范围')
         }else{
-          this.search_info.all = this.search_info.all === 'true'
+          if(this.search_info.gender === 'null'){
+            this.search_info.gender=null
+          }else {
+            this.search_info.gender = this.search_info.gender === 'true'
+          }
           this.search_info.age_start=parseInt(this.search_info.age_start)
           this.search_info.age_end=parseInt(this.search_info.age_end)
-          // request
-          this.request.post("/favorite/statistics",this.search_info).then((res) => {
-            if (res.status === 200) {
-              this.chartData.labels = res.data.CommodityItem.item_name
-              this.chartData.datasets=[
-                {
-                  label: '指定用户收藏前10的商品',
-                  backgroundColor: 'rgba(30,98,224,0.61)',
-                  borderColor: 'rgba(43,250,11,0.49)',
-                  borderWidth: 1,
-                  data: res.data.count
-                },
-              ]
-            }
-          }).catch(error => {
-            this.$message.error(error.response.data.message);
-          });
+          let label = '性别:'+ (this.search_info.gender==null?'不区分':this.search_info.gender===true?'男':'女') + ' 年龄:'+this.search_info.age_start+'~'+this.search_info.age_end+' 用户收藏前10的商品'
+            // request
+            this.request.post("/favorite/statistics", this.search_info).then((res) => {
+              if (res.status === 200) {
+                if(res.data.length<1){
+                  this.$message.warning('数据为空');
+                }else {
+                  this.chartData.labels = [];
+                  this.chartData.datasets = [
+                    {
+                      label: label,
+                      backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                      ],
+                      borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                      ],
+                      borderWidth: 1,
+                      data: []
+                    }
+                  ];
+                  res.data.forEach(item => {
+                    this.chartData.labels.push(item.CommodityItem.item_name);
+                  });
+                  res.data.forEach(item => {
+                    this.chartData.datasets[0].data.push(item.count);
+                  });
+                }
+              }
+            }).catch(error => {
+              this.$message.error(error.response.data.message);
+            });
         }
       }
+      this.search_info.all = null
+      this.search_info.gender=null
+      this.search_info.age_start=null
+      this.search_info.age_end=null
     },
   },
 };

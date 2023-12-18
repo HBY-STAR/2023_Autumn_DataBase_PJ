@@ -276,7 +276,7 @@ func DeleteCommodity(c *fiber.Ctx) error {
 // @Success 200 {array} models.CommodityItem
 // @Failure 403 {object} common.HttpError
 func GetItemsByCommodity(c *fiber.Ctx) error {
-	commodityID, err := c.ParamsInt("commodity_id")
+	commodityID, err := c.ParamsInt("id")
 	if err != nil {
 		return err
 	}
