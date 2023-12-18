@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/opentreehole/go-common"
 	. "src/models"
+	"strings"
 )
 
 // GetAllCommodity @GetAllCommodity
@@ -110,4 +111,43 @@ func UpdateCommodity(c *fiber.Ctx) error {
 	}
 
 	return commodity.Update()
+}
+
+// SearchCommodity @SearchCommodity
+// @Router /api/commodities/search [post]
+// @Summary 搜索商品
+// @Description 搜索商品
+// @Tags 商品
+// @Accept json
+// @Produce json
+// @Param json body SearchQuery true "json"
+// @Success 200 {array} models.Commodity
+// @Failure 400 {object} common.HttpError
+func SearchCommodity(c *fiber.Ctx) error {
+	var searchQuery SearchQuery
+	err := c.BodyParser(&searchQuery)
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+	var commodities []Commodity
+	switch strings.ToLower(searchQuery.Range) {
+	case "name":
+		if searchQuery.Accurate {
+			commodities, err = GetCommoditiesByName(searchQuery.Search)
+		} else {
+			commodities, err = GetCommoditiesByNameFuzzy(searchQuery.Search)
+		}
+	case "category":
+		if searchQuery.Accurate {
+			commodities, err = GetCommoditiesByCategory(searchQuery.Search)
+		} else {
+			commodities, err = GetCommoditiesByCategoryFuzzy(searchQuery.Search)
+		}
+	default:
+		return common.BadRequest("Invalid search range")
+	}
+	if err != nil {
+		return err
+	}
+	return c.JSON(&commodities)
 }

@@ -61,3 +61,31 @@ func (commodity *Commodity) Update() (err error) {
 	})
 	return
 }
+
+func GetCommoditiesByName(name string) (commodities []Commodity, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Where("default_name = ?", name).Find(&commodities).Error
+	})
+	return
+}
+
+func GetCommoditiesByNameFuzzy(name string) (commodities []Commodity, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Where("default_name LIKE ?", "%"+name+"%").Find(&commodities).Error
+	})
+	return
+}
+
+func GetCommoditiesByCategory(category string) (commodities []Commodity, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Where("category = ?", category).Find(&commodities).Error
+	})
+	return
+}
+
+func GetCommoditiesByCategoryFuzzy(category string) (commodities []Commodity, err error) {
+	err = DB.Transaction(func(tx *gorm.DB) error {
+		return tx.Where("category LIKE ?", "%"+category+"%").Find(&commodities).Error
+	})
+	return
+}

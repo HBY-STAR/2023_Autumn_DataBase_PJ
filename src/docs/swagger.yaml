@@ -32,6 +32,15 @@ definitions:
       produce_at:
         type: string
     type: object
+  commodity.SearchQuery:
+    properties:
+      accurate:
+        type: boolean
+      range:
+        type: string
+      search:
+        type: string
+    type: object
   common.ErrorDetailElement:
     properties:
       field:
@@ -235,10 +244,8 @@ definitions:
     properties:
       commodityItem:
         $ref: '#/definitions/models.CommodityItem'
-      priceChange:
-        items:
-          $ref: '#/definitions/models.PriceChange'
-        type: array
+      price_variance:
+        type: number
     type: object
   models.Seller:
     properties:
@@ -478,6 +485,34 @@ paths:
           schema:
             $ref: '#/definitions/models.Commodity'
       summary: 获取所有商品
+      tags:
+      - 商品
+  /api/commodities/search:
+    post:
+      consumes:
+      - application/json
+      description: 搜索商品
+      parameters:
+      - description: json
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/commodity.SearchQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Commodity'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: 搜索商品
       tags:
       - 商品
   /api/commodity/all:

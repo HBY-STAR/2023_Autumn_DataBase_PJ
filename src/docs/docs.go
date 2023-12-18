@@ -201,6 +201,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/commodities/search": {
+            "post": {
+                "description": "搜索商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商品"
+                ],
+                "summary": "搜索商品",
+                "parameters": [
+                    {
+                        "description": "json",
+                        "name": "json",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commodity.SearchQuery"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Commodity"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/commodity/all": {
             "get": {
                 "description": "获取所有商品",
@@ -1845,6 +1888,20 @@ const docTemplate = `{
                 }
             }
         },
+        "commodity.SearchQuery": {
+            "type": "object",
+            "properties": {
+                "accurate": {
+                    "type": "boolean"
+                },
+                "range": {
+                    "type": "string"
+                },
+                "search": {
+                    "type": "string"
+                }
+            }
+        },
         "common.ErrorDetailElement": {
             "type": "object",
             "properties": {
@@ -2153,11 +2210,8 @@ const docTemplate = `{
                 "commodityItem": {
                     "$ref": "#/definitions/models.CommodityItem"
                 },
-                "priceChange": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.PriceChange"
-                    }
+                "price_variance": {
+                    "type": "number"
                 }
             }
         },
