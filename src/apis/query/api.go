@@ -72,6 +72,9 @@ func GetPriceStatistics(c *fiber.Ctx) error {
 	if err := c.BodyParser(&priceStatisticsRequest); err != nil {
 		return common.BadRequest("Invalid request body")
 	}
+	if priceStatisticsRequest.TimeStart.Time.After(priceStatisticsRequest.TimeEnd.Time) {
+		return common.BadRequest("Invalid time range")
+	}
 	res, err := GetPriceStatisticsHistory(priceStatisticsRequest.CommodityID, priceStatisticsRequest.TimeStart.Time, priceStatisticsRequest.TimeEnd.Time)
 	if err != nil {
 		return err

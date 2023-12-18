@@ -10,7 +10,7 @@ import (
 type PriceChange struct {
 	ID              int            `json:"id" gorm:"primaryKey"`
 	CommodityItem   *CommodityItem `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CommodityItemID int            `json:"commodity_item_id" gorm:"not null;index:price_change,priority:1"`
+	CommodityItemID int            `json:"commodity_item_id" gorm:"not null;index;index:price_change,priority:1"`
 	NewPrice        float32        `json:"new_price" gorm:"not null"`
 	UpdateAt        MyTime         `json:"update_at" gorm:"autoUpdateTime;index:price_change,priority:2,sort:desc"`
 }

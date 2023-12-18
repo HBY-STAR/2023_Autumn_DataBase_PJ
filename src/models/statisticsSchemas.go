@@ -11,8 +11,8 @@ type FavoriteStatistics struct {
 }
 
 type PriceStatisticsResponse struct {
-	CommodityItem *CommodityItem
-	PriceChange   []PriceChange
+	CommodityItem CommodityItem
+	PriceVariance float32 `json:"price_variance"`
 }
 
 //type PriceStatisticsResponseCurrent struct {
