@@ -244,7 +244,7 @@ func UpdateCommodity(c *fiber.Ctx) error {
 // @Tags Item
 // @Accept json
 // @Produce json
-// @Param id path string true "commodity id"
+// @Param id path string true "item id"
 // @Success 200
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError

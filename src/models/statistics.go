@@ -34,6 +34,8 @@ func GetFavoriteStatisticsAll() (favoriteStatisticsResponse []FavoriteStatistics
 		return
 	})
 	return
+	// RAW sql statement:
+	// SELECT COUNT(*) AS COUNT, commodity_item_id FROM favorite GROUP BY commodity_item_id ORDER BY COUNT DESC LIMIT 20;
 }
 
 func GetFavoriteStatisticsSome(gender *bool, ageStart int, ageEnd int) (favoriteStatisticsResponse []FavoriteStatisticsResponse, err error) {
@@ -77,20 +79,11 @@ func GetFavoriteStatisticsSome(gender *bool, ageStart int, ageEnd int) (favorite
 		return
 	})
 	return
-	//err = DB.Transaction(func(tx *gorm.DB) error {
-	//	return tx.Model(&User{}).
-	//		Where("gender = ? AND age BETWEEN ? AND ?", gender, ageStart, ageEnd).
-	//		Preload("Favorites").
-	//		Select("count(*) as count, commodity_item_id").
-	//		Group("commodity_item_id").
-	//		Order("count DESC").
-	//		Scan(&favStats).Error
-	//})
+	// RAW sql statement:
+	// SELECT COUNT(*) AS COUNT, commodity_item_id FROM favorite INNER JOIN USER ON favorite.`user_id` = user.`id` WHERE user.`gender` = FALSE AND user.`age` BETWEEN 10 AND 50 GROUP BY commodity_item_id ORDER BY COUNT DESC LIMIT 20;
+	// SELECT COUNT(*) AS COUNT, commodity_item_id FROM favorite LEFT JOIN USER ON favorite.`user_id` = user.`id` WHERE user.`age` BETWEEN 10 AND 50 GROUP BY commodity_item_id ORDER BY COUNT DESC LIMIT 20;
 
 	// Preload("CommodityItem").
-	// Preload("CommodityItem.Commodity").
-	// Preload("CommodityItem.Platform").
-	// Preload("CommodityItem.Seller").
 	//	preload will happen after the query, so it will not work if select CommodityItem
 }
 
