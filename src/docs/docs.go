@@ -48,10 +48,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.SummaryResponse"
-                            }
+                            "$ref": "#/definitions/models.SummaryResponse"
                         }
                     },
                     "400": {
@@ -95,10 +92,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.SummaryResponse"
-                            }
+                            "$ref": "#/definitions/models.SummaryResponse"
                         }
                     },
                     "400": {

@@ -410,9 +410,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.SummaryResponse'
-            type: array
+            $ref: '#/definitions/models.SummaryResponse'
         "400":
           description: Bad Request
           schema:
@@ -441,9 +439,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.SummaryResponse'
-            type: array
+            $ref: '#/definitions/models.SummaryResponse'
         "400":
           description: Bad Request
           schema:
