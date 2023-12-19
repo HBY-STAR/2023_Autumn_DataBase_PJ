@@ -22,6 +22,100 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/annual/summary": {
+            "get": {
+                "description": "Get personal annual summary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Query"
+                ],
+                "summary": "Get personal annual summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SummaryResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/annual/summary/all": {
+            "get": {
+                "description": "Get all annual summary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Query"
+                ],
+                "summary": "Get all annual summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SummaryResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/commodities": {
             "put": {
                 "description": "更新商品",
@@ -429,7 +523,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "commodity id",
+                        "description": "item id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -2233,6 +2327,44 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "models.SummaryResponse": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "category_num": {
+                    "type": "integer"
+                },
+                "commodity": {
+                    "$ref": "#/definitions/models.Commodity"
+                },
+                "commodity_num": {
+                    "type": "integer"
+                },
+                "favorite_num": {
+                    "type": "integer"
+                },
+                "message_num": {
+                    "type": "integer"
+                },
+                "platform": {
+                    "$ref": "#/definitions/models.Platform"
+                },
+                "platform_num": {
+                    "type": "integer"
+                },
+                "price_change_num": {
+                    "type": "integer"
+                },
+                "seller": {
+                    "$ref": "#/definitions/models.Seller"
+                },
+                "seller_num": {
+                    "type": "integer"
                 }
             }
         },
