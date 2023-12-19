@@ -96,17 +96,17 @@
               <el-menu-item index="7">
                 <template #title>
                   <el-icon>
-                    <money />
+                    <shopping-cart />
                   </el-icon>
-                  <div @click="router.push('/admin/statistics_commodity_price')">商品价格统计</div>
+                  <div @click="router.push('/admin/statistics_commodity_price')">价格统计</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="8">
                 <template #title>
                   <el-icon>
-                    <shopping-cart />
+                    <clock />
                   </el-icon>
-                  <div @click="router.push('/admin/statistics_commodity_seller')">商家价格差统计</div>
+                  <div @click="router.push('/admin/statistics_annual')">年度总结</div>
                 </template>
               </el-menu-item>
             </el-menu>
@@ -141,7 +141,7 @@ export default {
 
 <script setup>
 
-import { Money, Setting, ShoppingCart } from "@element-plus/icons-vue";
+import { Clock, Money, Setting, ShoppingCart } from "@element-plus/icons-vue";
 import { RouterLink } from "vue-router";
 import router from "@/router";
 

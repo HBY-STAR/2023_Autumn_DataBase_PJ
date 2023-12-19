@@ -6,7 +6,7 @@
     >
       <template #prepend>
         <el-select v-model="search_info.range" placeholder="范围" style="width: 100px;">
-          <el-option label="按商品" value = 'name' />
+          <el-option label="按名称" value = 'name' />
           <el-option label="按种类" value= 'category' />
         </el-select>
         <el-select v-model="search_info.accurate" placeholder="选项"  style="width: 100px;margin-left: 20px">

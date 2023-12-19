@@ -10,9 +10,14 @@ const router = createRouter({
       component:()=>import('../views/HomeView/HomeView.vue'),
       children: [
         {
+          path:'/home_item_all',
+          name:'home_item_all',
+          component:()=>import('../views/HomeView/CommodityItemAll.vue')
+        },
+        {
           path:'/home_commodity_all',
           name:'home_commodity_all',
-          component:()=>import('../views/HomeView/CommodityItemAll.vue')
+          component:()=>import('../views/UserView/CommodityAll.vue')
         },
       ]
     },
@@ -65,9 +70,9 @@ const router = createRouter({
           component:()=>import('../views/AdminView/Statistics/StatisticsCommodityPrice.vue')
         },
         {
-          path: 'statistics_commodity_seller',
-          name: 'statistics_commodity_seller',
-          component:()=>import('../views/AdminView/Statistics/StatisticsCommoditySeller.vue')
+          path: 'statistics_annual',
+          name: 'statistics_annual',
+          component:()=>import('../views/AdminView/Statistics/StatisticsAnnual.vue')
         },
       ]
     },
@@ -88,6 +93,11 @@ const router = createRouter({
           component:()=>import('../views/HomeView/CommodityItemAll.vue')
         },
         {
+          path:'user_commodity_data',
+          name:'user_commodity_data',
+          component:()=>import('../views/UserView/CommodityAll.vue')
+        },
+        {
           path:'favorite',
           name:'favorite',
           component:()=>import('../views/UserView/Favorite.vue')
@@ -101,6 +111,16 @@ const router = createRouter({
           path:'search',
           name:'search',
           component:()=>import('../views/HomeView/SearchView.vue')
+        },
+        {
+          path:'search_commodity',
+          name:'search_commodity',
+          component:()=>import('../views/UserView/SearchCommodity.vue')
+        },
+        {
+          path:'user_annual',
+          name:'user_annual',
+          component:()=>import('../views/UserView/UserAnnual.vue')
         },
       ]
     },

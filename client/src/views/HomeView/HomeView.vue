@@ -48,15 +48,15 @@
                   <el-icon>
                     <goods />
                   </el-icon>
-                  <div @click="router.push('/home_commodity_all')">所有商品</div>
+                  <div @click="router.push('/home_item_all')">所有商品实例</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="2">
                 <template #title>
                   <el-icon>
-                    <search />
+                    <goods-filled />
                   </el-icon>
-                  <div @click="remind_to_login">搜索商品</div>
+                  <div @click="router.push('/home_commodity_all')">所有商品</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="3">
@@ -116,7 +116,7 @@ const remind_to_login = () => {
 
 <script setup>
 // eslint-disable-next-line no-unused-vars
-import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+import { GoodsFilled, Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
 import { RouterLink } from "vue-router";
 import router from "@/router";
 

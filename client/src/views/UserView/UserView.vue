@@ -51,7 +51,7 @@
                   <el-icon>
                     <goods />
                   </el-icon>
-                  <div @click="router.push('/user/all_commodity_item_data')">所有商品</div>
+                  <div @click="router.push('/user/all_commodity_item_data')">所有商品实例</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="2">
@@ -59,10 +59,26 @@
                   <el-icon>
                     <search />
                   </el-icon>
-                  <div @click="router.push('/user/search')">搜索商品</div>
+                  <div @click="router.push('/user/search')">搜索商品实例</div>
                 </template>
               </el-menu-item>
               <el-menu-item index="3">
+                <template #title>
+                  <el-icon>
+                    <goods-filled />
+                  </el-icon>
+                  <div @click="router.push('/user/user_commodity_data')">所有商品</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="4">
+                <template #title>
+                  <el-icon>
+                    <search />
+                  </el-icon>
+                  <div @click="router.push('/user/search_commodity')">搜索商品</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="5">
                 <template #title>
                   <el-icon>
                     <user />
@@ -70,7 +86,7 @@
                   <div @click="router.push('/user/user_data')">个人信息</div>
                 </template>
               </el-menu-item>
-              <el-menu-item index="4">
+              <el-menu-item index="6">
                 <template #title>
                   <el-icon>
                     <star />
@@ -78,12 +94,20 @@
                   <div @click="router.push('/user/favorite')">个人收藏</div>
                 </template>
               </el-menu-item>
-              <el-menu-item index="5">
+              <el-menu-item index="7">
                 <template #title>
                   <el-icon>
                     <message />
                   </el-icon>
                   <div @click="router.push('/user/message')">系统消息</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="8">
+                <template #title>
+                  <el-icon>
+                    <clock />
+                  </el-icon>
+                  <div @click="router.push('/user/user_annual')">年度统计</div>
                 </template>
               </el-menu-item>
             </el-menu>
@@ -130,7 +154,17 @@ export default {
 
 <script setup>
 // eslint-disable-next-line no-unused-vars
-import { Menu as IconMenu, Message, Setting } from "@element-plus/icons-vue";
+import {
+  Clock,
+  Goods,
+  GoodsFilled,
+  Menu as IconMenu,
+  Message,
+  Search,
+  Setting,
+  Star,
+  User
+} from "@element-plus/icons-vue";
 import { RouterLink } from "vue-router";
 import router from "@/router";
 
