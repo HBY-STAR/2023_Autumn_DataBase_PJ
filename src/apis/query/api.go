@@ -59,15 +59,14 @@ func GetFavoriteStatistics(c *fiber.Ctx) error {
 // @Success 200 {array} models.PriceStatisticsResponse
 // @Failure 400 {object} common.HttpError
 // @Failure 403 {object} common.HttpError
-// @param Authorization header string true "Bearer和token空格拼接"
 func GetPriceStatistics(c *fiber.Ctx) error {
-	tmpUser, err := GetGeneralUser(c)
-	if err != nil {
-		return err
-	}
-	if tmpUser == nil || tmpUser.UserType != "admin" {
-		return common.Forbidden("Only admin can get price statistics")
-	}
+	//tmpUser, err := GetGeneralUser(c)
+	//if err != nil {
+	//	return err
+	//}
+	//if tmpUser == nil || tmpUser.UserType != "admin" {
+	//	return common.Forbidden("Only admin can get price statistics")
+	//}
 	var priceStatisticsRequest PriceStatisticsRequest
 	if err := c.BodyParser(&priceStatisticsRequest); err != nil {
 		return common.BadRequest("Invalid request body")
