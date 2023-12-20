@@ -106,7 +106,7 @@
                   <el-icon>
                     <clock />
                   </el-icon>
-                  <div @click="router.push('/admin/statistics_annual')">年度总结</div>
+                  <div @click="router.push('/admin/statistics_annual')">年度统计</div>
                 </template>
               </el-menu-item>
             </el-menu>

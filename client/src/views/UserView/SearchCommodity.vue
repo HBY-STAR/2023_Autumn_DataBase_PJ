@@ -43,7 +43,7 @@
               </span>
             </div>
             <div>
-              <el-table :data="sortedItems" border height="500px" show-empty style="margin-top: 30px">
+              <el-table :data="sortedItems" border height="500px" show-empty style="margin-top: 30px" :row-class-name="highlightLowestPriceRow">
                 <el-table-column label="商品序号" prop="id" width="120" sortable="custom"/>
                 <el-table-column label="商品名" prop="item_name" width="150" />
                 <el-table-column label="种类" prop="Commodity.category" width="100" />
@@ -130,6 +130,10 @@ export default {
         });
       }
     },
+    highlightLowestPriceRow({ row }) {
+      const lowestPrice = Math.min(...this.sortedItems.map(item => item.price));
+      return row.price === lowestPrice ? "lowest-price-row" : "";
+    },
     handleClose1(){
       this.find_item=[];
       this.drawer=false;
@@ -146,3 +150,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-table .lowest-price-row {
+  background-color: rgba(220, 29, 29, 0.74); /* 设置最低价格行的背景色 */
+  /* 可以根据需要添加其他样式 */
+}
+
+</style>

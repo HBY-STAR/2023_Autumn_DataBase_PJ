@@ -105,6 +105,14 @@
               <el-menu-item index="8">
                 <template #title>
                   <el-icon>
+                    <calendar />
+                  </el-icon>
+                  <div @click="router.push('/user/user_statistics_price')">商品价格统计</div>
+                </template>
+              </el-menu-item>
+              <el-menu-item index="9">
+                <template #title>
+                  <el-icon>
                     <clock />
                   </el-icon>
                   <div @click="router.push('/user/user_annual')">年度统计</div>
@@ -155,6 +163,7 @@ export default {
 <script setup>
 // eslint-disable-next-line no-unused-vars
 import {
+  Calendar,
   Clock,
   Goods,
   GoodsFilled,

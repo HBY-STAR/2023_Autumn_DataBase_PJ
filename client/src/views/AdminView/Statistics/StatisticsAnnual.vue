@@ -1,47 +1,43 @@
 <template>
   <el-carousel :interval="4000" type="card" height="400px" style="margin-top: 50px">
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">商品种类总数:{{this.annual_data.category_num}}</h1>
+    <el-carousel-item style="border-radius: 15px">
+      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎的商品种类:</h2>
+      <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 30px">名称:{{this.annual_data.category}}</h3>
+      <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">收藏次数:{{this.annual_data.category_num}}</h3>
     </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">收藏最多的商品种类:{{this.annual_data.category}}</h1>
-    </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">商品总数:{{this.annual_data.commodity_num}}</h1>
-    </el-carousel-item>
-    <el-carousel-item>
-      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎商品:</h2>
+    <el-carousel-item style="border-radius: 15px">
+      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎的商品:</h2>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 30px">名称:{{this.annual_data.Commodity.default_name}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">种类:{{ this.annual_data.Commodity.category}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">产地:{{ this.annual_data.Commodity.produce_address}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">生产时间:{{ this.annual_data.Commodity.produce_at}}</h3>
+      <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">收藏次数:{{this.annual_data.commodity_num}}</h3>
     </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">商家总数:{{this.annual_data.seller_num}}</h1>
-    </el-carousel-item>
-    <el-carousel-item>
-      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎商家:</h2>
+    <el-carousel-item style="border-radius: 15px">
+      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎的商家:</h2>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 30px">商家名:{{this.annual_data.Seller.username}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">邮箱:{{ this.annual_data.Seller.email}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">地址:{{ this.annual_data.Seller.address}}</h3>
+      <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">收藏次数:{{this.annual_data.seller_num}}</h3>
     </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">平台总数:{{this.annual_data.platform_num}}</h1>
-    </el-carousel-item>
-    <el-carousel-item>
-      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎平台:</h2>
+    <el-carousel-item style="border-radius: 15px">
+      <h2 text="2xl" justify="center" style="margin-top: 40px">最受欢迎的平台:</h2>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 30px">平台名:{{this.annual_data.Platform.name}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">国家:{{ this.annual_data.Platform.country}}</h3>
       <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">URL:{{ this.annual_data.Platform.url}}</h3>
+      <h3 text="2xl" justify="center" style="margin-left: 100px; margin-top: 20px">收藏次数:{{this.annual_data.platform_num}}</h3>
     </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">用户收藏总数:{{this.annual_data.favorite_num}}</h1>
+    <el-carousel-item style="border-radius: 15px">
+      <h1 text="2xl" justify="center" style="margin-top: 40px">用户收藏总数:</h1>
+      <span style="margin-left: 100px; font-size: 150px; color: #79bbff">{{this.annual_data.favorite_num}}</span>
     </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">总计发送消息: {{this.annual_data.message_num}} 条</h1>
+    <el-carousel-item style="border-radius: 15px">
+      <h1 text="2xl" justify="center" style="margin-top: 40px">累计发送消息: </h1>
+      <span style="margin-left: 100px; font-size: 150px; color: #79bbff">{{this.annual_data.message_num}}</span>
     </el-carousel-item>
-    <el-carousel-item>
-      <h1 text="2xl" justify="center" style="margin-top: 70px">价格变动次数:{{this.annual_data.price_change_num}}</h1>
+    <el-carousel-item style="border-radius: 15px">
+      <h1 text="2xl" justify="center" style="margin-top: 40px">累计商品价格变动次数:</h1>
+      <span style="margin-left: 100px; font-size: 150px; color: #79bbff">{{this.annual_data.price_change_num}}</span>
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -102,13 +98,12 @@ export default {
 
 <style scoped>
 .el-carousel__item h1 {
-  color: rgba(29, 74, 220, 0.74);
-  line-height: 200px;
-  text-align: center;
+  color: rgba(152, 8, 68, 0.8);
+  margin-left: 50px;
 }
 
 .el-carousel__item h2 {
-  color: rgba(152, 8, 68, 0.91);
+  color: rgba(99, 109, 220, 0.89);
   margin-left: 50px;
 }
 
@@ -119,10 +114,10 @@ export default {
 }
 
 .el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+  background-color: #99a6bf;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+  background-color: #d3dde6;
 }
 </style>

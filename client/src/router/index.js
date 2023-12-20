@@ -122,6 +122,11 @@ const router = createRouter({
           name:'user_annual',
           component:()=>import('../views/UserView/UserAnnual.vue')
         },
+        {
+          path:'user_statistics_price',
+          name:'user_statistics_price',
+          component:()=>import('../views/AdminView/Statistics/StatisticsCommodityPrice.vue')
+        },
       ]
     },
     //商家界面

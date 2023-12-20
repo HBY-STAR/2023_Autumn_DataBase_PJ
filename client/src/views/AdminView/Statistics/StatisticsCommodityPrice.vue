@@ -5,7 +5,7 @@
       style="width: 250px"
       :min="0"
       controls-position="right"
-      placeholder="请输入可发布商品的序号"
+      placeholder="请输入商品ID"
     />
     <el-date-picker
       style="margin-left: 30px"
