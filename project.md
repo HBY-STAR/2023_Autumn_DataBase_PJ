@@ -1,5 +1,13 @@
 # 1、数据库ER图
-%% - ，若有特殊的设计意图，可附带文档进行说明。 %%
+
+### （1）按照书上描述的标准绘制的ER图
+
+![pj_er.jpg](ER_image/pj_er.jpg)
+
+### （2）MySQL Workbench生成的ER图 (供参考)
+
+![mysql_er.png](ER_image/mysql_er.png)
+
 # 2、数据库表结构
 建表语句脚本见price_comparator.sql
 表结构说明：
