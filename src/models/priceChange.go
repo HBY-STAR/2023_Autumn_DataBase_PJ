@@ -67,3 +67,30 @@ func CreatePriceChanges(priceChanges []PriceChange) error {
 		return tx.Create(&priceChanges).Error
 	})
 }
+
+func DeletePriceChangeByID(id int) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Delete(&PriceChange{}, id)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return gorm.ErrRecordNotFound
+		}
+		return nil
+	})
+}
+
+func DeletePriceChangeByCommodityItemID(commodityItemID int) error {
+	return DB.Transaction(func(tx *gorm.DB) error {
+		result := tx.Where("commodity_item_id = ?", commodityItemID).Delete(&PriceChange{})
+		//result := tx.Delete(&PriceChange{}, commodityItemID)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			return gorm.ErrRecordNotFound
+		}
+		return nil
+	})
+}

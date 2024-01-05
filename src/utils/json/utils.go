@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+var batchSize = 1000
+
 // ReadStrings get []string from file
 func ReadStrings(file *os.File) ([]string, error) {
 	var result []string

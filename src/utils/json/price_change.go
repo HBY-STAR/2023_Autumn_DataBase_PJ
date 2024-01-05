@@ -18,9 +18,23 @@ func parsePriceChange() error {
 		return err
 	}
 	sort.Sort(models.ByUpdateAt(changes))
-	err = models.CreatePriceChanges(changes)
-	if err != nil {
-		fmt.Println(err)
+	//err = models.CreatePriceChanges(changes)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	total := len(changes)
+	for i := 0; i < total; i += batchSize {
+		end := i + batchSize
+		if end > total {
+			end = total
+		}
+
+		batch := changes[i:end]
+		err = models.DB.Create(&batch).Error
+		if err != nil {
+			fmt.Println(err)
+			//return err
+		}
 	}
 	return nil
 }

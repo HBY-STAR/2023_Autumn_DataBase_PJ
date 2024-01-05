@@ -171,6 +171,17 @@ func CreateItems(items []CommodityItem) error {
 	})
 }
 
+func (item *CommodityItem) AfterCreate(tx *gorm.DB) (err error) {
+	var priceChange = PriceChange{
+		CommodityItemID: item.ID,
+		NewPrice:        item.Price,
+		//UpdateAt:        MyTime{t},
+	}
+	//err = tx.Transaction(func(tx *gorm.DB) (err error) {
+	// insert priceChange
+	return tx.Create(&priceChange).Error
+}
+
 func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error) {
 	if item.Price == 0 {
 		return

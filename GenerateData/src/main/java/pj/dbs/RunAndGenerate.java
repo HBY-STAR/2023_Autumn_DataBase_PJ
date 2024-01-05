@@ -6,12 +6,16 @@ import pj.dbs.generate.*;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class RunAndGenerate {
+
     public static void main(String[] args) throws ParseException {
         clean();
-        generate_in_order(1000,200,100,4,2000,2000,500,1000);
+//        generate_in_order(1000, 200, 100, 4, 2000, 2000, 500, 1000);
+        generate_in_order(100000, 10000, 10000,
+                500, 100000, 1000000, 500000, 300000);
     }
 
     //直接使用这个函数就可以了，由于是按照顺序产生的，故外键都是正确的。
@@ -48,10 +52,10 @@ public class RunAndGenerate {
     }
 
     //清除之前生成的文件（如果存在的话）
-    public static void clean(){
+    public static void clean() {
         List<String> files = Arrays.asList(
-                "admin.json","commodity.json","commodity_item.json","favorite.json","message.json",
-                "platform.json","price_change.json","seller.json","user.json"
+                "admin.json", "commodity.json", "commodity_item.json", "favorite.json", "message.json",
+                "platform.json", "price_change.json", "seller.json", "user.json"
         );
         for (String file : files) {
             File check_file = new File("Data/" + file);

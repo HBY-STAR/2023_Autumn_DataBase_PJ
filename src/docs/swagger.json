@@ -898,6 +898,54 @@
                 }
             }
         },
+        "/api/item/history/{id}": {
+            "delete": {
+                "description": "Delete batch priceChange by commodityItemID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PriceChange"
+                ],
+                "summary": "Delete batch priceChange by commodityItemID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "commodityItem id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "description": "Login",
@@ -1305,6 +1353,54 @@
                 }
             }
         },
+        "/api/price/history/{id}": {
+            "delete": {
+                "description": "Delete priceChange by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PriceChange"
+                ],
+                "summary": "Delete priceChange by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "priceChange id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer和token空格拼接",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/common.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/price/limit": {
             "post": {
                 "description": "AddPriceLimit",
@@ -1383,13 +1479,6 @@
                         "schema": {
                             "$ref": "#/definitions/query.PriceStatisticsRequest"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer和token空格拼接",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
                     }
                 ],
                 "responses": {
