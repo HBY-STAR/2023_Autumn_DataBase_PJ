@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/opentreehole/go-common"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"time"
@@ -97,6 +98,9 @@ func GetPriceStatisticsHistory(commodityID int, timeStart time.Time, timeEnd tim
 		if err != nil {
 			return
 		}
+		if len(items) == 0 {
+			return common.NotFound("Commodity not found")
+		}
 		for _, item := range items {
 			var PriceVariance float32
 			err = tx.Model(&PriceChange{}).
@@ -160,6 +164,7 @@ func GetAnnualSummary(userID int) (res SummaryResponse, err error) {
 				Joins("left join price_change on price_change.commodity_item_id = favorite.commodity_item_id").
 				Where("favorite.user_id = ? AND favorite.update_at < price_change.update_at", userID).
 				Count(&priceChangeNum).Error
+			//err = tx.Raw("select count(*) from favorite left join price_change on price_change.commodity_item_id = favorite.commodity_item_id where favorite.user_id = ? AND favorite.update_at < price_change.update_at", userID).Scan(&priceChangeNum).Error
 			// select count(*) from favorite left join price_change on price_change.commodity_item_id = favorite.commodity_item_id where favorite.user_id = 1 AND favorite.update_at < price_change.update_at
 			// Get all:
 			// SELECT COUNT(*) AS num,user_id FROM favorite LEFT JOIN price_change ON price_change.commodity_item_id = favorite.commodity_item_id WHERE favorite.update_at < price_change.update_at GROUP BY user_id ORDER BY num DESC
