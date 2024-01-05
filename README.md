@@ -30,6 +30,9 @@
 - 触发器可由trigger.sql导入或使用代码中的hook函数模拟触发器行为
 - 若选择使用trigger.sql导入触发器，需要注释掉hook函数即`func (item *CommodityItem) AfterUpdate(tx *gorm.DB) (err error)`
 
+数据导入脚本的默认路径是DatabasePJ\GenerateData\Data
+数据目录下提供了两种规模的测试数据100K-Data和Data，可以手动替换后执行数据导入脚本
+
 ### 构建和运行
 1. client：在client目录下，命令行执行`npm run dev`即可启动前端，部署在localhost:8070。
 2. src：运行`go run main.go`启动后端，部署在127.0.0.1:8080。

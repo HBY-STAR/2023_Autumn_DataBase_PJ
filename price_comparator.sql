@@ -1,6 +1,6 @@
 /*
-SQLyog Ultimate v10.00 Beta1
-MySQL - 8.0.32 : Database - price_comparator
+SQLyog Ultimate v12.08 (32 bit)
+MySQL - 8.0.35 : Database - price_comparator
 *********************************************************************
 */
 
@@ -38,7 +38,9 @@ CREATE TABLE `commodity` (
   `produce_at` datetime(3) NOT NULL,
   `produce_address` varchar(64) NOT NULL,
   `category` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_commodity_default_name` (`default_name`),
+  KEY `idx_commodity_category` (`category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `commodity_item` */
@@ -54,14 +56,16 @@ CREATE TABLE `commodity_item` (
   `price` float NOT NULL,
   `update_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_commodity_item_commodity` (`commodity_id`),
+  UNIQUE KEY `idx_item` (`commodity_id`,`platform_id`,`seller_id`),
+  KEY `idx_commodity_item_item_name` (`item_name`),
+  KEY `idx_commodity_item_update_at` (`update_at` DESC),
   KEY `fk_commodity_item_platform` (`platform_id`),
   KEY `fk_commodity_item_seller` (`seller_id`),
   CONSTRAINT `fk_commodity_item_commodity` FOREIGN KEY (`commodity_id`) REFERENCES `commodity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_commodity_item_platform` FOREIGN KEY (`platform_id`) REFERENCES `platform` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_commodity_item_seller` FOREIGN KEY (`seller_id`) REFERENCES `seller` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chk_commodity_item_price` CHECK ((`price` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `favorite` */
 
@@ -73,6 +77,7 @@ CREATE TABLE `favorite` (
   `price_limit` float NOT NULL DEFAULT '0',
   `update_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`user_id`,`commodity_item_id`),
+  UNIQUE KEY `favorite` (`user_id`,`commodity_item_id`),
   KEY `fk_favorite_commodity_item` (`commodity_item_id`),
   CONSTRAINT `fk_favorite_commodity_item` FOREIGN KEY (`commodity_item_id`) REFERENCES `commodity_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -89,11 +94,11 @@ CREATE TABLE `message` (
   `current_price` float NOT NULL,
   `create_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `idx_message_user_id` (`user_id`),
   KEY `fk_message_commodity_item` (`commodity_item_id`),
-  KEY `fk_message_user` (`user_id`),
   CONSTRAINT `fk_message_commodity_item` FOREIGN KEY (`commodity_item_id`) REFERENCES `commodity_item` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_message_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `platform` */
 
@@ -105,7 +110,7 @@ CREATE TABLE `platform` (
   `url` varchar(64) DEFAULT NULL,
   `country` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `price_change` */
 
@@ -117,9 +122,10 @@ CREATE TABLE `price_change` (
   `new_price` float NOT NULL,
   `update_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_price_change_commodity_item` (`commodity_item_id`),
+  KEY `idx_price_change_commodity_item_id` (`commodity_item_id`),
+  KEY `price_change` (`commodity_item_id`,`update_at` DESC),
   CONSTRAINT `fk_price_change_commodity_item` FOREIGN KEY (`commodity_item_id`) REFERENCES `commodity_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2503 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `seller` */
 
@@ -132,8 +138,8 @@ CREATE TABLE `seller` (
   `email` varchar(64) DEFAULT NULL,
   `address` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `idx_seller_username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `user` */
 
@@ -148,8 +154,8 @@ CREATE TABLE `user` (
   `gender` tinyint(1) NOT NULL,
   `phone` char(13) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `idx_user_username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `user_jwt_secret` */
 
@@ -159,7 +165,7 @@ CREATE TABLE `user_jwt_secret` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `secret` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
