@@ -978,6 +978,38 @@ paths:
       summary: AddCommodityFavorite
       tags:
       - Favorite
+  /api/item/history/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete batch priceChange by commodityItemID
+      parameters:
+      - description: commodityItem id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Delete batch priceChange by commodityItemID
+      tags:
+      - PriceChange
   /api/login:
     post:
       consumes:
@@ -1212,6 +1244,38 @@ paths:
       summary: Update priceChange
       tags:
       - PriceChange
+  /api/price/history/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete priceChange by ID
+      parameters:
+      - description: priceChange id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer和token空格拼接
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.HttpError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/common.HttpError'
+      summary: Delete priceChange by ID
+      tags:
+      - PriceChange
   /api/price/history/batch:
     post:
       consumes:
@@ -1296,11 +1360,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/query.PriceStatisticsRequest'
-      - description: Bearer和token空格拼接
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:

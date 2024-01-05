@@ -88,3 +88,59 @@ func AddBatchPriceChange(c *fiber.Ctx) error {
 
 	return CreatePriceChanges(priceChanges)
 }
+
+// DeletePriceChange @DeletePriceChange
+// @Router /api/price/history/{id} [delete]
+// @Summary Delete priceChange by ID
+// @Description Delete priceChange by ID
+// @Tags PriceChange
+// @Accept json
+// @Produce json
+// @Param id path int true "priceChange id"
+// @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @param Authorization header string true "Bearer和token空格拼接"
+func DeletePriceChange(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can delete priceChange")
+	}
+
+	priceChangeID, err := c.ParamsInt("id")
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+	return DeletePriceChangeByID(priceChangeID)
+}
+
+// DeleteBatchPriceChange @DeleteBatchPriceChange
+// @Router /api/item/history/{id} [delete]
+// @Summary Delete batch priceChange by commodityItemID
+// @Description Delete batch priceChange by commodityItemID
+// @Tags PriceChange
+// @Accept json
+// @Produce json
+// @Param id path int true "commodityItem id"
+// @Success 200
+// @Failure 400 {object} common.HttpError
+// @Failure 403 {object} common.HttpError
+// @param Authorization header string true "Bearer和token空格拼接"
+func DeleteBatchPriceChange(c *fiber.Ctx) error {
+	tmpUser, err := GetGeneralUser(c)
+	if err != nil {
+		return err
+	}
+	if tmpUser.UserType != "admin" {
+		return common.Forbidden("Only admin can delete priceChange")
+	}
+
+	itemID, err := c.ParamsInt("id")
+	if err != nil {
+		return common.BadRequest("Invalid request body")
+	}
+	return DeletePriceChangeByCommodityItemID(itemID)
+}
