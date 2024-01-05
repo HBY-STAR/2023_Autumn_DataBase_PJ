@@ -1,3 +1,4 @@
 GenerateData/target
 .idea/
 src/.idea/
+./client/node_modules/
