@@ -2,8 +2,8 @@
   <div style="display: flex">
     <div style="width: 950px;">
       <el-table :data="currentTableData1" border height="550px" show-empty style="width: 950px">
-        <el-table-column label="商品序号" prop="id" width="150"/>
-        <el-table-column label="商品名" prop="item_name" width="200"/>
+        <el-table-column label="商品序号" prop="id" width="100"/>
+        <el-table-column label="商品名" prop="item_name" width="130"/>
         <el-table-column label="当前价格" prop="price" width="120"/>
         <el-table-column label="商品ID" prop="commodity_id" width="100"/>
         <el-table-column label="商家ID" prop="seller_id" width="100"/>
@@ -64,6 +64,16 @@
                 </span>
               </template>
             </el-dialog>
+          </template>
+        </el-table-column>
+        <el-table-column label="清除价格历史" width="120">
+          <template v-slot="scope">
+            <div style="text-align: center">
+              <el-icon>
+                <Delete style="height: 25px; width: 25px; text-align: center; color: #409eff" @click="showDeleteConfirm2(scope.row)">
+                </Delete>
+              </el-icon>
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="删除商品" width="90">
@@ -281,6 +291,19 @@ export default {
         this.$message.error(error.response.data.message);
       });
     },
+    //delete
+    deleteItemHistory(){
+      this.request.delete("/item/history/"+this.focus_id).then((res) => {
+        if (res.status === 200) {
+          this.$message.success("清除成功")
+        } else {
+          this.$message.error(res.message);
+        }
+      }).catch(error => {
+        // 这里处理通过拦截器输出的错误信息
+        this.$message.error(error.response.data.message);
+      });
+    },
     showDeleteConfirm(row) {
       this.$confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
@@ -289,6 +312,17 @@ export default {
       }).then(() => {
         this.focus_id = row.id;
         this.deleteCommodityItem();
+      }).catch(() => {
+      });
+    },
+    showDeleteConfirm2(row) {
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.focus_id = row.id;
+        this.deleteItemHistory();
       }).catch(() => {
       });
     },

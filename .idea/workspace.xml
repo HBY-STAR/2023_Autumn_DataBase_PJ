@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5dc3f3d1-f11f-4c97-bcbc-8ba3ff7c35e3" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/GenerateData/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/GenerateData/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.md" beforeDir="false" afterPath="$PROJECT_DIR$/project.md" afterDir="false" />
-    </list>
+    <list default="true" id="5dc3f3d1-f11f-4c97-bcbc-8ba3ff7c35e3" name="更改" comment="feat: 添加ER图" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,12 +55,25 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1703512889251</updated>
-      <workItem from="1703512890291" duration="459000" />
+      <workItem from="1703512890291" duration="540000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: 添加ER图">
+      <option name="closed" value="true" />
+      <created>1703513406252</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1703513406252</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: 添加ER图" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 添加ER图" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

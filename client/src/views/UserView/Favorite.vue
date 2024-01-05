@@ -1,8 +1,8 @@
 <template>
   <el-table :data="user_favorite" border height="580px" show-empty  :key="table_key1">
-    <el-table-column label="商品序号" prop="commodity_item_id" width="160"/>
+    <el-table-column label="商品序号" prop="commodity_item_id" width="100"/>
     <el-table-column label="商品名" prop="CommodityItem.item_name" width="160"/>
-    <el-table-column label="商家" prop="CommodityItem.Seller.username" width="150"/>
+    <el-table-column label="商家" prop="CommodityItem.Seller.username" width="110"/>
     <el-table-column label="平台" prop="CommodityItem.Platform.name" width="150"/>
     <el-table-column label="当前价格" prop="CommodityItem.price" width="150"/>
     <el-table-column label="收藏时间" prop="update_at" width="180"/>
@@ -94,16 +94,26 @@
         </el-dialog>
       </template>
     </el-table-column>
+    <el-table-column label="取消收藏" width="90">
+      <template v-slot="scope">
+        <div style="text-align: center">
+          <el-icon>
+            <Delete style="height: 25px; width: 25px; text-align: center; color: #409eff" @click="showDeleteConfirm(scope.row)">
+            </Delete>
+          </el-icon>
+        </div>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
 <script>
 
-import { Edit, Plus } from "@element-plus/icons-vue";
+import { Delete, Edit, Plus } from "@element-plus/icons-vue";
 
 export default {
   name: "user_favorite",
-  components: { Plus, Edit },
+  components: { Delete, Plus, Edit },
   data() {
     return {
       user_favorite: localStorage.getItem('user_favorite')
@@ -326,6 +336,30 @@ export default {
         //ctx.fillText(time, x - 10, yAxis + 10);
       });
       ctx.stroke();
+    },
+    showDeleteConfirm(row) {
+      this.$confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.focus_commodity_item_id = row.commodity_item_id;
+        this.deleteFavorite();
+      }).catch(() => {
+      });
+    },
+    deleteFavorite(){
+      this.focus_commodity_item_id = parseInt(this.focus_commodity_item_id)
+      this.request.delete("/favorites/"+this.focus_commodity_item_id).then((res) => {
+        if (res.status === 200) {
+          this.$message.success("取消成功")
+        } else {
+          this.$message.error(res.message);
+        }
+      }).catch(error => {
+        // 这里处理通过拦截器输出的错误信息
+        this.$message.error(error.response.data.message);
+      });
     },
   }
 };
